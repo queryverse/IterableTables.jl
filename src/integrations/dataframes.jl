@@ -114,7 +114,8 @@ function _DataFrame(x)
     end
     df = DataFrames.DataFrame(columns, fieldnames(T))
     _filldf((df.columns...), iter)
-    return dfend
+    return df
+end
 
 @traitfn function DataFrames.DataFrame{X; IsIterableTable{X}}(x::X)
     return _DataFrame(x)
