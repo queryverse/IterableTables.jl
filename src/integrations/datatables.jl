@@ -83,7 +83,7 @@ end
     end
 end
 
-@traitfn function DataTables.DataTable{X; IsIterableTable{X}}(x::X)
+function _DataTable(x)
     iter = getiterator(x)
     
     T = eltype(iter)
@@ -104,6 +104,10 @@ end
     df = DataTables.DataTable(columns, fieldnames(T))
     _filldt((df.columns...), iter)
     return df
+end
+
+@traitfn function DataTables.DataTable{X; IsIterableTable{X}}(x::X)
+    return _DataTable(x)
 end
 
 end
