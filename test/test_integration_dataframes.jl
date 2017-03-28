@@ -41,4 +41,8 @@ df = DataFrame(source_array)
 @test df[:b] == [1.,2.,3.]
 @test df[:c] == ["A","B","C"]
 
+# TODO add some test beyond just creating a ModelFrame
+mf_array = ModelFrame(@formula(a~b), source_array)
+mf_dt = ModelFrame(@formula(a~b), dt)
+
 end
