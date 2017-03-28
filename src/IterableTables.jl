@@ -1,6 +1,6 @@
 module IterableTables
 
-using NamedTuples, SimpleTraits
+using NamedTuples, SimpleTraits, Requires
 
 export IsIterable, IsIterableTable, getiterator
 
@@ -34,5 +34,12 @@ else
         istrait(IsIterable{X}) && ( Base.iteratoreltype(X)==Base.HasEltype() && eltype(X)<: NamedTuple ) ? :(IsIterableTable{X}) : :(Not{IsIterableTable{X}})
     end
 end
+
+include("integrations/dataframes.jl")
+include("integrations/datastreams.jl")
+include("integrations/datatables.jl")
+include("integrations/indexedtables.jl")
+include("integrations/statsmodels.jl")
+include("integrations/typedtables.jl")
 
 end # module

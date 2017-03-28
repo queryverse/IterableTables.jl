@@ -1,3 +1,4 @@
 julia 0.5
 SimpleTraits
 NamedTuples 2.0.0
+Requires 0.3.0
