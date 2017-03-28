@@ -94,7 +94,7 @@ end
     end
 end
 
-@traitfn function DataFrames.DataFrame{X; IsIterableTable{X}}(x::X)
+function _DataFrame(x)
     iter = getiterator(x)
 
     T = eltype(iter)
@@ -114,7 +114,10 @@ end
     end
     df = DataFrames.DataFrame(columns, fieldnames(T))
     _filldf((df.columns...), iter)
-    return df
+    return dfend
+
+@traitfn function DataFrames.DataFrame{X; IsIterableTable{X}}(x::X)
+    return _DataFrame(x)
 end
 
 @traitfn DataFrames.ModelFrame{X; IsIterableTable{X}}(f::DataFrames.Formula, d::X; kwargs...) = DataFrames.ModelFrame(f, DataFrames.DataFrame(d); kwargs...)
