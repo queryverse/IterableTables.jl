@@ -38,6 +38,7 @@ end
 include("integrations/dataframes.jl")
 include("integrations/datastreams.jl")
 include("integrations/datatables.jl")
+include("integrations/gadfly.jl")
 include("integrations/indexedtables.jl")
 include("integrations/statsmodels.jl")
 include("integrations/timeseries.jl")
