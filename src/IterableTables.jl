@@ -40,6 +40,7 @@ include("integrations/datastreams.jl")
 include("integrations/datatables.jl")
 include("integrations/indexedtables.jl")
 include("integrations/statsmodels.jl")
+include("integrations/timeseries.jl")
 include("integrations/typedtables.jl")
 
 end # module
