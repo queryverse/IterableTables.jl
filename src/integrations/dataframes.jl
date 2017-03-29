@@ -117,6 +117,8 @@ function _DataFrame(x)
     return df
 end
 
+DataFrames.DataFrame{T<:NamedTuple}(x::Array{T,1}) = _DataFrame(x)
+
 @traitfn function DataFrames.DataFrame{X; IsIterableTable{X}}(x::X)
     return _DataFrame(x)
 end

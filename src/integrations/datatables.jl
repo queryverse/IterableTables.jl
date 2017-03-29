@@ -106,6 +106,8 @@ function _DataTable(x)
     return df
 end
 
+DataTables.DataTable{T<:NamedTuple}(x::Array{T,1}) = _DataTable(x)
+
 @traitfn function DataTables.DataTable{X; IsIterableTable{X}}(x::X)
     return _DataTable(x)
 end
