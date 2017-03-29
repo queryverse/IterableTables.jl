@@ -16,5 +16,6 @@ end
 include("test_integration_dataframes.jl")
 include("test_integration_datastreams.jl")
 include("test_integration_datatables.jl")
+include("test_integration_indexedtables.jl")
 include("test_integration_statsmodels.jl")
 include("test_integration_typedtables.jl")
