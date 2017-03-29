@@ -3,6 +3,8 @@ using NamedTuples
 using SimpleTraits
 using Base.Test
 
+@testset "IterableTables" begin
+
 @testset "Core" begin
 
 table_array = [@NT(a=1), @NT(a=2)]
@@ -19,3 +21,5 @@ include("test_integration_datatables.jl")
 include("test_integration_indexedtables.jl")
 include("test_integration_statsmodels.jl")
 include("test_integration_typedtables.jl")
+
+end
