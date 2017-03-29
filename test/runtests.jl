@@ -15,3 +15,4 @@ end
 
 include("test_integration_dataframes.jl")
 include("test_integration_datatables.jl")
+include("test_integration_typedtables.jl")
