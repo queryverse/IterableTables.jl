@@ -14,5 +14,6 @@ other_array = [1,2,3]
 end
 
 include("test_integration_dataframes.jl")
+include("test_integration_datastreams.jl")
 include("test_integration_datatables.jl")
 include("test_integration_typedtables.jl")
