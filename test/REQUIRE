@@ -10,3 +10,4 @@ StatsModels
 TimeSeries
 Gadfly
 VegaLite
+SQLite
