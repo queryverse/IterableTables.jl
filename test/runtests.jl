@@ -23,5 +23,6 @@ include("test_integration_indexedtables.jl")
 include("test_integration_statsmodels.jl")
 include("test_integration_timeseries.jl")
 include("test_integration_typedtables.jl")
+include("test_integration_vegalite.jl")
 
 end

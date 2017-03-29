@@ -43,5 +43,6 @@ include("integrations/indexedtables.jl")
 include("integrations/statsmodels.jl")
 include("integrations/timeseries.jl")
 include("integrations/typedtables.jl")
+include("integrations/vegalite.jl")
 
 end # module
