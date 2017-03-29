@@ -24,7 +24,7 @@ push!(data, [1,2,3])
 push!(data, [1.,2.,3.])
 push!(data, ["A","B","C"])
 source_dt_non_nullable = DataTable(data, [:a,:b,:c])
-df_non_nullable = DataTable(source_dt_non_nullable)
+df_non_nullable = DataFrame(source_dt_non_nullable)
 
 @test size(df_non_nullable) == (3,3)
 @test isa(df_non_nullable[:a], Array)
