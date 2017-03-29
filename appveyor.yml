@@ -29,6 +29,7 @@ build_script:
   - IF EXIST .git\shallow (git fetch --unshallow)
   - C:\projects\julia\bin\julia -e "Pkg.clone(\"https://github.com/JuliaComputing/IndexedTables.jl.git\")"
   - C:\projects\julia\bin\julia -e "Pkg.add(\"SimpleTraits\"); Pkg.checkout(\"SimpleTraits\")"
+  - C:\projects\julia\bin\julia -e "Pkg.add(\"StatsModels\"); Pkg.checkout(\"StatsModels\")"
   - C:\projects\julia\bin\julia -e "versioninfo();
       Pkg.clone(pwd(), \"IterableTables\"); Pkg.build(\"IterableTables\")"
 

@@ -6,3 +6,4 @@ DataStreams
 CSV
 Feather
 NullableArrays
+StatsModels
