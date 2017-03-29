@@ -6,6 +6,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/uv9ybxa17e8581pr/branch/master?svg=true)](https://ci.appveyor.com/project/davidanthoff/iterabletables-jl/branch/master)
 [![Query](http://pkg.julialang.org/badges/IterableTables_0.5.svg)](http://pkg.julialang.org/?pkg=IterableTables)
 [![codecov.io](http://codecov.io/github/davidanthoff/IterableTables.jl/coverage.svg?branch=master)](http://codecov.io/github/davidanthoff/IterableTables.jl?branch=master)
+[![Coverage Status](https://coveralls.io/repos/davidanthoff/IterableTables.jl/badge.svg)](https://coveralls.io/r/davidanthoff/IterableTables.jl)
 
 ## Overview
 
