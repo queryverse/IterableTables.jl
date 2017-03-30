@@ -4,8 +4,9 @@ using SimpleTraits
 using DataFrames
 using DataStreams
 using CSV
-using Feather
 using SQLite
+using FlatBuffers
+using Feather
 using NullableArrays
 using Base.Test
 
@@ -37,10 +38,12 @@ df_feather = DataFrame(feather_source)
 @test df_feather[1,:conc] == 95.0
 @test df_feather[1,:uptake] == 16.
 
-sqlite_source = SQLite.Source(SQLite.DB(joinpath(Pkg.dir("SQLite"), "test", "Chinook_Sqlite.sqlite")), "SELECT * FROM Employee;")
-df_sqlite = DataFrame(sqlite_source)
-@test size(df_sqlite) == (8,15)
-@test isa(df_sqlite[:EmployeeId], DataArray)
-@test df_sqlite[1, :EmployeeId] == 1
+if VERSION < v"0.6.0-"
+    sqlite_source = SQLite.Source(SQLite.DB(joinpath(Pkg.dir("SQLite"), "test", "Chinook_Sqlite.sqlite")), "SELECT * FROM Employee;")
+    df_sqlite = DataFrame(sqlite_source)
+    @test size(df_sqlite) == (8,15)
+    @test isa(df_sqlite[:EmployeeId], DataArray)
+    @test df_sqlite[1, :EmployeeId] == 1
+end
 
 end
