@@ -72,4 +72,69 @@ function Base.done{T,TS}(iter::TimeArrayIterator{T,TS}, state)
     return state>length(iter.source.timestamp)
 end
 
+# Sink
+
+# TODO This is a terribly inefficient implementation. Minimally it
+# should be changed to be more type stable.
+@traitfn function TimeSeries.TimeArray{X; IsIterableTable{X}}(x::X, timestamp_column::Symbol=:timestamp)
+    iter = getiterator(x)
+
+    if column_count(iter)<2
+        error("Need at least two columns")
+    end
+
+    names = column_names(iter)
+    
+    timestep_col_index = findfirst(names, timestamp_column)
+
+    if timestep_col_index==0
+        error("No timestamp column found.")
+    end
+    
+    col_types = column_types(iter)
+
+    data_columns = collect(filter(i->i[2][1]!=timestamp_column, enumerate(zip(names, col_types))))
+
+    orig_data_type = data_columns[1][2][2]
+
+    data_type = orig_data_type <: Nullable ? orig_data_type.parameters[1] : orig_data_type
+
+    orig_timestep_type = col_types[timestep_col_index]
+
+    timestep_type = orig_timestep_type <: Nullable ? orig_timestep_type.parameters[1] : orig_timestep_type
+
+    if any(i->i[2][2]!=orig_data_type, data_columns)
+        error("All data columns need to be of the same type.")
+    end
+
+    t_column = Array{timestep_type,1}()
+    d_array = Array{Array{data_type,1},1}()
+    for i in data_columns
+        push!(d_array, Array{data_type,1}())
+    end
+
+    for v in iter
+        if orig_timestep_type <: Nullable
+            push!(t_column, get(v[timestep_col_index]))
+        else
+            push!(t_column, v[timestep_col_index])
+        end
+
+        if orig_data_type <: Nullable
+            for (i,c) in enumerate(data_columns)
+                push!(d_array[i],get(v[c[1]]))
+            end
+        else
+            for (i,c) in enumerate(data_columns)
+                push!(d_array[i],v[c[1]])
+            end
+        end
+    end
+
+    d_array = hcat(d_array...)
+
+    ta = TimeSeries.TimeArray(t_column,d_array,[string(i[2][1]) for i in data_columns])
+    return ta
+end
+
 end
