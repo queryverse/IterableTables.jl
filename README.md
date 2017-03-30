@@ -29,6 +29,7 @@ The following data sinks are currently supported:
 [DataFrames](https://github.com/JuliaStats/DataFrames.jl) (including things
 like ``ModelFrame`` etc.),
 [DataTables](https://github.com/JuliaData/DataTables.jl),
+[TimeSeries](https://github.com/JuliaStats/TimeSeries.jl),
 [TypedTables](https://github.com/FugroRoames/TypedTables.jl),
 [StatsModels](https://github.com/JuliaStats/StatsModels.jl),
 [Gadfly](https://github.com/GiovineItalia/Gadfly.jl) and
