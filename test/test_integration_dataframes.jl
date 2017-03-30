@@ -72,7 +72,7 @@ df = DataFrame(source_array)
 @test df[:c] == ["A","B","C"]
 
 # TODO add some test beyond just creating a ModelFrame
-mf_array = ModelFrame(@formula(a~b), source_array)
-mf_dt = ModelFrame(@formula(a~b), dt)
+mf_array = DataFrames.ModelFrame(DataFrames.@formula(a~b), source_array)
+mf_dt = DataFrames.ModelFrame(DataFrames.@formula(a~b), dt)
 
 end
