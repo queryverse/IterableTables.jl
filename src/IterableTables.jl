@@ -2,7 +2,7 @@ module IterableTables
 
 using NamedTuples, SimpleTraits, Requires
 
-export IsIterable, IsIterableTable, getiterator
+export IsIterable, IsIterableTable, getiterator, column_names, column_types, column_count
 
 @traitfn function getiterator{X; SimpleTraits.BaseTraits.IsIterator{X}}(x::X)
     return x
@@ -34,6 +34,8 @@ else
         istrait(IsIterable{X}) && ( Base.iteratoreltype(X)==Base.HasEltype() && eltype(X)<: NamedTuple ) ? :(IsIterableTable{X}) : :(Not{IsIterableTable{X}})
     end
 end
+
+include("utilities.jl")
 
 include("integrations/dataframes.jl")
 include("integrations/datastreams.jl")
