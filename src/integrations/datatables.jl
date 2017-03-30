@@ -91,8 +91,11 @@ function _DataTable(x)
         error("Can only collect a NamedTuple iterator into a DataTable.")
     end
 
+    column_types = IterableTables.column_types(iter)
+    column_names = IterableTables.column_names(iter)
+
     columns = []
-    for t in T.types
+    for t in column_types
         if isa(t, TypeVar)
             push!(columns, Array{Any}(0))
         elseif t <: Nullable
@@ -101,7 +104,7 @@ function _DataTable(x)
             push!(columns, Array{t}(0))
         end
     end
-    df = DataTables.DataTable(columns, fieldnames(T))
+    df = DataTables.DataTable(columns, column_names)
     _filldt((df.columns...), iter)
     return df
 end

@@ -35,6 +35,8 @@ else
     end
 end
 
+include("utilities.jl")
+
 include("integrations/dataframes.jl")
 include("integrations/datastreams.jl")
 include("integrations/datatables.jl")
