@@ -72,4 +72,27 @@ function Base.done{T,TS}(iter::TimeArrayIterator{T,TS}, state)
     return state>length(iter.source.timestamp)
 end
 
+# Sink
+
+@traitfn function TimeSeries.TimeArray{X; IsIterableTable{X}}(x::X, timestamp_column::Symbol=:timestamp)
+    if column_count(x)<2
+        error("Need at least two columns")
+    end
+
+    names = column_names(x)
+    
+    if !(timestamp_column in names)
+        error("No timestamp column found.")
+    end
+
+    data_columns = filter(i->i[1]!=timestamp_column, enumerate(zip(names, column_types(x))))
+
+    data_type = data_columns[1][2][2]
+
+    if any(i->i[2][2]!=data_type, data_columns)
+        error("All data columns need to be of the same type.")
+    end
+
+end
+
 end
