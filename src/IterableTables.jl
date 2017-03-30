@@ -2,7 +2,7 @@ module IterableTables
 
 using NamedTuples, SimpleTraits, Requires
 
-export IsIterable, IsIterableTable, getiterator, column_names, column_types, column_count
+export IsIterable, IsIterableTable, getiterator
 
 @traitfn function getiterator{X; SimpleTraits.BaseTraits.IsIterator{X}}(x::X)
     return x

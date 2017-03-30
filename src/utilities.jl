@@ -17,7 +17,7 @@ function column_types(iter)
         error()
     end
 
-    types = T.parameters
+    types = [i for i in T.parameters]
     
     return types
 end

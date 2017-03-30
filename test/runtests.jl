@@ -30,6 +30,11 @@ other_array = [1,2,3]
 @test istrait(IsIterableTable{typeof(table_array)})
 @test !istrait(IsIterableTable{typeof(other_array)})
 
+iter = getiterator(table_array)
+@test IterableTables.column_names(iter) == [:a]
+@test IterableTables.column_types(iter) == [Int]
+@test IterableTables.column_count(iter) == 1
+
 end
 
 include("test_integration_dataframes.jl")
