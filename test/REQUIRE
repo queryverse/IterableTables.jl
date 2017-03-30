@@ -6,7 +6,7 @@ DataStreams
 CSV
 Feather
 NullableArrays
-StatsModels
+StatsModels 0.0.2
 TimeSeries
 Gadfly
 VegaLite

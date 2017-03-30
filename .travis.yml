@@ -16,7 +16,6 @@ script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia -e 'Pkg.clone("https://github.com/JuliaComputing/IndexedTables.jl.git")'
   - julia -e 'Pkg.add("SimpleTraits"); Pkg.checkout("SimpleTraits")'
-  - julia -e 'Pkg.add("StatsModels"); Pkg.checkout("StatsModels")'
   - julia -e 'Pkg.clone(pwd()); Pkg.build("IterableTables"); Pkg.test("IterableTables"; coverage=true)'
 after_success:
   - julia -e 'cd(Pkg.dir("IterableTables")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
