@@ -20,7 +20,7 @@ any iterator who produces elements of type
 
 The following data sinks are currently supported:
 [DataFrames](https://github.com/JuliaStats/DataFrames.jl) (including things
-like ``ModelFrame`` etc.),
+like `ModelFrame` etc.),
 [DataTables](https://github.com/JuliaData/DataTables.jl),
 [TypedTables](https://github.com/FugroRoames/TypedTables.jl),
 [StatsModels](https://github.com/JuliaStats/StatsModels.jl),
@@ -30,6 +30,6 @@ like ``ModelFrame`` etc.),
 ## Installation
 
 This package only works on julia 0.5 and newer. You can add it with:
-````julia
+```julia
 Pkg.add("IterableTables")
-````
+```
