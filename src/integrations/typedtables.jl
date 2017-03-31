@@ -1,5 +1,7 @@
 @require TypedTables begin
 
+import NullableArrays
+
 immutable TypedTableIterator{T, TS}
     df::TypedTables.Table
     # This field hols a tuple with the columns of the DataFrame.
@@ -61,6 +63,49 @@ end
 
 function Base.done{T,TS}(iter::TypedTableIterator{T,TS}, state)
     return state>size(iter.df,1)
+end
+
+# Sink
+
+@generated function _filltt(source, tt)
+    n = length(tt.parameters[2].parameters)
+    push_exprs = Expr(:block)
+    for i in 1:n
+        ex = :( push!(tt.data[$i], row[$i]) )
+        push!(push_exprs.args, ex)
+    end
+
+    quote
+        for row in source
+            $push_exprs
+        end
+    end
+end
+
+@traitfn function TypedTables.Table{X; IsIterableTable{X}}(x::X)
+    iter = getiterator(x)
+
+    source_colnames = IterableTables.column_names(iter)
+    source_coltypes = IterableTables.column_types(iter)
+
+    columns = []
+    for t in source_coltypes
+        if t <: Nullable
+            push!(columns, NullableArrays.NullableArray(t.parameters[1],0))
+        else
+            push!(columns, Array{t}(0))
+        end
+    end
+
+    T = eval(TypedTables, 
+        Expr(:curly, :Table, Expr(:tuple, [QuoteNode(i) for i in source_colnames]...), Expr(:curly, :Tuple, [typeof(i) for i in columns]...))
+    )
+
+    tt = T()
+
+    _filltt(iter, tt)    
+
+    return tt
 end
 
 end
