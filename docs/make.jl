@@ -5,7 +5,10 @@ makedocs(
 	format = :html,
 	sitename = "IterableTables.jl",
 	pages = [
-		"Introduction" => "index.md"]
+		"Introduction" => "index.md",
+        "User Guide" => "userguide.md",
+        "Integration Guide" => "integrationguide.md",
+        "Developer Guide" => "developerguide.md"]
 )
 
 deploydocs(
