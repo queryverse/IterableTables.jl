@@ -75,4 +75,9 @@ df = DataFrame(source_array)
 mf_array = DataFrames.ModelFrame(DataFrames.@formula(a~b), source_array)
 mf_dt = DataFrames.ModelFrame(DataFrames.@formula(a~b), dt)
 
+# This tests for a specific bug we once had
+df_with_sub_list = DataFrame(name=["John", "Sally", "Kirk"], numberoftoys=[[4; 3; 2], [2; 2; 4; 5; 1], [2; 2]])
+dt = DataTable(df_with_sub_list)
+@test size(dt) == (3,2)
+
 end
