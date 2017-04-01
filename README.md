@@ -100,6 +100,5 @@ plot(tt, x=:Age, y=:Children, Geom.line)
 
 # Plot a DataTable
 plot(dt, x=:Age, y=:Children, Geom.line)
- Geom.line)
 ````
 Again, this will work with any of the data sources listed above.
