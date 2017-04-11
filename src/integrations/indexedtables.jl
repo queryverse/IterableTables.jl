@@ -1,5 +1,6 @@
 @require IndexedTables begin
 using IndexedTables: IndexedTable
+import NullableArrays
 
 immutable IndexedTableIterator{T, S<:IndexedTable}
     source::S
@@ -98,6 +99,7 @@ end
 
 function IndexedTables.IndexedTable(x; idxcols::Union{Void,Vector{Symbol}}=nothing, datacols::Union{Void,Vector{Symbol}}=nothing)
     isiterabletable(x) || error()
+
     iter = getiterator(x)
 
     source_colnames = IterableTables.column_names(iter)
