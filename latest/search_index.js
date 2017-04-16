@@ -29,7 +29,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction",
     "title": "Installation",
     "category": "section",
-    "text": "This package only works on julia 0.5 and newer. You can add it with:Pkg.clone(\"https://github.com/davidanthoff/IterableTables.jl.git\")Currently you also need to checkout SimpleTraits:Pkg.checkout(\"SimpleTraits\")"
+    "text": "This package only works on julia 0.5 and newer. You can add it with:Pkg.clone(\"https://github.com/davidanthoff/IterableTables.jl.git\")"
 },
 
 {
