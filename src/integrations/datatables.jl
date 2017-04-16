@@ -11,8 +11,8 @@ immutable DataTableIterator{T, TS}
     columns::TS
 end
 
-@traitimpl IsIterable{DataTables.DataTable}
-@traitimpl IsIterableTable{DataTables.DataTable}
+isiterable(x::DataTables.DataTable) = true
+isiterabletable(x::DataTables.DataTable) = true
 
 function getiterator(df::DataTables.DataTable)
     col_expressions = Array{Expr,1}()
@@ -111,7 +111,8 @@ end
 
 DataTables.DataTable{T<:NamedTuple}(x::Array{T,1}) = _DataTable(x)
 
-@traitfn function DataTables.DataTable{X; IsIterableTable{X}}(x::X)
+function DataTables.DataTable(x)
+    isiterabletable(x) || error()
     return _DataTable(x)
 end
 

@@ -1,6 +1,5 @@
 using IterableTables
 using NamedTuples
-using SimpleTraits
 using DataFrames
 using DataStreams
 using CSV

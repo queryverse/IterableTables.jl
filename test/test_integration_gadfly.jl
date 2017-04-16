@@ -1,6 +1,5 @@
 using IterableTables
 using NamedTuples
-using SimpleTraits
 using Gadfly
 using DataTables
 using Base.Test

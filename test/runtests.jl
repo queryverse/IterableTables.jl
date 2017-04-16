@@ -1,5 +1,4 @@
 using IterableTables
-using SimpleTraits
 using NamedTuples
 using DataFrames
 using DataTables
@@ -27,8 +26,8 @@ end
 table_array = [@NT(a=1), @NT(a=2)]
 other_array = [1,2,3]
 
-@test istrait(IsIterableTable{typeof(table_array)})
-@test !istrait(IsIterableTable{typeof(other_array)})
+@test isiterabletable(table_array)
+@test !isiterabletable(other_array)
 
 iter = getiterator(table_array)
 @test IterableTables.column_names(iter) == [:a]

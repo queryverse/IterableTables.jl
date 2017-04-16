@@ -3,7 +3,8 @@
 import Gadfly
 import DataFrames
 
-@traitfn function Gadfly.plot{X; IsIterableTable{X}}(data_source::X, elements::Gadfly.ElementOrFunctionOrLayers...; mapping...)
+function Gadfly.plot(data_source, elements::Gadfly.ElementOrFunctionOrLayers...; mapping...)
+    isiterabletable(data_source) || error()
     Gadfly.plot(DataFrames.DataFrame(data_source), elements...; mapping...)
 end
 

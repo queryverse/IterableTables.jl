@@ -14,7 +14,6 @@ branches:
   - /release-.*/
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia -e 'Pkg.add("SimpleTraits"); Pkg.checkout("SimpleTraits")'
   - julia -e 'Pkg.clone(pwd()); Pkg.build("IterableTables"); Pkg.test("IterableTables"; coverage=true)'
 after_success:
   - julia -e 'cd(Pkg.dir("IterableTables")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'

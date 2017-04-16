@@ -1,6 +1,5 @@
 using IterableTables
 using NamedTuples
-using SimpleTraits
 using TimeSeries
 using DataFrames
 using NullableArrays
