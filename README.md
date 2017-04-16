@@ -9,7 +9,7 @@
 
 ## Overview
 
-IterableTables defines a  generic traits interface for tabular data.
+IterableTables defines a  generic interface for tabular data.
 
 The package currently has support for the following data sources:
 [DataFrames](https://github.com/JuliaStats/DataFrames.jl),
