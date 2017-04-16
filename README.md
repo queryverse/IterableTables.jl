@@ -36,6 +36,12 @@ like ``ModelFrame`` etc.),
 [Gadfly](https://github.com/GiovineItalia/Gadfly.jl) and
 [VegaLite](https://github.com/fredo-dedup/VegaLite.jl).
 
+The package is tightly integrated with [Query.jl](https://github.com/davidanthoff/Query.jl):
+Any query that creates a named tuple in the last ``@select`` statement (and
+doesn't ``@collect`` the results into a data structure) is automatically an
+iterable table data source, and any of the data sources mentioned above can
+be queried using [Query.jl](https://github.com/davidanthoff/Query.jl).
+
 ## Installation
 
 This package only works on julia 0.5 and newer. You can add it with:
