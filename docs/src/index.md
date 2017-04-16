@@ -33,10 +33,6 @@ This package only works on julia 0.5 and newer. You can add it with:
 ```julia
 Pkg.clone("https://github.com/davidanthoff/IterableTables.jl.git")
 ```
-Currently you also need to checkout ``SimpleTraits``:
-```julia
-Pkg.checkout("SimpleTraits")
-```
 
 ## Getting started
 

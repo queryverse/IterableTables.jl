@@ -1,6 +1,5 @@
 using IterableTables
 using NamedTuples
-using SimpleTraits
 using StatsModels
 using DataFrames
 using Base.Test

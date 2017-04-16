@@ -5,8 +5,8 @@ immutable IndexedTableIterator{T, S<:IndexedTable}
     source::S
 end
 
-@traitimpl IsIterable{IndexedTables.IndexedTable}
-@traitimpl IsIterableTable{IndexedTables.IndexedTable}
+isiterable(x::IndexedTables.IndexedTable) = true
+isiterabletable(x::IndexedTables.IndexedTable) = true
 
 function getiterator{S<:IndexedTable}(source::S)
     col_expressions = Array{Expr,1}()
@@ -92,7 +92,8 @@ end
     end
 end
 
-@traitfn function IndexedTables.IndexedTable{X; IsIterableTable{X}}(x::X; idxcols::Union{Void,Vector{Symbol}}=nothing, datacols::Union{Void,Vector{Symbol}}=nothing)
+function IndexedTables.IndexedTable(x; idxcols::Union{Void,Vector{Symbol}}=nothing, datacols::Union{Void,Vector{Symbol}}=nothing)
+    isiterabletable(x) || error()
     iter = getiterator(x)
 
     source_colnames = IterableTables.column_names(iter)

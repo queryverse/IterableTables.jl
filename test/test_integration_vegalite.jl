@@ -1,6 +1,5 @@
 using IterableTables
 using NamedTuples
-using SimpleTraits
 using VegaLite
 using DataTables
 using Base.Test

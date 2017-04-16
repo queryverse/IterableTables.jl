@@ -4,8 +4,8 @@ immutable TimeArrayIterator{T, S}
     source::S
 end
 
-@traitimpl IsIterable{TimeSeries.TimeArray}
-@traitimpl IsIterableTable{TimeSeries.TimeArray}
+isiterable(x::TimeSeries.TimeArray) = true
+isiterabletable(x::TimeSeries.TimeArray) = true
 
 function getiterator{S<:TimeSeries.TimeArray}(ta::S)
     col_expressions = Array{Expr,1}()
@@ -76,7 +76,9 @@ end
 
 # TODO This is a terribly inefficient implementation. Minimally it
 # should be changed to be more type stable.
-@traitfn function TimeSeries.TimeArray{X; IsIterableTable{X}}(x::X, timestamp_column::Symbol=:timestamp)
+function TimeSeries.TimeArray(x, timestamp_column::Symbol=:timestamp)
+    isiterabletable(x) || error()
+
     iter = getiterator(x)
 
     if column_count(iter)<2

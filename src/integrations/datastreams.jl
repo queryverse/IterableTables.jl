@@ -7,8 +7,8 @@ immutable DataStreamIterator{T, S<:DataStreams.Data.Source, TC, TSC}
     schema::DataStreams.Data.Schema
 end
 
-@traitimpl IsIterable{DataStreams.Data.Source}
-@traitimpl IsIterableTable{DataStreams.Data.Source}
+isiterable(x::DataStreams.Data.Source) = true
+isiterabletable(x::DataStreams.Data.Source) = true
 
 function getiterator{S<:DataStreams.Data.Source}(source::S)
     if !Data.streamtype(S, Data.Field)

@@ -10,8 +10,8 @@ immutable TypedTableIterator{T, TS}
     columns::TS
 end
 
-@traitimpl IsIterable{TypedTables.Table}
-@traitimpl IsIterableTable{TypedTables.Table}
+isiterable(x::TypedTables.Table) = true
+isiterabletable(x::TypedTables.Table) = true
 
 function getiterator(df::TypedTables.Table)
     col_expressions = Array{Expr,1}()
@@ -82,7 +82,9 @@ end
     end
 end
 
-@traitfn function TypedTables.Table{X; IsIterableTable{X}}(x::X)
+function TypedTables.Table(x)
+    isiterabletable(x) || error()
+    
     iter = getiterator(x)
 
     source_colnames = IterableTables.column_names(iter)

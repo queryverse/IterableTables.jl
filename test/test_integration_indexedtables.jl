@@ -1,6 +1,5 @@
 using IterableTables
 using NamedTuples
-using SimpleTraits
 using PooledArrays
 using IndexedTables
 using DataFrames

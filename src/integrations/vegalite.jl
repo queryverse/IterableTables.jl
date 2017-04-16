@@ -3,7 +3,9 @@
 import VegaLite
 import DataFrames
 
-@traitfn function VegaLite.data_values{X; IsIterableTable{X}}(data_source::X)
+function VegaLite.data_values(data_source)
+    isiterabletable(data_source) || error()
+
     df = DataFrames.DataFrame(data_source)
     return VegaLite.data_values(df)
 end

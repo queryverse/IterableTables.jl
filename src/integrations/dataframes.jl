@@ -11,8 +11,8 @@ immutable DataFrameIterator{T, TS}
     columns::TS
 end
 
-@traitimpl IsIterable{DataFrames.DataFrame}
-@traitimpl IsIterableTable{DataFrames.DataFrame}
+isiterable(x::DataFrames.DataFrame) = true
+isiterabletable(x::DataFrames.DataFrame) = true
 
 function getiterator(df::DataFrames.DataFrame)
     col_expressions = Array{Expr,1}()
@@ -119,20 +119,27 @@ end
 
 DataFrames.DataFrame{T<:NamedTuple}(x::Array{T,1}) = _DataFrame(x)
 
-@traitfn function DataFrames.DataFrame{X; IsIterableTable{X}}(x::X)
+function DataFrames.DataFrame(x)
+    isiterabletable(x) || error()
+    
     return _DataFrame(x)
 end
 
-@traitfn DataFrames.ModelFrame{X; IsIterableTable{X}}(f::DataFrames.Formula, d::X; kwargs...) = DataFrames.ModelFrame(f, DataFrames.DataFrame(d); kwargs...)
+function DataFrames.ModelFrame(f::DataFrames.Formula, source; kwargs...)
+    isiterabletable(source) || error()
+    return DataFrames.ModelFrame(f, DataFrames.DataFrame(source); kwargs...)
+end
 
-@traitfn function StatsBase.fit{T<:StatsBase.StatisticalModel, X; IsIterableTable{X}}(::Type{T}, f::DataFrames.Formula, source::X, args...; contrasts::Dict = Dict(), kwargs...)
+function StatsBase.fit{T<:StatsBase.StatisticalModel}(::Type{T}, f::DataFrames.Formula, source, args...; contrasts::Dict = Dict(), kwargs...)
+    isiterabletable(source) || error()
     mf = DataFrames.ModelFrame(f, source, contrasts=contrasts)
     mm = DataFrames.ModelMatrix(mf)
     y = model_response(mf)
     DataFrames.DataFrameStatisticalModel(fit(T, mm.m, y, args...; kwargs...), mf, mm)
 end
 
-@traitfn function StatsBase.fit{T<:StatsBase.RegressionModel, X; IsIterableTable{X}}(::Type{T}, f::DataFrames.Formula, source::X, args...; contrasts::Dict = Dict(), kwargs...)
+function StatsBase.fit{T<:StatsBase.RegressionModel}(::Type{T}, f::DataFrames.Formula, source, args...; contrasts::Dict = Dict(), kwargs...)
+    isiterabletable(source) || error()
     mf = DataFrames.ModelFrame(f, source, contrasts=contrasts)
     mm = DataFrames.ModelMatrix(mf)
     y = model_response(mf)
