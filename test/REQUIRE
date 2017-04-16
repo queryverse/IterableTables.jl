@@ -12,3 +12,5 @@ Gadfly
 VegaLite
 SQLite
 IndexedTables
+FlatBuffers
+PooledArrays
