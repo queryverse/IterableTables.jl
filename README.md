@@ -30,9 +30,7 @@ The following data sinks are currently supported:
 like ``ModelFrame`` etc.),
 [DataStreams](https://github.com/JuliaData/DataStreams.jl)
 (including [CSV](https://github.com/JuliaData/CSV.jl),
-[Feather](https://github.com/JuliaStats/Feather.jl),
-[SQLite](https://github.com/JuliaDB/SQLite.jl),
-[ODBC](https://github.com/JuliaDB/ODBC.jl)),
+[Feather](https://github.com/JuliaStats/Feather.jl)),
 [DataTables](https://github.com/JuliaData/DataTables.jl),
 [IndexedTables](https://github.com/JuliaComputing/IndexedTables.jl),
 [TimeSeries](https://github.com/JuliaStats/TimeSeries.jl),
