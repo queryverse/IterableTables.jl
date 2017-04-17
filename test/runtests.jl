@@ -2,16 +2,13 @@ using IterableTables
 using NamedTuples
 using DataFrames
 using DataTables
-using DataStreams
 using CSV
 using SQLite
-using FlatBuffers
 using Feather
 using TimeSeries
 using StatsModels
 using TypedTables
 using VegaLite
-using PooledArrays
 using IndexedTables
 using Base.Test
 

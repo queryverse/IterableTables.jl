@@ -1,16 +1,11 @@
 DataFrames
-DataArrays
 DataTables
 TypedTables
-DataStreams
 CSV
 Feather
-NullableArrays
 StatsModels 0.0.2
 TimeSeries
 Gadfly
 VegaLite
 SQLite
 IndexedTables
-FlatBuffers
-PooledArrays
