@@ -16,7 +16,10 @@ function Base.length(iter::DESolutionIterator)
 end
 
 function Base.eltype(iter::DESolutionIterator)
-    return @NT(timestamp::Float64, value::Float64)
+    timestamp_type = eltype(iter.sol.t)
+    value_type = eltype(iter.sol.u)
+    
+    return @NT(timestamp, value){timestamp_type, value_type}
 end
 
 function Base.start(iter::DESolutionIterator)
