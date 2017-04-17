@@ -68,7 +68,7 @@ end
 
 # Sink
 
-@generated function _filldt(columns, enumerable)
+@generated function _filldt_without_length(columns, enumerable)
     n = length(columns.types)
     push_exprs = Expr(:block)
     for i in 1:n
@@ -78,6 +78,21 @@ end
 
     quote
         for i in enumerable
+            $push_exprs
+        end
+    end
+end
+
+@generated function _filldt_with_length(columns, enumerable)
+    n = length(columns.types)
+    push_exprs = Expr(:block)
+    for col_idx in 1:n
+        ex = :( columns[$col_idx][i] = v[$col_idx] )
+        push!(push_exprs.args, ex)
+    end
+
+    quote
+        for (i,v) in enumerate(enumerable)
             $push_exprs
         end
     end
@@ -94,19 +109,27 @@ function _DataTable(x)
     column_types = IterableTables.column_types(iter)
     column_names = IterableTables.column_names(iter)
 
+    rows = Base.iteratorsize(typeof(iter))==Base.HasLength() ? length(iter) : 0
+
     columns = []
     for t in column_types
         if isa(t, TypeVar)
-            push!(columns, Array{Any}(0))
+            push!(columns, Array{Any}(rows))
         elseif t <: Nullable
-            push!(columns, NullableArray(t.parameters[1],0))
+            push!(columns, NullableArray(t.parameters[1],rows))
         else
-            push!(columns, Array{t}(0))
+            push!(columns, Array{t}(rows))
         end
     end
-    df = DataTables.DataTable(columns, column_names)
-    _filldt((df.columns...), iter)
-    return df
+
+    if Base.iteratorsize(typeof(iter))==Base.HasLength()
+        _filldt_with_length((columns...), iter)
+    else
+        _filldt_without_length((columns...), iter)
+    end
+
+    dt = DataTables.DataTable(columns, column_names)
+    return dt
 end
 
 DataTables.DataTable{T<:NamedTuple}(x::Array{T,1}) = _DataTable(x)
