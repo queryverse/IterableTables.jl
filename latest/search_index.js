@@ -21,7 +21,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction",
     "title": "Overview",
     "category": "section",
-    "text": "IterableTables defines a  generic interface for tabular data.The package currently has support for the following data sources: DataFrames, DataStreams (including CSV, Feather, SQLite, ODBC), DataTables, IndexedTables, TimeSeries, TypedTables and any iterator who produces elements of type NamedTuple.The following data sinks are currently supported: DataFrames (including things like ModelFrame etc.), DataTables, TypedTables, StatsModels, Gadfly and VegaLite.The package is tightly integrated with Query.jl: Any query that creates a named tuple in the last select statement (and doesn't collect the results into a data structure) is automatically an iterable table data source, and any of the data sources mentioned above can be queried using Query.jl."
+    "text": "IterableTables defines a  generic interface for tabular data.The package currently has support for the following data sources: DataFrames, DataStreams (including CSV, Feather, SQLite, ODBC), DataTables, IndexedTables, TimeSeries, TypedTables and any iterator who produces elements of type NamedTuple.The following data sinks are currently supported: DataFrames (including things like ModelFrame etc.), DataStreams (including CSV, Feather, SQLite, ODBC), DataTables, IndexedTables, TimeSeries, TypedTables, StatsModels, Gadfly and VegaLite.The package is tightly integrated with Query.jl: Any query that creates a named tuple in the last select statement (and doesn't collect the results into a data structure) is automatically an iterable table data source, and any of the data sources mentioned above can be queried using Query.jl."
 },
 
 {
