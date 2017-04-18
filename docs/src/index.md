@@ -15,7 +15,7 @@ The package currently has support for the following data sources:
 [IndexedTables](https://github.com/JuliaComputing/IndexedTables.jl),
 [TimeSeries](https://github.com/JuliaStats/TimeSeries.jl),
 [TypedTables](https://github.com/FugroRoames/TypedTables.jl),
-[DifferentialEquations](https://github.com/JuliaDiffEq/DifferentialEquations.jl)(any `DESolution`) and
+[DifferentialEquations](https://github.com/JuliaDiffEq/DifferentialEquations.jl) (any `DESolution`) and
 any iterator who produces elements of type
 [NamedTuple](https://github.com/blackrock/NamedTuples.jl).
 
