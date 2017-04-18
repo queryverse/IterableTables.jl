@@ -20,7 +20,7 @@ function getiterator(sol::DiffEqBase.DESolution)
             if DiffEqBase.has_syms(sol.prob.f)
                 push!(value_names, sol.prob.f.syms[i])
             else
-                push!(value_names, Symbol("value $i"))
+                push!(value_names, Symbol("value$i"))
             end
         end            
     else
