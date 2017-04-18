@@ -14,3 +14,5 @@ SQLite
 IndexedTables
 FlatBuffers
 PooledArrays
+DifferentialEquations
+ParameterizedFunctions
