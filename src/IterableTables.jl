@@ -26,5 +26,6 @@ include("integrations/statsmodels.jl")
 include("integrations/timeseries.jl")
 include("integrations/typedtables.jl")
 include("integrations/vegalite.jl")
+include("integrations/differentialequations.jl")
 
 end # module

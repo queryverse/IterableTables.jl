@@ -9,3 +9,5 @@ Gadfly
 VegaLite
 SQLite
 IndexedTables
+DifferentialEquations
+ParameterizedFunctions
