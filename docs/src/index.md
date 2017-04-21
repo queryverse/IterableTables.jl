@@ -34,8 +34,8 @@ like `ModelFrame` etc.),
 [VegaLite](https://github.com/fredo-dedup/VegaLite.jl).
 
 The package is tightly integrated with [Query.jl](https://github.com/davidanthoff/Query.jl):
-Any query that creates a named tuple in the last ``@select`` statement (and
-doesn't ``@collect`` the results into a data structure) is automatically an
+Any query that creates a named tuple in the last `@select` statement (and
+doesn't `@collect` the results into a data structure) is automatically an
 iterable table data source, and any of the data sources mentioned above can
 be queried using [Query.jl](https://github.com/davidanthoff/Query.jl).
 
