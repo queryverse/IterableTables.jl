@@ -42,13 +42,13 @@ function getiterator(sol::DiffEqBase.DESolution)
     end
     
     t_expr = NamedTuples.make_tuple(col_expressions)
+    t_expr.args[1] = Expr(:., :NamedTuples, QuoteNode(t_expr.args[1]))
 
-    t2 = :(IterableTables.DESolutionIterator{Float64,Float64})
+    t2 = :(DESolutionIterator{Float64,Float64})
     t2.args[2] = t_expr
     t2.args[3] = typeof(sol)
 
-    eval(NamedTuples, :(import IterableTables))
-    t = eval(NamedTuples, t2)
+    t = eval(t2)
 
     si = t(sol)
 

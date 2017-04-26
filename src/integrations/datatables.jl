@@ -23,13 +23,13 @@ function getiterator(df::DataTables.DataTable)
         push!(df_columns_tuple_type.args, typeof(df.columns[i]))
     end
     t_expr = NamedTuples.make_tuple(col_expressions)
+    t_expr.args[1] = Expr(:., :NamedTuples, QuoteNode(t_expr.args[1]))
 
-    t2 = :(IterableTables.DataTableIterator{Float64,Float64})
+    t2 = :(DataTableIterator{Float64,Float64})
     t2.args[2] = t_expr
     t2.args[3] = df_columns_tuple_type
 
-    eval(NamedTuples, :(import IterableTables))
-    t = eval(NamedTuples, t2)
+    t = eval(t2)
 
     e_df = t(df, (df.columns...))
 

@@ -22,13 +22,13 @@ function getiterator(df::TypedTables.Table)
         push!(df_columns_tuple_type.args, typeof(df.data[i]))
     end
     t_expr = NamedTuples.make_tuple(col_expressions)
+    t_expr.args[1] = Expr(:., :NamedTuples, QuoteNode(t_expr.args[1]))
 
-    t2 = :(IterableTables.TypedTableIterator{Float64,Float64})
+    t2 = :(TypedTableIterator{Float64,Float64})
     t2.args[2] = t_expr
     t2.args[3] = df_columns_tuple_type
 
-    eval(NamedTuples, :(import IterableTables))
-    t = eval(NamedTuples, t2)
+    t = eval(t2)
 
     e_df = t(df, df.data)
 
@@ -99,9 +99,7 @@ function TypedTables.Table(x)
         end
     end
 
-    T = eval(TypedTables, 
-        Expr(:curly, :Table, Expr(:tuple, [QuoteNode(i) for i in source_colnames]...), Expr(:curly, :Tuple, [typeof(i) for i in columns]...))
-    )
+    T = eval(Expr(:curly, :(TypedTables.Table), Expr(:tuple, [QuoteNode(i) for i in source_colnames]...), Expr(:curly, :Tuple, [typeof(i) for i in columns]...)))
 
     tt = T()
 

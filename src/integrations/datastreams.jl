@@ -35,15 +35,15 @@ function getiterator{S<:DataStreams.Data.Source}(source::S)
         push!(columns_tuple_type_source.args, schema.types[i])
     end
     t_expr = NamedTuples.make_tuple(col_expressions)
+    t_expr.args[1] = Expr(:., :NamedTuples, QuoteNode(t_expr.args[1]))
 
-    t2 = :(IterableTables.DataStreamIterator{Float64,Float64,Float64,Float64})
+    t2 = :(DataStreamIterator{Float64,Float64,Float64,Float64})
     t2.args[2] = t_expr
     t2.args[3] = typeof(source)
     t2.args[4] = columns_tuple_type
     t2.args[5] = columns_tuple_type_source
 
-    eval(NamedTuples, :(import IterableTables))
-    t = eval(NamedTuples, t2)
+    t = eval(t2)
 
     e_df = t(source, schema)
 
