@@ -4,7 +4,6 @@ using DataFrames
 using DataStreams
 using CSV
 using SQLite
-using FlatBuffers
 using Feather
 using NullableArrays
 using Base.Test

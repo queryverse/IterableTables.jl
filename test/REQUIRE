@@ -11,3 +11,5 @@ SQLite
 IndexedTables
 DifferentialEquations
 ParameterizedFunctions
+NullableArrays
+DataStreams
