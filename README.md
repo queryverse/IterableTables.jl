@@ -50,7 +50,7 @@ be queried using [Query.jl](https://github.com/davidanthoff/Query.jl).
 
 This package only works on julia 0.5 and newer. You can add it with:
 ```julia
-Pkg.clone("https://github.com/davidanthoff/IterableTables.jl.git")
+Pkg.add("IterableTables")
 ```
 
 ## Getting started
