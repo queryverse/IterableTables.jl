@@ -10,7 +10,6 @@ using StatsModels
 using TypedTables
 using VegaLite
 using IndexedTables
-using ParameterizedFunctions
 using Base.Test
 
 if VERSION < v"0.6.0-"    
