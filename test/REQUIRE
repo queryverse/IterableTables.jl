@@ -9,7 +9,7 @@ Gadfly
 VegaLite
 SQLite
 IndexedTables
-DifferentialEquations
-ParameterizedFunctions
+DiffEqBase
+OrdinaryDiffEq
 NullableArrays
 DataStreams

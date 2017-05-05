@@ -1,7 +1,7 @@
 using IterableTables
 using DataFrames
-using DifferentialEquations
-using ParameterizedFunctions
+using DiffEqBase
+using OrdinaryDiffEq
 using Base.Test
 
 @testset "DifferentialEquations" begin
