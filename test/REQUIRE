@@ -11,5 +11,6 @@ SQLite
 IndexedTables
 DiffEqBase
 OrdinaryDiffEq
+ParameterizedFunctions
 NullableArrays
 DataStreams
