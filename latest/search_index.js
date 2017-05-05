@@ -61,7 +61,55 @@ var documenterSearchIndex = {"docs": [
     "page": "User Guide",
     "title": "Overview",
     "category": "section",
-    "text": "[TODO]"
+    "text": "Any of the types that supports the iterable tables interface does so by loading the IterableTables package, nothing else needs to be done.To convert things into a destination type one sometimes needs to obey some special conventions, depending on the destination type, but in general these conversions follow a simple pattern. The following sections describe how to convert and use an iterable table with various packages."
+},
+
+{
+    "location": "userguide.html#DataFrames,-DataTables,-TypedTables-1",
+    "page": "User Guide",
+    "title": "DataFrames, DataTables, TypedTables",
+    "category": "section",
+    "text": "For all three packages one can simply pass an iterable table to a constructor call to construct a new instance of that type that holds a copy of the data that was stored in the iterable table. For example, assuming the data source is called ds, one can use the following code:# Construct a DataFrame\ndf = DataFrame(ds)\n\n# Construct a DataTable\ndt = DataTable(ds)\n\n# Construct a TypedTable\ntt = Table(ds)"
+},
+
+{
+    "location": "userguide.html#TimeSeries-1",
+    "page": "User Guide",
+    "title": "TimeSeries",
+    "category": "section",
+    "text": "To construct a TimeArray instance, one needs a source that follows a number of rules: 1) it must have a column that is of type TimeType and 2) all other columns must be of one type. With such a source, one can use the following code to create a TimeArray, assuming that ds is an iterable table:ta = TimeArray(ds, timestamp_column=:name_of_timestamp_column)If the column with the timestamp information is named timestamp in the source, one can use a single argument constructor call:ta = TimeArray(ds)"
+},
+
+{
+    "location": "userguide.html#IndexedTables-1",
+    "page": "User Guide",
+    "title": "IndexedTables",
+    "category": "section",
+    "text": "The simplest way to construct an IndexedTable is to call the one argument constructor on an iterable table ds:it = IndexedTable(ds)In this case the last column in the source will be the data column in the IndexedTable, and all other columns will be index columns.One can manually select the index and data columns by using the keyword arguments idxcols and datacols. Both take a vector of Symbols as arguments. For example, to make the time and region column in a data source the index columns, one would use the following command:it = IndexedTable(ds, idxcols=[:time, :region])In this case all remaining columns will be turned into data columns. If one only specifies the datacols argument, one will create an IndexedTable in which all columns that are not listed in the datacols argument will be turned into index columns. Finally, one can also specify both the idxcols and datacols argument at the same time (and thus even drop columns by noth listing them in either argument list)."
+},
+
+{
+    "location": "userguide.html#DataStreams-(CSV,-Feather)-1",
+    "page": "User Guide",
+    "title": "DataStreams (CSV, Feather)",
+    "category": "section",
+    "text": "To write an iterable table into a CSV or Feather file is slightly more involved. In particular, one must call the function IterableTables.get_datastreams_source to create a DataStream.Source instance that can then be passed to either the CSV.write or Feather.write function.To write an iterable table ds to a CSV file, one would therefor use the following code:CSV.write(\"filename.csv\", IterableTables.get_datastreams_source(ds))And to write an iterable table to a Feather file, one would use the following code:Feather.write(\"filename.csv\", IterableTables.get_datastreams_source(ds))"
+},
+
+{
+    "location": "userguide.html#Gadfly-and-VegaLite-1",
+    "page": "User Guide",
+    "title": "Gadfly and VegaLite",
+    "category": "section",
+    "text": "For both plotting packages one can simply pass an iterable table where one would normally have passed a DataFrame.The following example plots an iterable table ds using Gadfly:p = plot(ds, x=:a, y=:b, Geom.line)And this code will plot an iterable table using VegaLite:p = data_values(ds) +\n    mark_line() +\n    encoding_x_quant(:a) +\n    encoding_y_quant(:b)"
+},
+
+{
+    "location": "userguide.html#StatsModels-(and-statistical-models-in-DataFrames)-1",
+    "page": "User Guide",
+    "title": "StatsModels (and statistical models in DataFrames)",
+    "category": "section",
+    "text": "For statistical models one can use an iterable table instead of a DataFrame. Under the hood this is achieved by providing a constructor for ModelFrame that takes an iterable table, and by providing methods for the fit function that accept an iterable table instead of a DataFrame. For most users this implies that one can e.g. simply pass an iterable table to the lm and glm function in the GLM package (assuming ds is any iterable table):OLS = glm(@formula(Y ~ X), ds, Normal(), IdentityLink())"
 },
 
 {
@@ -84,6 +132,38 @@ var documenterSearchIndex = {"docs": [
     "location": "integrationguide.html#Overview-1",
     "page": "Integration Guide",
     "title": "Overview",
+    "category": "section",
+    "text": "For now I recommend that all integrations with IterableTables should live in the IterableTables package. This is a temporary solution until the interface in IterableTables is more stable, at which point integrations will be moved into the packages that they integrate. So new integrations should at this point ideally be submitted as pull requests against the IterableTables repository. Specifically, each integration should be put into a file in the folder src/integrations, and the filename should be the name of the package that is being integrated. The code in that file should live in a @require block (see one of the existing integrations for an example)."
+},
+
+{
+    "location": "integrationguide.html#Consuming-iterable-tables-1",
+    "page": "Integration Guide",
+    "title": "Consuming iterable tables",
+    "category": "section",
+    "text": "One cannot dispatch on an iterable table because iterable tables don't have a common super type. Instead one has to add a method that takes any type as an argument to consume an iterable table. For conversions between types it is recommended that one adds a constructor that takes one argument without any type restriction that can convert an iterable table into the target type. For example, if one has added a new table type called MyTable, one would add a constructor with this method signature for this type: function MyTable(iterable_table). For other situations, for example a plotting function, one also would add a method without any type restriction, for example plot(iterable_table).The first step inside any function that consumes iterable tables is to check whether the argument that was passed is actually an iterable table or not. This can easily be done with the isiterabletable function. For example, the constructor for a new table type might start like this:function MyTable(source)\n    isiterabletable(source) || error(\"Argument is not an iterable table.\")\n\n    # Code that converts things follows\nendOnce it has been established that the argument is actually an iterable table there are multiple ways to proceed. The following two sections describe two options, which one is appropriate for a given situation depends on a variety of factors."
+},
+
+{
+    "location": "integrationguide.html#Reusing-an-existing-consumer-of-iterable-tables-1",
+    "page": "Integration Guide",
+    "title": "Reusing an existing consumer of iterable tables",
+    "category": "section",
+    "text": "This option is by far the simplest way to add support for consuming an iterable table. Essentially the strategy is to reuse the conversion implementation of some other type. For example, one can simply convert the iterable table into a DataFrame right after one has checked that the argument of the function is actually an iterable table. Once the iterable table is converted to a DataFrame, one can use the standard API of DataFrames to proceed. This strategy is especially simple for packages that already support interaction with DataFrames (or any of the other table types supported by IterableTables). The code for the MyTable constructor might look like this:function MyTable(source)\n    isiterabletable(source) || error(\"Argument is not an iterable table.\")\n\n    df = DataFrame(source)\n    return MyTable(df)\nendThis assumes that MyTable has another constructor that accepts a DataFrame.Currently the most efficient table type for this kind of conversion is the DataTable type from the DataTables.jl package. How efficient is this strategy in general? It really depends what is happening in the next step with say the DataTable one constructed. If the data will be copied into yet another data structure after it has been converted to a DataTable, one has added at least one unnecessary memory allocation in the conversion. For such a situation it is probably more efficient to manually code a complete version, as described in the next section. If, on the other hand, one for example requires a vector of values for each column of the table, this approach can be quite efficient: one can just access the vector in the DataTable and operate on that."
+},
+
+{
+    "location": "integrationguide.html#Coding-a-complete-conversion-1",
+    "page": "Integration Guide",
+    "title": "Coding a complete conversion",
+    "category": "section",
+    "text": "[TODO]"
+},
+
+{
+    "location": "integrationguide.html#Creating-an-iterable-table-source-1",
+    "page": "Integration Guide",
+    "title": "Creating an iterable table source",
     "category": "section",
     "text": "[TODO]"
 },
