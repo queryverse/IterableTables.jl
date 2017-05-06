@@ -84,7 +84,67 @@ one can just access the vector in the `DataTable` and operate on that.
 
 ## Coding a complete conversion
 
-[TODO]
+Coding a custom conversion is more work than reusing an existing consumer
+of iterable tables, but it provides more flexibility.
+
+In general, a custom
+conversion function also needs to start with a call to `isiterable` to
+check whether one actually has an iterable table. The second step in any
+custom conversion function is to all the `getiterator` function on the
+iterable table. This will return an instance of a type that implements
+the standard julia iterator interface, i.e. one can call `start`, `next`
+and `done` on the instance that is returned by `getiterator`. For some
+iterable tables `getiterator` will just return the argument that one has
+passed to it, but for other iterable tables it will return an instance
+of a different type.
+
+`getiterator` is generally not a type stable function. Given that this
+function is generally only called once per conversion this hopefully
+is not a huge performance issue. The functions that really need to be
+type-stable are `start`, `next` and `done` because they will be called
+for every row of the table that is to be converted. In general, these three
+functions will be type stable for the type of the return value of
+`getiterator`. But given that `getiterator` is not type stable, one needs
+to use a function barrier to make sure the three iteration functions are
+called from a type stable function.
+
+The next step in a custom conversion function is typically to find out
+what columns the iterable table has. The helper functions
+`IterableTables.column_types` and `IterableTables.column_names` provide
+this functionality (note that these are not part of the official iterable
+tables interface, they are simply helper functions that make it easier to
+find this information). Both functions need to be called with the return
+value of `getiterator` as the argument. `IterableTables.column_types`
+returns a vector of `Type`s that are the element types of the columns of
+the iterable table. `IterableTables.column_names` returns a vector of
+`Symbol`s with the names of the columns.
+
+Custom conversion functions can at this point optionally check whether
+the iterable table implements the `length` function by checking whether
+`Base.iteratorsize(typeof(iter))==Base.HasLength()` (this is part of the
+standard iteration protocol). It is important to note that every consumer
+of iterable tables needs to handle the case where no length information
+is available, but can provide an additional, typically faster implementation
+if length information is provided by the source. A typical pattern might
+be that a consumer can pre-allocate the arrays that should hold the data
+from the iterable tables with the right size if length information is
+available from the source.
+
+With all this information, a consumer now typically would allocate the
+data structures that should hold the converted data. This will almost always
+be very consumer specific. Once these data structures have been allocated,
+one can actually implement the loop that iterates over the source rows.
+To get good performance it is recommended that this loop is implemented
+in a new function (behind a function barrier), and that the function with
+the loop is type-stable. Often this will require the use of a generated
+function that generates code for each column of the source. This can avoid
+a loop over the columns while one is iterating over the rows. It is often
+key to avoid a loop over columns inside the loop over the rows, given that
+columns can have different types, which almost inevitably would lead to a
+type instability. 
+
+A good example of a custom consumer of an iterable table is the code
+in the `DataTable` integration.
 
 # Creating an iterable table source
 
