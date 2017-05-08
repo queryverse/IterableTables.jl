@@ -45,6 +45,10 @@ Base.eltype{T,S<:IndexedTable}(iter::IndexedTableIterator{T,S}) = T
 
 Base.eltype{T,S<:IndexedTable}(iter::Type{IndexedTableIterator{T,S}}) = T
 
+function Base.length{T,S<:IndexedTable}(iter::IndexedTableIterator{T,S})
+    return length(iter.source)
+end
+
 function Base.start{T,S<:IndexedTable}(iter::IndexedTableIterator{T,S})
     return 1
 end
