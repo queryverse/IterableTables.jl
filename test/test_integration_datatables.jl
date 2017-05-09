@@ -8,6 +8,13 @@ using Base.Test
 @testset "DataTables" begin
 
 source_dt = DataTable(a=[1,2,3], b=[1.,2.,3.], c=["A","B","C"])
+
+@test isiterable(source_dt) == true
+
+dt_iterator = getiterator(source_dt)
+
+@test length(dt_iterator) == 3
+
 df = DataFrame(source_dt)
 
 @test size(df) == (3,3)

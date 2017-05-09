@@ -8,6 +8,13 @@ using Base.Test
 @testset "TypedTables" begin
 
 source_tt = @Table(a=Nullable{Int}[1,2,3], b=Nullable{Float64}[1.,2.,3.], c=Nullable{String}["A","B","C"])
+
+@test isiterable(source_tt) == true
+
+tt_iterator = getiterator(source_tt)
+
+@test length(tt_iterator) == 3
+
 df = DataFrame(source_tt)
 
 @test size(df) == (3,3)
