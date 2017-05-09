@@ -40,7 +40,7 @@ function getiterator{S<:TimeSeries.TimeArray}(ta::S)
 end
 
 function Base.length{T,TS}(iter::TimeArrayIterator{T,TS})
-    return size(iter.source,1)
+    return length(iter.source)
 end
 
 function Base.eltype{T,TS}(iter::TimeArrayIterator{T,TS})
