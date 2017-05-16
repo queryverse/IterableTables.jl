@@ -104,7 +104,7 @@ type DataStreamSource{TSource,TE} <: Data.Source
     iterate_state
     current_row::Int
     current_val::TE
-    function DataStreamSource(schema, data)
+    function DataStreamSource{TSource,TE}(schema, data) where {TSource,TE}
         x = new(schema, data)
         x.current_row = 0
         return x
