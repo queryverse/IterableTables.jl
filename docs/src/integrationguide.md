@@ -171,7 +171,7 @@ return `NamedTuple`s for each element. The fields in the `NamedTuple`
 correspond to the columns of the table, i.e. the names of the fields are
 the column names, and the types of the field are the column types. If the
 source supports some notion of missing values, it should return
-`NamedTuples` that have fields of type `Nullable{T}`, where `T` is the
+`NamedTuples` that have fields of type `DataValue{T}`, where `T` is the
 data type of the column.
 
 It is important to not only implement `start`, `next` and `end` from the

@@ -25,4 +25,4 @@ The final function in the detection and signaling interface of `IterableTables` 
 
 ## Iteration conventions
 
-Any iterable table should return elements of type `NamedTuple`. Each column of the source table should be encoded as a field in the named tuple, and the type of that field in the named tuple should reflect the data type of the column in the table. If a column can hold missing values, the type of the corresponding field in the `NamedTuple` should be a `Nullable{T}` where `T` is the data type of the column.
+Any iterable table should return elements of type `NamedTuple`. Each column of the source table should be encoded as a field in the named tuple, and the type of that field in the named tuple should reflect the data type of the column in the table. If a column can hold missing values, the type of the corresponding field in the `NamedTuple` should be a `DataValue{T}` where `T` is the data type of the column.
