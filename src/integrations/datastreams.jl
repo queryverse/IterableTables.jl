@@ -104,7 +104,7 @@ end
 # DataStreams Source
 
 type DataStreamSource{TSource,TE} <: Data.Source
-    schema::Data.Schema
+    _schema::Data.Schema
     data::TSource
     iterate_state
     current_row::Int
@@ -178,7 +178,7 @@ function Data.streamfrom{T}(source::DataStreamSource, ::Type{Data.Field}, ::Type
 end
 
 function Data.schema(source::DataStreamSource)
-    return source.schema
+    return source._schema
 end
 
 function Data.schema(source::DataStreamSource, ::Type{Data.Field})
@@ -193,6 +193,11 @@ function get_datastreams_source{S}(source::S)
     column_types = IterableTables.column_types(iter)
     column_names = IterableTables.column_names(iter)
 
+    for (i,v) in enumerate(column_types)
+        if v <: DataValue
+            column_types[i] = Nullable{v.parameters[1]}
+        end
+    end
 
     schema = Data.Schema(column_names, column_types, -1)
     source = DataStreamSource{typeof(iter),eltype(iter)}(schema, iter)
