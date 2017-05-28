@@ -1,6 +1,7 @@
 # IterableTables.jl v0.1.0 Release Notes
 * Drop julia 0.5 compat
 * Fix julia 0.6 compat issues
+* Use DataValue for missing values
 
 # IterableTables.jl v0.0.2 Release Notes
 * Add documentation

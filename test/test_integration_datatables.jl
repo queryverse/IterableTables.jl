@@ -3,6 +3,7 @@ using NamedTuples
 using DataFrames
 using DataTables
 using NullableArrays
+using DataValues
 using Base.Test
 
 @testset "DataTables" begin
@@ -51,7 +52,7 @@ dt = DataTable(source_array_non_nullable)
 @test dt[:b] == [1.,2.,3.]
 @test dt[:c] == ["A","B","C"]
 
-source_array = [@NT(a=Nullable(1),b=Nullable(1.),c=Nullable("A")), @NT(a=Nullable(2),b=Nullable(2.),c=Nullable("B")), @NT(a=Nullable(3),b=Nullable(3.),c=Nullable("C"))]
+source_array = [@NT(a=DataValue(1),b=DataValue(1.),c=DataValue("A")), @NT(a=DataValue(2),b=DataValue(2.),c=DataValue("B")), @NT(a=DataValue(3),b=DataValue(3.),c=DataValue("C"))]
 dt = DataTable(source_array)
 
 @test size(dt) == (3,3)

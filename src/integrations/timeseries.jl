@@ -1,4 +1,5 @@
 @require TimeSeries begin
+using DataValues
 
 immutable TimeArrayIterator{T, S}
     source::S
@@ -99,11 +100,11 @@ function TimeSeries.TimeArray(x, timestamp_column::Symbol=:timestamp)
 
     orig_data_type = data_columns[1][2][2]
 
-    data_type = orig_data_type <: Nullable ? orig_data_type.parameters[1] : orig_data_type
+    data_type = orig_data_type <: DataValue ? orig_data_type.parameters[1] : orig_data_type
 
     orig_timestep_type = col_types[timestep_col_index]
 
-    timestep_type = orig_timestep_type <: Nullable ? orig_timestep_type.parameters[1] : orig_timestep_type
+    timestep_type = orig_timestep_type <: DataValue ? orig_timestep_type.parameters[1] : orig_timestep_type
 
     if any(i->i[2][2]!=orig_data_type, data_columns)
         error("All data columns need to be of the same type.")
@@ -116,13 +117,13 @@ function TimeSeries.TimeArray(x, timestamp_column::Symbol=:timestamp)
     end
 
     for v in iter
-        if orig_timestep_type <: Nullable
+        if orig_timestep_type <: DataValue
             push!(t_column, get(v[timestep_col_index]))
         else
             push!(t_column, v[timestep_col_index])
         end
 
-        if orig_data_type <: Nullable
+        if orig_data_type <: DataValue
             for (i,c) in enumerate(data_columns)
                 push!(d_array[i],get(v[c[1]]))
             end

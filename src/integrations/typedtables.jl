@@ -1,6 +1,6 @@
 @require TypedTables begin
-
-import NullableArrays
+using DataValues
+using NullableArrays
 
 immutable TypedTableIterator{T, TS}
     df::TypedTables.Table
@@ -18,7 +18,11 @@ function getiterator(df::TypedTables.Table)
     df_columns_tuple_type = Expr(:curly, :Tuple)
     for i in 1:length(df.data)
         etype = eltype(df.data[i])
-        push!(col_expressions, Expr(:(::), names(df)[i], etype))
+        if isa(df.data[i], NullableArray)
+            push!(col_expressions, Expr(:(::), names(df)[i], DataValue{etype.parameters[1]}))
+        else            
+            push!(col_expressions, Expr(:(::), names(df)[i], etype))
+        end
         push!(df_columns_tuple_type.args, typeof(df.data[i]))
     end
     t_expr = NamedTuples.make_tuple(col_expressions)
@@ -50,7 +54,11 @@ end
 @generated function Base.next{T,TS}(iter::TypedTableIterator{T,TS}, state)
     constructor_call = Expr(:call, :($T))
     for (i,t) in enumerate(T.parameters)
-        push!(constructor_call.args, :(columns[$i][i]))
+        if iter.parameters[1].parameters[i] <: DataValue
+            push!(constructor_call.args, :(DataValue(columns[$i][i])))
+        else        
+            push!(constructor_call.args, :(columns[$i][i]))
+        end
     end
 
     quote
@@ -71,7 +79,11 @@ end
     n = length(tt.parameters[2].parameters)
     push_exprs = Expr(:block)
     for i in 1:n
-        ex = :( push!(tt.data[$i], row[$i]) )
+        if tt.parameters[2].parameters[i] <: NullableArray
+            ex = :( push!(tt.data[$i], Nullable(row[$i]) ))
+        else 
+            ex = :( push!(tt.data[$i], row[$i]) )
+        end
         push!(push_exprs.args, ex)
     end
 
@@ -92,7 +104,7 @@ function TypedTables.Table(x)
 
     columns = []
     for t in source_coltypes
-        if t <: Nullable
+        if t <: DataValue
             push!(columns, NullableArrays.NullableArray(t.parameters[1],0))
         else
             push!(columns, Array{t}(0))

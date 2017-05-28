@@ -1,5 +1,6 @@
 @require DataFrames begin
 using DataArrays
+using DataValues
 
 # T is the type of the elements produced
 # TS is a tuple type that stores the columns of the DataFrame
@@ -19,7 +20,7 @@ function getiterator(df::DataFrames.DataFrame)
     df_columns_tuple_type = Expr(:curly, :Tuple)
     for i in 1:length(df.columns)
         if isa(df.columns[i], DataArray)
-            push!(col_expressions, Expr(:(::), names(df)[i], Nullable{eltype(df.columns[i])}))
+            push!(col_expressions, Expr(:(::), names(df)[i], DataValue{eltype(df.columns[i])}))
         else
             push!(col_expressions, Expr(:(::), names(df)[i], eltype(df.columns[i])))
         end
@@ -54,7 +55,7 @@ end
 @generated function Base.next{T,TS}(iter::DataFrameIterator{T,TS}, state)
     constructor_call = Expr(:call, :($T))
     for i in 1:length(iter.types[2].types)
-        if iter.parameters[1].parameters[i] <: Nullable
+        if iter.parameters[1].parameters[i] <: DataValue
             push!(constructor_call.args, :(isna(columns[$i],i) ? $(iter.parameters[1].parameters[i])() : $(iter.parameters[1].parameters[i])(columns[$i][i])))
         else
             push!(constructor_call.args, :(columns[$i][i]))
@@ -102,11 +103,14 @@ function _DataFrame(x)
         error("Can only collect a NamedTuple iterator into a DataFrame")
     end
 
+    column_types = IterableTables.column_types(iter)
+    column_names = IterableTables.column_names(iter)    
+
     columns = []
-    for t in T.types
+    for t in column_types
         if isa(t, TypeVar)
             push!(columns, Array{Any}(0))
-        elseif t <: Nullable
+        elseif t <: DataValue
             push!(columns, DataArray(t.parameters[1],0))
         else
             push!(columns, Array{t}(0))

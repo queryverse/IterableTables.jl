@@ -3,11 +3,12 @@ using NamedTuples
 using TypedTables
 using DataFrames
 using NullableArrays
+using DataValues
 using Base.Test
 
 @testset "TypedTables" begin
 
-source_tt = @Table(a=Nullable{Int}[1,2,3], b=Nullable{Float64}[1.,2.,3.], c=Nullable{String}["A","B","C"])
+source_tt = @Table(a=NullableArray([1,2,3]), b=NullableArray([1.,2.,3.]), c=NullableArray(["A","B","C"]))
 
 @test isiterable(source_tt) == true
 
@@ -48,7 +49,7 @@ tt = Table(source_array_non_nullable)
 @test @col(tt, b) == [1.,2.,3.]
 @test @col(tt, c) == ["A","B","C"]
 
-source_array = [@NT(a=Nullable(1),b=Nullable(1.),c=Nullable("A")), @NT(a=Nullable(2),b=Nullable(2.),c=Nullable("B")), @NT(a=Nullable(3),b=Nullable(3.),c=Nullable("C"))]
+source_array = [@NT(a=DataValue(1),b=DataValue(1.),c=DataValue("A")), @NT(a=DataValue(2),b=DataValue(2.),c=DataValue("B")), @NT(a=DataValue(3),b=DataValue(3.),c=DataValue("C"))]
 tt = Table(source_array)
 
 @test TypedTables.ncol(tt) == 3

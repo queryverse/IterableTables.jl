@@ -4,6 +4,7 @@ using DataFrames
 using DataTables
 using GLM
 using NullableArrays
+using DataValues
 using Base.Test
 
 @testset "DataFrames" begin
@@ -63,7 +64,7 @@ df = DataFrame(source_array_non_nullable)
 @test df[:b] == [1.,2.,3.]
 @test df[:c] == ["A","B","C"]
 
-source_array = [@NT(a=Nullable(1),b=Nullable(1.),c=Nullable("A")), @NT(a=Nullable(2),b=Nullable(2.),c=Nullable("B")), @NT(a=Nullable(3),b=Nullable(3.),c=Nullable("C"))]
+source_array = [@NT(a=DataValue(1),b=DataValue(1.),c=DataValue("A")), @NT(a=DataValue(2),b=DataValue(2.),c=DataValue("B")), @NT(a=DataValue(3),b=DataValue(3.),c=DataValue("C"))]
 df = DataFrame(source_array)
 
 @test size(df) == (3,3)

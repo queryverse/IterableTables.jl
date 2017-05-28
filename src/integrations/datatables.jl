@@ -1,5 +1,6 @@
 @require DataTables begin
 using NullableArrays
+using DataValues
 
 # T is the type of the elements produced
 # TS is a tuple type that stores the columns of the DataTable
@@ -19,7 +20,11 @@ function getiterator(df::DataTables.DataTable)
     df_columns_tuple_type = Expr(:curly, :Tuple)
     for i in 1:length(df.columns)
         etype = eltype(df.columns[i])
-        push!(col_expressions, Expr(:(::), names(df)[i], etype))
+        if isa(df.columns[i], NullableArray)
+            push!(col_expressions, Expr(:(::), names(df)[i], DataValue{etype.parameters[1]}))
+        else
+            push!(col_expressions, Expr(:(::), names(df)[i], etype))
+        end
         push!(df_columns_tuple_type.args, typeof(df.columns[i]))
     end
     t_expr = NamedTuples.make_tuple(col_expressions)
@@ -51,7 +56,11 @@ end
 @generated function Base.next{T,TS}(iter::DataTableIterator{T,TS}, state)
     constructor_call = Expr(:call, :($T))
     for (i,t) in enumerate(T.parameters)
-        push!(constructor_call.args, :(columns[$i][i]))
+        if iter.parameters[1].parameters[i] <: DataValue
+            push!(constructor_call.args, :(DataValue(columns[$i][i])))
+        else
+            push!(constructor_call.args, :(columns[$i][i]))
+        end
     end
 
     quote
@@ -72,7 +81,11 @@ end
     n = length(columns.types)
     push_exprs = Expr(:block)
     for i in 1:n
-        ex = :( push!(columns[$i], i[$i]) )
+        if columns.parameters[i] <: NullableArray
+            ex = :( push!(columns[$i], Nullable(i[$i]) ))
+        else
+            ex = :( push!(columns[$i], i[$i]) )
+        end
         push!(push_exprs.args, ex)        
     end
 
@@ -87,7 +100,11 @@ end
     n = length(columns.types)
     push_exprs = Expr(:block)
     for col_idx in 1:n
-        ex = :( columns[$col_idx][i] = v[$col_idx] )
+        if columns.parameters[col_idx] <: NullableArray
+            ex = :( columns[$col_idx][i] = Nullable(v[$col_idx] ))
+        else
+            ex = :( columns[$col_idx][i] = v[$col_idx] )
+        end
         push!(push_exprs.args, ex)
     end
 
@@ -115,7 +132,7 @@ function _DataTable(x)
     for t in column_types
         if isa(t, TypeVar)
             push!(columns, Array{Any}(rows))
-        elseif t <: Nullable
+        elseif t <: DataValue
             push!(columns, NullableArray(t.parameters[1],rows))
         else
             push!(columns, Array{t}(rows))
