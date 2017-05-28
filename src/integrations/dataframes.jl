@@ -27,7 +27,6 @@ function getiterator(df::DataFrames.DataFrame)
         push!(df_columns_tuple_type.args, typeof(df.columns[i]))
     end
     t_expr = NamedTuples.make_tuple(col_expressions)
-    t_expr.args[1] = Expr(:., :NamedTuples, QuoteNode(t_expr.args[1]))
 
     t2 = :(DataFrameIterator{Float64,Float64})
     t2.args[2] = t_expr
