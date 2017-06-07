@@ -60,6 +60,7 @@ include("test_integration_typedtables.jl")
 include("test_integration_vegalite.jl")
 include("test_integration_indexedtables.jl")
 include("test_integration_differentialequations.jl")
+include("test_integration_temporal.jl")
 
 if VERSION < v"0.6.0-"
     include("test_integration_gadfly.jl")    

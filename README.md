@@ -22,6 +22,7 @@ The package currently has support for the following data sources:
 [DataTables](https://github.com/JuliaData/DataTables.jl),
 [IndexedTables](https://github.com/JuliaComputing/IndexedTables.jl),
 [TimeSeries](https://github.com/JuliaStats/TimeSeries.jl),
+[Temporal](https://github.com/dysonance/Temporal.jl),
 [TypedTables](https://github.com/FugroRoames/TypedTables.jl),
 [DifferentialEquations](https://github.com/JuliaDiffEq/DifferentialEquations.jl) (any ``DESolution``) and
 any iterator who produces elements of type
@@ -36,6 +37,7 @@ like ``ModelFrame`` etc.),
 [DataTables](https://github.com/JuliaData/DataTables.jl),
 [IndexedTables](https://github.com/JuliaComputing/IndexedTables.jl),
 [TimeSeries](https://github.com/JuliaStats/TimeSeries.jl),
+[Temporal](https://github.com/dysonance/Temporal.jl),
 [TypedTables](https://github.com/FugroRoames/TypedTables.jl),
 [StatsModels](https://github.com/JuliaStats/StatsModels.jl),
 [Gadfly](https://github.com/GiovineItalia/Gadfly.jl) and
