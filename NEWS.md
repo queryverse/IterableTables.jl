@@ -1,3 +1,6 @@
+# IterableTables.jl v0.3.0 Release Notes
+* Use NamedTuples.jl v4.0.0
+
 # IterableTables.jl v0.2.0 Release Notes
 * Add Temporal.jl integration
 
