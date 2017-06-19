@@ -71,7 +71,7 @@ end
 end
 
 function Base.done{T,TS}(iter::DataTableIterator{T,TS}, state)
-    return state>size(iter.df,1)
+    return state>length(iter.columns[1])
 end
 
 # Sink
