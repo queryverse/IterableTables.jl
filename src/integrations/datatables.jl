@@ -95,7 +95,7 @@ end
     end
 end
 
-@generated function _filldt_with_length(columns, enumerable)
+@generated function _filldt_with_length(columns, enumerable, state)    
     n = length(columns.types)
     push_exprs = Expr(:block)
     for col_idx in 1:n
@@ -108,8 +108,14 @@ end
     end
 
     quote
-        for (i,v) in enumerate(enumerable)
+        state_internal = state
+        i = 1
+        while !done(enumerable, state_internal)
+            res = next(enumerable, state_internal)
+            v = res[1]
+            state_internal = res[2]
             $push_exprs
+            i += 1
         end
     end
 end
@@ -125,22 +131,33 @@ function _DataTable(x)
     column_types = IterableTables.column_types(iter)
     column_names = IterableTables.column_names(iter)
 
-    rows = Base.iteratorsize(typeof(iter))==Base.HasLength() ? length(iter) : 0
-
     columns = []
-    for t in column_types
-        if isa(t, TypeVar)
-            push!(columns, Array{Any}(rows))
-        elseif t <: DataValue
-            push!(columns, NullableArray(t.parameters[1],rows))
-        else
-            push!(columns, Array{t}(rows))
-        end
-    end
+    if iteratorsize2(iter) in (Base.HasLength(), HasLengthAfterStart())
+        state = start(iter)
 
-    if Base.iteratorsize(typeof(iter))==Base.HasLength()
-        _filldt_with_length((columns...), iter)
+        rows = iteratorsize2(iter)==HasLengthAfterStart() ? length(iter, state) : length(iter)
+
+        for t in column_types
+            if isa(t, TypeVar)
+                push!(columns, Array{Any}(rows))
+            elseif t <: DataValue
+                push!(columns, NullableArray(t.parameters[1],rows))
+            else
+                push!(columns, Array{t}(rows))
+            end
+        end  
+        _filldt_with_length((columns...), iter, state)      
     else
+        for t in column_types
+            if isa(t, TypeVar)
+                push!(columns, Array{Any}(0))
+            elseif t <: DataValue
+                push!(columns, NullableArray(t.parameters[1],0))
+            else
+                push!(columns, Array{t}(0))
+            end
+        end
+
         _filldt_without_length((columns...), iter)
     end
 

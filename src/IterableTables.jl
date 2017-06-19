@@ -4,6 +4,11 @@ using NamedTuples, Requires
 
 export getiterator, isiterable, isiterabletable
 
+struct HasLengthAfterStart <: Base.IteratorSize end
+
+iteratorsize2(x) = iteratorsize2(typeof(x))
+iteratorsize2{T}(::Type{T}) = Base.iteratorsize(T)
+
 isiterable{T}(x::T) = method_exists(start, Tuple{T})
 
 function getiterator(x)
