@@ -17,6 +17,8 @@ isiterabletable{T}(x::T) = isiterable(x) && Base.iteratoreltype(x)==Base.HasElty
 
 include("utilities.jl")
 
+include("generic_implementation.jl")
+
 include("integrations/dataframes.jl")
 include("integrations/datastreams.jl")
 include("integrations/datatables.jl")
