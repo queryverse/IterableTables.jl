@@ -6,7 +6,7 @@ immutable TableIterator{T, TS}
     columns::TS
 end
 
-function create_tableiterator(columns::Vector{AbstractArray}, names::Vector{Symbol})
+function create_tableiterator(columns::Vector, names::Vector{Symbol})
     col_expressions = Array{Expr,1}()
     df_columns_tuple_type = Expr(:curly, :Tuple)
     for i in 1:length(columns)
@@ -26,7 +26,7 @@ function create_tableiterator(columns::Vector{AbstractArray}, names::Vector{Symb
 
     t = eval(t2)
 
-    e_df = t((df.columns...))
+    e_df = t((columns...))
 
     return e_df
 end
