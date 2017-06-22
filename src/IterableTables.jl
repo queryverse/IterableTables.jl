@@ -31,5 +31,6 @@ include("integrations/vegalite.jl")
 include("integrations/differentialequations.jl")
 include("integrations/generators.jl")
 include("integrations/temporal.jl")
+include("integrations/pandas.jl")
 
 end # module
