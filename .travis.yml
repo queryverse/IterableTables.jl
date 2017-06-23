@@ -12,6 +12,10 @@ branches:
   - master
   - /release-.*/
   - /v(\d+)\.(\d+)\.(\d+)/
+addons:
+  apt:
+    packages:
+    - liblzma-dev
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia -e 'Pkg.clone(pwd()); Pkg.build("IterableTables"); Pkg.test("IterableTables"; coverage=true)'
