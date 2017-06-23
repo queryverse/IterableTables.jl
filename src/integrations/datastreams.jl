@@ -1,6 +1,7 @@
 @require DataStreams begin
 using DataStreams
 using WeakRefStrings
+using DataValues
 
 immutable DataStreamIterator{T, S<:DataStreams.Data.Source, TC, TSC}
     source::S
@@ -25,7 +26,9 @@ function getiterator{S<:DataStreams.Data.Source}(source::S)
         if schema.types[i] <: WeakRefString
             col_type = String
         elseif schema.types[i] <: Nullable && schema.types[i].parameters[1] <: WeakRefString
-            col_type = Nullable{String}
+            col_type = DataValue{String}
+        elseif schema.types[i] <: Nullable
+            col_type = DataValue{schema.types[i].parameters[1]}
         else
             col_type = schema.types[i]
         end
@@ -35,7 +38,6 @@ function getiterator{S<:DataStreams.Data.Source}(source::S)
         push!(columns_tuple_type_source.args, schema.types[i])
     end
     t_expr = NamedTuples.make_tuple(col_expressions)
-    t_expr.args[1] = Expr(:., :NamedTuples, QuoteNode(t_expr.args[1]))
 
     t2 = :(DataStreamIterator{Float64,Float64,Float64,Float64})
     t2.args[2] = t_expr
@@ -65,9 +67,9 @@ end
 function _convertion_helper_for_datastreams(source, row, col, T)
     v = Data.streamfrom(source, Data.Field, Nullable{T}, row, col)
     if isnull(v)
-        return Nullable{String}()
+        return DataValue{String}()
     else
-        return Nullable{String}(String(get(v)))
+        return DataValue{String}(String(get(v)))
     end
 end
 
@@ -76,8 +78,10 @@ end
     for i in 1:length(TC.types)
         if TC.types[i] <: String
             get_expression = :(Data.streamfrom(source, Data.Field, WeakRefString, row, $i))
-        elseif TC.types[i] <: Nullable && TSC.types[i].parameters[1] <: WeakRefString
+        elseif TC.types[i] <: DataValue && TSC.types[i].parameters[1] <: WeakRefString
             get_expression = :(_convertion_helper_for_datastreams(source, row, $i, TSC.types[$i].parameters[1]))
+        elseif TC.types[i] <: DataValue
+            get_expression = :(DataValue(Data.streamfrom(source, Data.Field, $(Nullable{TC.types[i].parameters[1]}), row, $i)))
         else
             get_expression = :(Data.streamfrom(source, Data.Field, $(TC.types[i]), row, $i))
         end
@@ -99,12 +103,12 @@ end
 # DataStreams Source
 
 type DataStreamSource{TSource,TE} <: Data.Source
-    schema::Data.Schema
+    _schema::Data.Schema
     data::TSource
     iterate_state
     current_row::Int
     current_val::TE
-    function DataStreamSource(schema, data)
+    function DataStreamSource{TSource,TE}(schema, data) where {TSource,TE}
         x = new(schema, data)
         x.current_row = 0
         return x
@@ -161,7 +165,7 @@ function Data.streamfrom{T}(source::DataStreamSource, ::Type{Data.Field}, ::Type
 
     val = source.current_val[col]
 
-    if typeof(val) <: Nullable
+    if typeof(val) <: DataValue
         if isnull(val)
             return Nullable{T}()
         else
@@ -173,7 +177,7 @@ function Data.streamfrom{T}(source::DataStreamSource, ::Type{Data.Field}, ::Type
 end
 
 function Data.schema(source::DataStreamSource)
-    return source.schema
+    return source._schema
 end
 
 function Data.schema(source::DataStreamSource, ::Type{Data.Field})
@@ -188,6 +192,11 @@ function get_datastreams_source{S}(source::S)
     column_types = IterableTables.column_types(iter)
     column_names = IterableTables.column_names(iter)
 
+    for (i,v) in enumerate(column_types)
+        if v <: DataValue
+            column_types[i] = Nullable{v.parameters[1]}
+        end
+    end
 
     schema = Data.Schema(column_names, column_types, -1)
     source = DataStreamSource{typeof(iter),eltype(iter)}(schema, iter)

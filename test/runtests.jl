@@ -24,6 +24,9 @@ f_2dlinear_named = @ode_def LotkaVolterra begin
   dy = -c*y + d*x*y
 end a=>1.5 b=>1 c=3 d=1
 
+immutable MyType
+end
+
 @testset "IterableTables" begin
 
 @testset "Core" begin
@@ -34,10 +37,17 @@ other_array = [1,2,3]
 @test isiterabletable(table_array)
 @test !isiterabletable(other_array)
 
+@test_throws ErrorException getiterator(MyType())
+
 iter = getiterator(table_array)
 @test IterableTables.column_names(iter) == [:a]
 @test IterableTables.column_types(iter) == [Int]
 @test IterableTables.column_count(iter) == 1
+
+iter2 = getiterator(other_array)
+@test_throws ErrorException IterableTables.column_names(iter2)
+@test_throws ErrorException IterableTables.column_types(iter2)
+@test_throws ErrorException IterableTables.column_count(iter2)
 
 end
 
@@ -50,6 +60,7 @@ include("test_integration_typedtables.jl")
 include("test_integration_vegalite.jl")
 include("test_integration_indexedtables.jl")
 include("test_integration_differentialequations.jl")
+include("test_integration_temporal.jl")
 
 if VERSION < v"0.6.0-"
     include("test_integration_gadfly.jl")    

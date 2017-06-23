@@ -17,6 +17,8 @@ isiterabletable{T}(x::T) = isiterable(x) && Base.iteratoreltype(x)==Base.HasElty
 
 include("utilities.jl")
 
+include("generic_implementation.jl")
+
 include("integrations/dataframes.jl")
 include("integrations/datastreams.jl")
 include("integrations/datatables.jl")
@@ -28,5 +30,7 @@ include("integrations/typedtables.jl")
 include("integrations/vegalite.jl")
 include("integrations/differentialequations.jl")
 include("integrations/juliadb.jl")
+include("integrations/generators.jl")
+include("integrations/temporal.jl")
 
 end # module

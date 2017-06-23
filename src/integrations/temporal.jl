@@ -1,34 +1,34 @@
-@require TimeSeries begin
+@require Temporal begin
 using DataValues
 
-immutable TimeArrayIterator{T, S}
+immutable TSIterator{T, S}
     source::S
 end
 
-isiterable(x::TimeSeries.TimeArray) = true
-isiterabletable(x::TimeSeries.TimeArray) = true
+isiterable(x::Temporal.TS) = true
+isiterabletable(x::Temporal.TS) = true
 
-function getiterator{S<:TimeSeries.TimeArray}(ta::S)
+function getiterator{S<:Temporal.TS}(ta::S)
     col_expressions = Array{Expr,1}()
     df_columns_tuple_type = Expr(:curly, :Tuple)
 
-    # Add column for timestamp
-    push!(col_expressions, Expr(:(::), :timestamp, S.parameters[3]))
-    push!(df_columns_tuple_type.args, S.parameters[3])
+    # Add column for index
+    push!(col_expressions, Expr(:(::), :Index, S.parameters[2]))
+    push!(df_columns_tuple_type.args, S.parameters[2])
 
     etype = eltype(ta.values)
     if ndims(ta.values)==1
-        push!(col_expressions, Expr(:(::), ta.colnames[1]=="" ? :value : Symbol(ta.colnames[1]), etype))
+        push!(col_expressions, Expr(:(::), ta.fields[1], etype))
         push!(df_columns_tuple_type.args, etype)
     else
         for i in 1:size(ta.values,2)
-            push!(col_expressions, Expr(:(::), Symbol(ta.colnames[i]), etype))
+            push!(col_expressions, Expr(:(::), Symbol(ta.fields[i]), etype))
             push!(df_columns_tuple_type.args, etype)
         end
     end
     t_expr = NamedTuples.make_tuple(col_expressions)
 
-    t2 = :(TimeArrayIterator{Float64,Float64})
+    t2 = :(TSIterator{Float64,Float64})
     t2.args[2] = t_expr
     t2.args[3] = S
 
@@ -39,23 +39,23 @@ function getiterator{S<:TimeSeries.TimeArray}(ta::S)
     return e_ta
 end
 
-function Base.length{T,TS}(iter::TimeArrayIterator{T,TS})
+function Base.length{T,TS}(iter::TSIterator{T,TS})
     return length(iter.source)
 end
 
-function Base.eltype{T,TS}(iter::TimeArrayIterator{T,TS})
+function Base.eltype{T,TS}(iter::TSIterator{T,TS})
     return T
 end
 
-function Base.start{T,TS}(iter::TimeArrayIterator{T,TS})
+function Base.start{T,TS}(iter::TSIterator{T,TS})
     return 1
 end
 
-@generated function Base.next{T,S}(iter::TimeArrayIterator{T,S}, state)
+@generated function Base.next{T,S}(iter::TSIterator{T,S}, state)
     constructor_call = Expr(:call, :($T))
 
-    # Add timestamp column
-    push!(constructor_call.args, :(iter.source.timestamp[i]))
+    # Add index column
+    push!(constructor_call.args, :(iter.source.index[i]))
 
     for i in 1:length(T.parameters)-1
         push!(constructor_call.args, :(iter.source.values[i,$i]))
@@ -68,15 +68,15 @@ end
     end
 end
 
-function Base.done{T,TS}(iter::TimeArrayIterator{T,TS}, state)
-    return state>length(iter.source.timestamp)
+function Base.done{T,TS}(iter::TSIterator{T,TS}, state)
+    return state>length(iter.source.index)
 end
 
 # Sink
 
 # TODO This is a terribly inefficient implementation. Minimally it
 # should be changed to be more type stable.
-function TimeSeries.TimeArray(x, timestamp_column::Symbol=:timestamp)
+function Temporal.TS(x, index_column::Symbol=:Index)
     isiterabletable(x) || error()
 
     iter = getiterator(x)
@@ -87,15 +87,15 @@ function TimeSeries.TimeArray(x, timestamp_column::Symbol=:timestamp)
 
     names = column_names(iter)
     
-    timestep_col_index = findfirst(names, timestamp_column)
+    timestep_col_index = findfirst(names, index_column)
 
     if timestep_col_index==0
-        error("No timestamp column found.")
+        error("No index column found.")
     end
     
     col_types = column_types(iter)
 
-    data_columns = collect(filter(i->i[2][1]!=timestamp_column, enumerate(zip(names, col_types))))
+    data_columns = collect(filter(i->i[2][1]!=index_column, enumerate(zip(names, col_types))))
 
     orig_data_type = data_columns[1][2][2]
 
@@ -135,7 +135,7 @@ function TimeSeries.TimeArray(x, timestamp_column::Symbol=:timestamp)
 
     d_array = hcat(d_array...)
 
-    ta = TimeSeries.TimeArray(t_column,d_array,[string(i[2][1]) for i in data_columns])
+    ta = Temporal.TS(d_array, t_column,[i[2][1] for i in data_columns])
     return ta
 end
 

@@ -11,6 +11,13 @@ using Base.Test
 dates  = collect(Date(1999,1,1):Date(1999,1,3))
 
 source_ta1 = TimeArray(dates, collect(1:length(dates)))
+
+@test isiterable(source_ta1) == true
+
+source_it = getiterator(source_ta1)
+
+@test length(source_it) == 3
+
 df1 = DataFrame(source_ta1)
 @test size(df1) == (3,2)
 @test df1[:timestamp] == dates

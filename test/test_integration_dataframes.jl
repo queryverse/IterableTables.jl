@@ -2,12 +2,17 @@ using IterableTables
 using NamedTuples
 using DataFrames
 using DataTables
+using GLM
 using NullableArrays
+using DataValues
 using Base.Test
 
 @testset "DataFrames" begin
 
 source_df = DataFrame(a=[1,2,3], b=[1.,2.,3.], c=["A","B","C"])
+
+@test isiterable(source_df) == true
+
 dt = DataTable(source_df)
 
 @test size(dt) == (3,3)
@@ -59,7 +64,7 @@ df = DataFrame(source_array_non_nullable)
 @test df[:b] == [1.,2.,3.]
 @test df[:c] == ["A","B","C"]
 
-source_array = [@NT(a=Nullable(1),b=Nullable(1.),c=Nullable("A")), @NT(a=Nullable(2),b=Nullable(2.),c=Nullable("B")), @NT(a=Nullable(3),b=Nullable(3.),c=Nullable("C"))]
+source_array = [@NT(a=DataValue(1),b=DataValue(1.),c=DataValue("A")), @NT(a=DataValue(2),b=DataValue(2.),c=DataValue("B")), @NT(a=DataValue(3),b=DataValue(3.),c=DataValue("C"))]
 df = DataFrame(source_array)
 
 @test size(df) == (3,3)
@@ -73,6 +78,8 @@ df = DataFrame(source_array)
 # TODO add some test beyond just creating a ModelFrame
 mf_array = DataFrames.ModelFrame(DataFrames.@formula(a~b), source_array)
 mf_dt = DataFrames.ModelFrame(DataFrames.@formula(a~b), dt)
+
+lm(DataFrames.@formula(a~b), dt)
 
 # This tests for a specific bug we once had
 df_with_sub_list = DataFrame(name=["John", "Sally", "Kirk"], numberoftoys=[[4; 3; 2], [2; 2; 4; 5; 1], [2; 2]])

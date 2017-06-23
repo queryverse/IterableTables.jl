@@ -2,6 +2,7 @@ using IterableTables
 using NamedTuples
 using StatsModels
 using DataFrames
+using GLM
 using Base.Test
 
 @testset "StatsModels" begin
@@ -12,5 +13,7 @@ source_df = DataFrame(a=[1,2,3], b=[1.,2.,3.], c=["A","B","C"])
 # TODO add some test beyond just creating a ModelFrame
 mf_array = StatsModels.ModelFrame(StatsModels.@formula(a~b), source_array)
 mf_dt = StatsModels.ModelFrame(StatsModels.@formula(a~b), source_df)
+
+lm(StatsModels.@formula(a~b), source_df)
 
 end

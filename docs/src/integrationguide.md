@@ -148,4 +148,68 @@ in the `DataTable` integration.
 
 # Creating an iterable table source
 
-[TODO]
+There are generally two strategies for turning some custom type into an
+iterable table. The first strategy works if one can implement a type-stable
+version of `start`, `next` and `done` that iterates elements of type
+`NamedTuple`. If that is not feasible, the strategy is to create a new
+iterator type. The following two sections describe both approaches.
+
+## Directly implementing the julia base iteration trait
+
+This strategy only works if the type that one wants to expose as an
+iterable table has enough information about the strcuture of the table
+that one can implement a type stable version of `start`, `next` and
+`done`. Typically that requires that one can deduce the names and types
+of the columns of the table purely from the type (and type parameters).
+For some types that works, but for other types (like `DataFrame`) this
+strategy won't work.
+
+If the type one wants to expose as an iterable table allows this strategy,
+the implementation is fairly straightforward: one simple needs to implement
+the standard julia base iterator interface, and during iteration one should
+return `NamedTuple`s for each element. The fields in the `NamedTuple`
+correspond to the columns of the table, i.e. the names of the fields are
+the column names, and the types of the field are the column types. If the
+source supports some notion of missing values, it should return
+`NamedTuples` that have fields of type `DataValue{T}`, where `T` is the
+data type of the column.
+
+It is important to not only implement `start`, `next` and `end` from the
+julia iteration protocoll. Iterable tables also always require that `eltype`
+is implemented. Finally, one should either implement `length`, if the source
+supports returning the number of rows without expensive computations, or
+one should add a method `iteratorsize` that returns `SizeUnknown()` for
+the custom type.
+
+The implementation of a type stable `next` method typically requires the
+use of generated functions.
+
+## Creating a custom iteration type
+
+For types that don't have enough information encoded in their type to
+implement a type stable version of the julia iteration interface, the best
+strategy is to create a custom iteration type that implements the julia
+iteration interface and has enough information.
+
+For example, for the `MyTable` type one might create a new iterator type
+called `MyTableIterator{T}` that holds the type of the `NamedTuple` that
+this iterator will return in `T`.
+
+To expose this new iterator type to consumers, one needs to add a method
+to the `IterableTables.getiterator` function. This function takes an instance
+of the type one wants to expose as an iterable table, and returns a new
+type that should actually be used for the iteration itself. For example,
+`function IterableTables.getiterator(table::MyTable)` would return an
+instance of `MyTableIterator{T}`.
+
+In addition to adding a method to `getiterator`, one must also add methods
+to the `IterableTables.isiterable` and `IterableTables.isiterabletable`
+functions for the type one wants to turn into an iterable table, in both
+cases those methods should return `true`.
+
+The final step is to implement the full julia iteration interface for the
+custom iterator type that one returned from `getiterator`. All the same
+requirements that were discussed in the previous section apply here as
+well.
+
+An example of this strategy is the `DataTable` integration.

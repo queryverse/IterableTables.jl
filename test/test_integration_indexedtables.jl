@@ -10,6 +10,13 @@ using Base.Test
 source_it = IndexedTable(Columns(a = [1,2,3], b = [1.,2.,3.]),
              Columns(c = ["A","B","C"], d = [true,false,true]))
 
+@test isiterable(source_it) == true
+
+it_iterator = getiterator(source_it)
+
+@test eltype(typeof(it_iterator)) == @NT(a::Int, b::Float64, c::String, d::Bool)
+@test length(it_iterator) == 3
+
 df = DataFrame(source_it)
 
 @test size(df) == (3,4)

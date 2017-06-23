@@ -5,6 +5,7 @@
 [![Build Status](https://travis-ci.org/davidanthoff/IterableTables.jl.svg?branch=master)](https://travis-ci.org/davidanthoff/IterableTables.jl)
 [![Build status](https://ci.appveyor.com/api/projects/status/uv9ybxa17e8581pr/branch/master?svg=true)](https://ci.appveyor.com/project/davidanthoff/iterabletables-jl/branch/master)
 [![Query](http://pkg.julialang.org/badges/IterableTables_0.5.svg)](http://pkg.julialang.org/?pkg=IterableTables)
+[![Query](http://pkg.julialang.org/badges/IterableTables_0.6.svg)](http://pkg.julialang.org/?pkg=IterableTables)
 [![codecov.io](http://codecov.io/github/davidanthoff/IterableTables.jl/coverage.svg?branch=master)](http://codecov.io/github/davidanthoff/IterableTables.jl?branch=master)
 
 ## Overview
@@ -21,6 +22,7 @@ The package currently has support for the following data sources:
 [DataTables](https://github.com/JuliaData/DataTables.jl),
 [IndexedTables](https://github.com/JuliaComputing/IndexedTables.jl),
 [TimeSeries](https://github.com/JuliaStats/TimeSeries.jl),
+[Temporal](https://github.com/dysonance/Temporal.jl),
 [TypedTables](https://github.com/FugroRoames/TypedTables.jl),
 [DifferentialEquations](https://github.com/JuliaDiffEq/DifferentialEquations.jl) (any ``DESolution``) and
 any iterator who produces elements of type
@@ -35,6 +37,7 @@ like ``ModelFrame`` etc.),
 [DataTables](https://github.com/JuliaData/DataTables.jl),
 [IndexedTables](https://github.com/JuliaComputing/IndexedTables.jl),
 [TimeSeries](https://github.com/JuliaStats/TimeSeries.jl),
+[Temporal](https://github.com/dysonance/Temporal.jl),
 [TypedTables](https://github.com/FugroRoames/TypedTables.jl),
 [StatsModels](https://github.com/JuliaStats/StatsModels.jl),
 [Gadfly](https://github.com/GiovineItalia/Gadfly.jl) and

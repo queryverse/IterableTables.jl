@@ -33,7 +33,6 @@ function getiterator{S<:IndexedTable}(source::S)
     end
 
     t_expr = NamedTuples.make_tuple(col_expressions)
-    t_expr.args[1] = Expr(:., :NamedTuples, QuoteNode(t_expr.args[1]))
     T = eval(t_expr)
 
     e_df = IndexedTableIterator{T,S}(source)

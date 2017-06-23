@@ -37,6 +37,21 @@ If the column with the timestamp information is named `timestamp` in the source,
 ta = TimeArray(ds)
 ```
 
+## Temporal
+
+To construct a `TS` instance, one needs a source that follows a number of rules: 1) it must have a column that is of type `TimeType` and 2) all other columns must be of one type. With such a source, one can use the following code to create a `TS`, assuming that `ds` is an iterable table:
+
+```julia
+ta = TS(ds, timestamp_column=:name_of_timestamp_column)
+```
+
+If the column with the timestamp information is named `Index` in the source, one can use a single argument constructor call:
+
+```julia
+ta = TS(ds)
+```
+
+
 ## IndexedTables
 
 The simplest way to construct an `IndexedTable` is to call the one argument constructor on an iterable table `ds`:
