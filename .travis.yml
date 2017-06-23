@@ -20,7 +20,8 @@ addons:
       - libgtk-3-0
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia -e 'Pkg.clone(pwd()); Pkg.build("IterableTables"); Pkg.test("IterableTables"; coverage=true)'
+  - if [[ `uname` = "Linux" ]]; then TESTCMD="xvfb-run julia"; else TESTCMD="julia"; fi
+  - $TESTCMD -e 'Pkg.clone(pwd()); Pkg.build("IterableTables"); Pkg.test("IterableTables"; coverage=true)'
 after_success:
   - julia -e 'cd(Pkg.dir("IterableTables")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
   # - julia -e 'cd(Pkg.dir("IterableTables")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(process_folder())'  
