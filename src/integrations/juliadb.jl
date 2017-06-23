@@ -7,7 +7,7 @@ isiterabletable(x::DTable) = true
 
 # TODO Replace with something more efficient
 function getiterator{S<:DTable}(source::S)
-    it  = JuliaDB.gather(source)
+    it  = collect(source)
     iter = getiterator(it)
 
     return iter
