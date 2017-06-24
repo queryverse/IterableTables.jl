@@ -70,6 +70,16 @@ it = IndexedTable(ds, idxcols=[:time, :region])
 
 In this case all remaining columns will be turned into data columns. If one only specifies the `datacols` argument, one will create an `IndexedTable` in which all columns that are not listed in the `datacols` argument will be turned into index columns. Finally, one can also specify both the `idxcols` and `datacols` argument at the same time (and thus even drop columns by noth listing them in either argument list).
 
+## JuliaDB
+
+The simplest way to load any iterable table `ds` into JuliaDB is to call the `distribute` function:
+
+```julia
+jdb = distribute(ds)
+```
+
+In addition to the arguments that `distribute` accepts in its normal JuliaDB definition, it also accepts named arguments `idxcols` and `datacols`, which have the same meaning as in the `InexedTable` case.
+
 ## DataStreams (CSV, Feather)
 
 To write an iterable table into a CSV or Feather file is slightly more involved. In particular, one must call the function `IterableTables.get_datastreams_source` to create a `DataStream.Source` instance that can then be passed to either the `CSV.write` or `Feather.write` function.

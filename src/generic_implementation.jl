@@ -64,3 +64,66 @@ end
 function Base.done{T,TS}(iter::TableIterator{T,TS}, state)
     return state>length(iter.columns[1])
 end
+
+# Sink
+
+@generated function _fill_cols_without_length(columns, enumerable)
+    n = length(columns.types)
+    push_exprs = Expr(:block)
+    for i in 1:n
+        ex = :( push!(columns[$i], i[$i]) )
+        push!(push_exprs.args, ex)        
+    end
+
+    quote
+        for i in enumerable
+            $push_exprs
+        end
+    end
+end
+
+@generated function _fill_cols_with_length(columns, enumerable)
+    n = length(columns.types)
+    push_exprs = Expr(:block)
+    for col_idx in 1:n
+        ex = :( columns[$col_idx][i] = v[$col_idx] )
+        push!(push_exprs.args, ex)
+    end
+
+    quote
+        for (i,v) in enumerate(enumerable)
+            $push_exprs
+        end
+    end
+end
+
+function _fillcols(x)
+    iter = getiterator(x)
+    
+    T = eltype(iter)
+    if !(T<:NamedTuple)
+        error("Can only collect a NamedTuple iterator.")
+    end
+
+    column_types = IterableTables.column_types(iter)
+    column_names = IterableTables.column_names(iter)
+
+    rows = Base.iteratorsize(typeof(iter))==Base.HasLength() ? length(iter) : 0
+
+    columns = []
+    for t in column_types
+        if isa(t, TypeVar)
+            push!(columns, Array{Any}(rows))
+        else
+            push!(columns, Array{t}(rows))
+        end
+    end
+
+    if Base.iteratorsize(typeof(iter))==Base.HasLength()
+        _fill_cols_with_length((columns...), iter)
+    else
+        _fill_cols_without_length((columns...), iter)
+    end
+
+    return columns, column_names
+end
