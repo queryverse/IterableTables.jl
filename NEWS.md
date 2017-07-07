@@ -1,3 +1,6 @@
+# IterableTables.jl v0.4.0 Release Notes
+* Add JuliaDB.jl integration
+
 # IterableTables.jl v0.3.0 Release Notes
 * Use NamedTuples.jl v4.0.0
 
