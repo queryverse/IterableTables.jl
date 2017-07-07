@@ -122,3 +122,7 @@ For statistical models one can use an iterable table instead of a `DataFrame`. U
 ```julia
 OLS = glm(@formula(Y ~ X), ds, Normal(), IdentityLink())
 ```
+
+## CSVFiles, FeatherFiles, ExcelFiles and StatFiles
+
+See the README for [CSVFiles.jl](https://github.com/davidanthoff/CSVFiles.jl), [ExcelFiles.jl](https://github.com/davidanthoff/ExcelFiles.jl), [FeatherFiles.jl](https://github.com/davidanthoff/FeatherFiles.jl) and [StatFiles.jl](https://github.com/davidanthoff/StatFiles.jl) for documentation.

@@ -24,7 +24,11 @@ The package currently has support for the following data sources:
 [TimeSeries](https://github.com/JuliaStats/TimeSeries.jl),
 [Temporal](https://github.com/dysonance/Temporal.jl),
 [TypedTables](https://github.com/FugroRoames/TypedTables.jl),
-[DifferentialEquations](https://github.com/JuliaDiffEq/DifferentialEquations.jl) (any ``DESolution``) and
+[DifferentialEquations](https://github.com/JuliaDiffEq/DifferentialEquations.jl) (any ``DESolution``),
+[CSVFiles](https://github.com/davidanthoff/CSVFiles.jl),
+[ExcelFiles](https://github.com/davidanthoff/ExcelFiles.jl),
+[FeatherFiles](https://github.com/davidanthoff/FeatherFiles.jl),
+[StatFiles](https://github.com/davidanthoff/StatFiles.jl) and
 any iterator who produces elements of type
 [NamedTuple](https://github.com/blackrock/NamedTuples.jl).
 
@@ -40,6 +44,8 @@ like ``ModelFrame`` etc.),
 [Temporal](https://github.com/dysonance/Temporal.jl),
 [TypedTables](https://github.com/FugroRoames/TypedTables.jl),
 [StatsModels](https://github.com/JuliaStats/StatsModels.jl),
+[CSVFiles](https://github.com/davidanthoff/CSVFiles.jl),
+[FeatherFiles](https://github.com/davidanthoff/FeatherFiles.jl),
 [Gadfly](https://github.com/GiovineItalia/Gadfly.jl) and
 [VegaLite](https://github.com/fredo-dedup/VegaLite.jl).
 
