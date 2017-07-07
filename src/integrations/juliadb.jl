@@ -14,7 +14,7 @@ function getiterator{S<:DTable}(source::S)
 end
 
 # TODO Replace with something more efficient
-function JuliaDB.distribute{V,K}(source, rowgroups::AbstractArray; idxcols::Union{Void,Vector{Symbol}}=nothing, datacols::Union{Void,Vector{Symbol}}=nothing)
+function JuliaDB.distribute(source, rowgroups::AbstractArray; idxcols::Union{Void,Vector{Symbol}}=nothing, datacols::Union{Void,Vector{Symbol}}=nothing)
     isiterabletable(source) || error()
 
     it = IndexedTables.IndexedTable(source, idxcols=idxcols, datacols=datacols)
