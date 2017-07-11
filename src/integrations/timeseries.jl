@@ -76,7 +76,7 @@ end
 
 # TODO This is a terribly inefficient implementation. Minimally it
 # should be changed to be more type stable.
-function TimeSeries.TimeArray(x, timestamp_column::Symbol=:timestamp)
+function TimeSeries.TimeArray(x; timestamp_column::Symbol=:timestamp)
     isiterabletable(x) || error()
 
     iter = getiterator(x)

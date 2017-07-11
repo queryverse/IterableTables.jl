@@ -76,7 +76,7 @@ end
 
 # TODO This is a terribly inefficient implementation. Minimally it
 # should be changed to be more type stable.
-function Temporal.TS(x, index_column::Symbol=:Index)
+function Temporal.TS(x; index_column::Symbol=:Index)
     isiterabletable(x) || error()
 
     iter = getiterator(x)
