@@ -1,5 +1,6 @@
 # IterableTables.jl v0.4.1 Release Notes
 * Fix bug in TimeArray and TS constructor
+* Fix bug in DataFrame integration
 
 # IterableTables.jl v0.4.0 Release Notes
 * Add JuliaDB.jl integration
