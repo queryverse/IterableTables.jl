@@ -44,7 +44,7 @@ df4 = DataFrame(source_ta4)
 @test df4[:_2] == [3,2,1]
 
 source_tt = TypedTables.@Table(a=[4.,5.], time=[Date(1999,1,1),Date(1999,1,2)], b=[6.,8.], c=[12.,24.])
-ta1 = TimeArray(source_tt, :time)
+ta1 = TimeArray(source_tt, timestamp_column=:time)
 @test length(ta1) == 2
 @test colnames(ta1) == ["a", "b", "c"]
 @test ta1.values == [4. 6. 12.;5. 8. 24]
