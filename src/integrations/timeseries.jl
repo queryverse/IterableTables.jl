@@ -96,7 +96,7 @@ function TimeSeries.TimeArray(x; timestamp_column::Symbol=:timestamp)
     
     col_types = TableTraits.column_types(iter)
 
-    data_columns = collect(filter(i->i[2][1]!=timestamp_column, enumerate(zip(names, col_types))))
+    data_columns = collect(Iterators.filter(i->i[2][1]!=timestamp_column, enumerate(zip(names, col_types))))
 
     orig_data_type = data_columns[1][2][2]
 
