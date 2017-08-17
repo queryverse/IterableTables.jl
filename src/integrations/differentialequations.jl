@@ -1,13 +1,14 @@
 @require DiffEqBase begin
+using TableTraits
 
 immutable DESolutionIterator{T,S}
     sol::S
 end
 
-isiterable(sol::DiffEqBase.DESolution) = true
-isiterabletable(sol::DiffEqBase.DESolution) = true
+TableTraits.isiterable(sol::DiffEqBase.DESolution) = true
+TableTraits.isiterabletable(sol::DiffEqBase.DESolution) = true
 
-function getiterator(sol::DiffEqBase.DESolution)
+function TableTraits.getiterator(sol::DiffEqBase.DESolution)
     timestamp_type = eltype(sol.t)
     value_type = eltype(sol.u)
 

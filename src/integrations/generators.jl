@@ -2,14 +2,14 @@ immutable GeneratorIterator{T, S}
     source::S
 end
 
-function getiterator(source::Base.Generator)
+function TableTraits.getiterator(source::Base.Generator)
     TS = eltype(source.iter)
     T = Base.return_types(source.f, (TS,))[1]
     S = typeof(source)
     return GeneratorIterator{T,S}(source)
 end
 
-function isiterabletable(source::Base.Generator)
+function TableTraits.isiterabletable(source::Base.Generator)
     TS = eltype(source.iter)
     T = Base.return_types(source.f, (TS,))[1]
     

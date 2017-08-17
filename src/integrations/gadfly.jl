@@ -1,4 +1,5 @@
 @require Gadfly begin
+using TableTraits
 
 import Gadfly
 import DataFrames

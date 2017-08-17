@@ -1,14 +1,15 @@
 @require Temporal begin
+using TableTraits
 using DataValues
 
 immutable TSIterator{T, S}
     source::S
 end
 
-isiterable(x::Temporal.TS) = true
-isiterabletable(x::Temporal.TS) = true
+TableTraits.isiterable(x::Temporal.TS) = true
+TableTraits.isiterabletable(x::Temporal.TS) = true
 
-function getiterator{S<:Temporal.TS}(ta::S)
+function TableTraits.getiterator{S<:Temporal.TS}(ta::S)
     col_expressions = Array{Expr,1}()
     df_columns_tuple_type = Expr(:curly, :Tuple)
 
@@ -81,11 +82,11 @@ function Temporal.TS(x; index_column::Symbol=:Index)
 
     iter = getiterator(x)
 
-    if column_count(iter)<2
+    if TableTraits.column_count(iter)<2
         error("Need at least two columns")
     end
 
-    names = column_names(iter)
+    names = TableTraits.column_names(iter)
     
     timestep_col_index = findfirst(names, index_column)
 
@@ -93,7 +94,7 @@ function Temporal.TS(x; index_column::Symbol=:Index)
         error("No index column found.")
     end
     
-    col_types = column_types(iter)
+    col_types = TableTraits.column_types(iter)
 
     data_columns = collect(filter(i->i[2][1]!=index_column, enumerate(zip(names, col_types))))
 

@@ -1,12 +1,12 @@
 @require JuliaDB begin
-
+using TableTraits
 using JuliaDB: DTable
 
-isiterable(x::DTable) = true
-isiterabletable(x::DTable) = true
+TableTraits.isiterable(x::DTable) = true
+TableTraits.isiterabletable(x::DTable) = true
 
 # TODO Replace with something more efficient
-function getiterator{S<:DTable}(source::S)
+function TableTraits.getiterator{S<:DTable}(source::S)
     it  = collect(source)
     iter = getiterator(it)
 

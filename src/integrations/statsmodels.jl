@@ -1,4 +1,5 @@
 @require StatsModels begin
+using TableTraits
 
 import DataTables
 import StatsBase

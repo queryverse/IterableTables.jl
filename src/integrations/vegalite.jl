@@ -1,5 +1,5 @@
 @require VegaLite begin
-
+using TableTraits
 import VegaLite
 import DataFrames
 

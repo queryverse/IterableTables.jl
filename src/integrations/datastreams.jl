@@ -1,4 +1,5 @@
 @require DataStreams begin
+using TableTraits
 using DataStreams
 using WeakRefStrings
 using DataValues
@@ -8,10 +9,10 @@ immutable DataStreamIterator{T, S<:DataStreams.Data.Source, TC, TSC}
     schema::DataStreams.Data.Schema
 end
 
-isiterable(x::DataStreams.Data.Source) = true
-isiterabletable(x::DataStreams.Data.Source) = true
+TableTraits.isiterable(x::DataStreams.Data.Source) = true
+TableTraits.isiterabletable(x::DataStreams.Data.Source) = true
 
-function getiterator{S<:DataStreams.Data.Source}(source::S)
+function TableTraits.getiterator{S<:DataStreams.Data.Source}(source::S)
     if !Data.streamtype(S, Data.Field)
         error("Only sources that support field-based streaming are supported by IterableTables.")
     end
@@ -189,8 +190,8 @@ function get_datastreams_source{S}(source::S)
 
     iter = getiterator(source)
 
-    column_types = IterableTables.column_types(iter)
-    column_names = IterableTables.column_names(iter)
+    column_types = TableTraits.column_types(iter)
+    column_names = TableTraits.column_names(iter)
 
     for (i,v) in enumerate(column_types)
         if v <: DataValue

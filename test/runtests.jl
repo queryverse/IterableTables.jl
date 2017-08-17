@@ -1,4 +1,5 @@
 using IterableTables
+using TableTraits
 using NamedTuples
 using DataFrames
 using DataTables
@@ -40,14 +41,14 @@ other_array = [1,2,3]
 @test_throws ErrorException getiterator(MyType())
 
 iter = getiterator(table_array)
-@test IterableTables.column_names(iter) == [:a]
-@test IterableTables.column_types(iter) == [Int]
-@test IterableTables.column_count(iter) == 1
+@test TableTraits.column_names(iter) == [:a]
+@test TableTraits.column_types(iter) == [Int]
+@test TableTraits.column_count(iter) == 1
 
 iter2 = getiterator(other_array)
-@test_throws ErrorException IterableTables.column_names(iter2)
-@test_throws ErrorException IterableTables.column_types(iter2)
-@test_throws ErrorException IterableTables.column_count(iter2)
+@test_throws ErrorException TableTraits.column_names(iter2)
+@test_throws ErrorException TableTraits.column_types(iter2)
+@test_throws ErrorException TableTraits.column_count(iter2)
 
 end
 

@@ -1,10 +1,11 @@
 @require IndexedTables begin
+using TableTraits
 using IndexedTables: IndexedTable
 
-isiterable(x::IndexedTables.IndexedTable) = true
-isiterabletable(x::IndexedTables.IndexedTable) = true
+TableTraits.isiterable(x::IndexedTables.IndexedTable) = true
+TableTraits.isiterabletable(x::IndexedTables.IndexedTable) = true
 
-function getiterator{S<:IndexedTable}(source::S)
+function TableTraits.getiterator{S<:IndexedTable}(source::S)
     return IndexedTables.rows(source)
 end
 
@@ -33,8 +34,8 @@ function IndexedTables.IndexedTable(x; idxcols::Union{Void,Vector{Symbol}}=nothi
     isiterabletable(x) || error()
     iter = getiterator(x)
 
-    source_colnames = IterableTables.column_names(iter)
-    source_coltypes = IterableTables.column_types(iter)
+    source_colnames = TableTraits.column_names(iter)
+    source_coltypes = TableTraits.column_types(iter)
 
     if idxcols==nothing && datacols==nothing
         idxcols = source_colnames[1:end-1]

@@ -1,4 +1,5 @@
 @require TypedTables begin
+using TableTraits
 using DataValues
 using NullableArrays
 
@@ -10,10 +11,10 @@ immutable TypedTableIterator{T, TS}
     columns::TS
 end
 
-isiterable(x::TypedTables.Table) = true
-isiterabletable(x::TypedTables.Table) = true
+TableTraits.isiterable(x::TypedTables.Table) = true
+TableTraits.isiterabletable(x::TypedTables.Table) = true
 
-function getiterator(df::TypedTables.Table)
+function TableTraits.getiterator(df::TypedTables.Table)
     col_expressions = Array{Expr,1}()
     df_columns_tuple_type = Expr(:curly, :Tuple)
     for i in 1:length(df.data)
@@ -98,8 +99,8 @@ function TypedTables.Table(x)
     
     iter = getiterator(x)
 
-    source_colnames = IterableTables.column_names(iter)
-    source_coltypes = IterableTables.column_types(iter)
+    source_colnames = TableTraits.column_names(iter)
+    source_coltypes = TableTraits.column_types(iter)
 
     columns = []
     for t in source_coltypes

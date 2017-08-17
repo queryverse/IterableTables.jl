@@ -1,4 +1,5 @@
 @require DataTables begin
+using TableTraits
 using NullableArrays
 using DataValues
 
@@ -12,10 +13,10 @@ immutable DataTableIterator{T, TS}
     columns::TS
 end
 
-isiterable(x::DataTables.DataTable) = true
-isiterabletable(x::DataTables.DataTable) = true
+TableTraits.isiterable(x::DataTables.DataTable) = true
+TableTraits.isiterabletable(x::DataTables.DataTable) = true
 
-function getiterator(df::DataTables.DataTable)
+function TableTraits.getiterator(df::DataTables.DataTable)
     col_expressions = Array{Expr,1}()
     df_columns_tuple_type = Expr(:curly, :Tuple)
     for i in 1:length(df.columns)
@@ -122,8 +123,8 @@ function _DataTable(x)
         error("Can only collect a NamedTuple iterator into a DataTable.")
     end
 
-    column_types = IterableTables.column_types(iter)
-    column_names = IterableTables.column_names(iter)
+    column_types = TableTraits.column_types(iter)
+    column_names = TableTraits.column_names(iter)
 
     rows = Base.iteratorsize(typeof(iter))==Base.HasLength() ? length(iter) : 0
 

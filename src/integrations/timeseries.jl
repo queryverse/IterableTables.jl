@@ -1,14 +1,15 @@
 @require TimeSeries begin
+using TableTraits
 using DataValues
 
 immutable TimeArrayIterator{T, S}
     source::S
 end
 
-isiterable(x::TimeSeries.TimeArray) = true
-isiterabletable(x::TimeSeries.TimeArray) = true
+TableTraits.isiterable(x::TimeSeries.TimeArray) = true
+TableTraits.isiterabletable(x::TimeSeries.TimeArray) = true
 
-function getiterator{S<:TimeSeries.TimeArray}(ta::S)
+function TableTraits.getiterator{S<:TimeSeries.TimeArray}(ta::S)
     col_expressions = Array{Expr,1}()
     df_columns_tuple_type = Expr(:curly, :Tuple)
 
@@ -81,11 +82,11 @@ function TimeSeries.TimeArray(x; timestamp_column::Symbol=:timestamp)
 
     iter = getiterator(x)
 
-    if column_count(iter)<2
+    if TableTraits.column_count(iter)<2
         error("Need at least two columns")
     end
 
-    names = column_names(iter)
+    names = TableTraits.column_names(iter)
     
     timestep_col_index = findfirst(names, timestamp_column)
 
@@ -93,7 +94,7 @@ function TimeSeries.TimeArray(x; timestamp_column::Symbol=:timestamp)
         error("No timestamp column found.")
     end
     
-    col_types = column_types(iter)
+    col_types = TableTraits.column_types(iter)
 
     data_columns = collect(filter(i->i[2][1]!=timestamp_column, enumerate(zip(names, col_types))))
 

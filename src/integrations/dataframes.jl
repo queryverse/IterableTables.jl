@@ -1,4 +1,5 @@
 @require DataFrames begin
+using TableTraits
 using DataArrays
 using DataValues
 
@@ -12,10 +13,10 @@ immutable DataFrameIterator{T, TS}
     columns::TS
 end
 
-isiterable(x::DataFrames.DataFrame) = true
-isiterabletable(x::DataFrames.DataFrame) = true
+TableTraits.isiterable(x::DataFrames.DataFrame) = true
+TableTraits.isiterabletable(x::DataFrames.DataFrame) = true
 
-function getiterator(df::DataFrames.DataFrame)
+function TableTraits.getiterator(df::DataFrames.DataFrame)
     col_expressions = Array{Expr,1}()
     df_columns_tuple_type = Expr(:curly, :Tuple)
     for i in 1:length(df.columns)
@@ -102,8 +103,8 @@ function _DataFrame(x)
         error("Can only collect a NamedTuple iterator into a DataFrame")
     end
 
-    column_types = IterableTables.column_types(iter)
-    column_names = IterableTables.column_names(iter)    
+    column_types = TableTraits.column_types(iter)
+    column_names = TableTraits.column_names(iter)    
 
     columns = []
     for t in column_types
