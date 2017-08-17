@@ -1,6 +1,7 @@
 @require IndexedTables begin
 using TableTraits
 using IndexedTables: IndexedTable
+import NullableArrays
 
 TableTraits.isiterable(x::IndexedTables.IndexedTable) = true
 TableTraits.isiterabletable(x::IndexedTables.IndexedTable) = true
@@ -32,6 +33,7 @@ end
 
 function IndexedTables.IndexedTable(x; idxcols::Union{Void,Vector{Symbol}}=nothing, datacols::Union{Void,Vector{Symbol}}=nothing)
     isiterabletable(x) || error()
+
     iter = getiterator(x)
 
     source_colnames = TableTraits.column_names(iter)
