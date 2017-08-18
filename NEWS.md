@@ -1,3 +1,7 @@
+# IterableTables.jl v0.5.0 Release Notes
+* Move to TableTraits.jl implementation
+* Fix a number of constructor errors
+
 # IterableTables.jl v0.4.2 Release Notes
 * Fix IndexedTables and JuliaDB incompatibility
 
