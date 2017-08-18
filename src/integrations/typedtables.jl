@@ -95,29 +95,32 @@ end
 end
 
 function TypedTables.Table(x)
-    isiterabletable(x) || error()
+    if isiterabletable(x)
     
-    iter = getiterator(x)
+        iter = getiterator(x)
 
-    source_colnames = TableTraits.column_names(iter)
-    source_coltypes = TableTraits.column_types(iter)
+        source_colnames = TableTraits.column_names(iter)
+        source_coltypes = TableTraits.column_types(iter)
 
-    columns = []
-    for t in source_coltypes
-        if t <: DataValue
-            push!(columns, NullableArrays.NullableArray(t.parameters[1],0))
-        else
-            push!(columns, Array{t}(0))
+        columns = []
+        for t in source_coltypes
+            if t <: DataValue
+                push!(columns, NullableArrays.NullableArray(t.parameters[1],0))
+            else
+                push!(columns, Array{t}(0))
+            end
         end
+
+        T = eval(Expr(:curly, :(TypedTables.Table), Expr(:tuple, [QuoteNode(i) for i in source_colnames]...), Expr(:curly, :Tuple, [typeof(i) for i in columns]...)))
+
+        tt = T()
+
+        _filltt(iter, tt)    
+
+        return tt
+    else
+        return convert(TypedTables.Table, x)
     end
-
-    T = eval(Expr(:curly, :(TypedTables.Table), Expr(:tuple, [QuoteNode(i) for i in source_colnames]...), Expr(:curly, :Tuple, [typeof(i) for i in columns]...)))
-
-    tt = T()
-
-    _filltt(iter, tt)    
-
-    return tt
 end
 
 end

@@ -152,8 +152,11 @@ end
 DataTables.DataTable{T<:NamedTuple}(x::Array{T,1}) = _DataTable(x)
 
 function DataTables.DataTable(x)
-    isiterabletable(x) || error()
-    return _DataTable(x)
+    if isiterabletable(x)
+        return _DataTable(x)        
+    else
+        return convert(DataTables.DataTable,x)
+    end
 end
 
 end

@@ -124,9 +124,11 @@ end
 DataFrames.DataFrame{T<:NamedTuple}(x::Array{T,1}) = _DataFrame(x)
 
 function DataFrames.DataFrame(x)
-    isiterabletable(x) || error()
-    
-    return _DataFrame(x)
+    if isiterabletable(x)
+        return _DataFrame(x)        
+    else
+        return convert(DataFrames.DataFrame, x)
+    end
 end
 
 function DataFrames.ModelFrame(f::DataFrames.Formula, source; kwargs...)
