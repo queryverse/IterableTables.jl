@@ -20,7 +20,7 @@ function TableTraits.getiterator(df::DataFrames.DataFrame)
     col_expressions = Array{Expr,1}()
     df_columns_tuple_type = Expr(:curly, :Tuple)
     for i in 1:length(df.columns)
-        if isa(df.columns[i], DataArray)
+        if isa(df.columns[i], AbstractDataArray)
             push!(col_expressions, Expr(:(::), names(df)[i], DataValue{eltype(df.columns[i])}))
         else
             push!(col_expressions, Expr(:(::), names(df)[i], eltype(df.columns[i])))
@@ -104,7 +104,7 @@ function _DataFrame(x)
     end
 
     column_types = TableTraits.column_types(iter)
-    column_names = TableTraits.column_names(iter)    
+    column_names = TableTraits.column_names(iter)
 
     columns = []
     for t in column_types
@@ -125,7 +125,7 @@ DataFrames.DataFrame{T<:NamedTuple}(x::Array{T,1}) = _DataFrame(x)
 
 function DataFrames.DataFrame(x)
     if isiterabletable(x)
-        return _DataFrame(x)        
+        return _DataFrame(x)
     else
         return convert(DataFrames.DataFrame, x)
     end
