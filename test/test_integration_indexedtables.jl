@@ -1,4 +1,5 @@
 using IterableTables
+using TableTraits
 using NamedTuples
 using IndexedTables
 using DataFrames
