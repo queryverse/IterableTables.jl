@@ -1,3 +1,4 @@
+__precompile__()
 module IterableTables
 
 using TableTraits, NamedTuples, Requires
