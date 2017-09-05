@@ -72,7 +72,7 @@ For example, if you have a ``DataFrame``
 ````julia
 using DataFrames
 
-df = DataFrame(Name=["John", "Sally", "Jim"], Age=[34.,25.,67.], Children=[2,0,3])
+df = DataFrame(Name=["John", "Sally", "Jim"], Age=[34.,25.,67.], Children=[2,0,3], Income = [120_000, 20_000, 60_000])
 ````
 
 you can easily convert this into any of the supported data sink types by simply constructing a new table type and passing your source ``df``:
@@ -114,8 +114,14 @@ using Gadfly
 
 # Plot a TypedTable
 plot(tt, x=:Age, y=:Children, Geom.line)
+````
+Or with ``StatPlots``:
+````julia
+using StatPlots
 
 # Plot a DataTable
-plot(dt, x=:Age, y=:Children, Geom.line)
+@df dt plot(:Age, :Children)
+
+@df dt scatter(:Age, :Children, markersize = sqrt.(:Income ./ 1000))
 ````
 Again, this will work with any of the data sources listed above.
