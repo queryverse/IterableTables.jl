@@ -10,46 +10,51 @@
 
 ## Overview
 
-IterableTables defines a  generic interface for tabular data.
+Iterable tables is a  generic interface for tabular data.
 
-The package currently has support for the following data sources:
-[DataFrames](https://github.com/JuliaStats/DataFrames.jl),
-[DataStreams](https://github.com/JuliaData/DataStreams.jl)
-(including [CSV](https://github.com/JuliaData/CSV.jl),
-[Feather](https://github.com/JuliaStats/Feather.jl),
-[SQLite](https://github.com/JuliaDB/SQLite.jl),
-[ODBC](https://github.com/JuliaDB/ODBC.jl)),
-[DataTables](https://github.com/JuliaData/DataTables.jl),
-[IndexedTables](https://github.com/JuliaComputing/IndexedTables.jl),
-[TimeSeries](https://github.com/JuliaStats/TimeSeries.jl),
-[Temporal](https://github.com/dysonance/Temporal.jl),
-[TypedTables](https://github.com/FugroRoames/TypedTables.jl),
-[JuliaDB](https://github.com/JuliaComputing/JuliaDB.jl),
-[DifferentialEquations](https://github.com/JuliaDiffEq/DifferentialEquations.jl) (any ``DESolution``),
-[CSVFiles](https://github.com/davidanthoff/CSVFiles.jl),
-[ExcelFiles](https://github.com/davidanthoff/ExcelFiles.jl),
-[FeatherFiles](https://github.com/davidanthoff/FeatherFiles.jl),
-[StatFiles](https://github.com/davidanthoff/StatFiles.jl) and
-any iterator who produces elements of type
-[NamedTuple](https://github.com/blackrock/NamedTuples.jl).
+A large number of packages are compatible with this interface. The following
+packages can act as a source iterable table:
+
+* [DataFrames](https://github.com/JuliaStats/DataFrames.jl)
+* [DataTables](https://github.com/JuliaData/DataTables.jl)
+* [Pandas](https://github.com/JuliaPy/Pandas.jl)
+* [IndexedTables](https://github.com/JuliaComputing/IndexedTables.jl)
+* [TimeSeries](https://github.com/JuliaStats/TimeSeries.jl)
+* [Temporal](https://github.com/dysonance/Temporal.jl)
+* [TypedTables](https://github.com/FugroRoames/TypedTables.jl)
+* [JuliaDB](https://github.com/JuliaComputing/JuliaDB.jl)
+* [SQLite](https://github.com/JuliaDB/SQLite.jl)
+* [ODBC](https://github.com/JuliaDB/ODBC.jl)
+* [DifferentialEquations](https://github.com/JuliaDiffEq/DifferentialEquations.jl) (any ``DESolution``)
+* [CSVFiles](https://github.com/davidanthoff/CSVFiles.jl)
+* [ExcelFiles](https://github.com/davidanthoff/ExcelFiles.jl)
+* [FeatherFiles](https://github.com/davidanthoff/FeatherFiles.jl)
+* [BedgraphFiles](https://github.com/CiaranOMara/BedgraphFiles.jl)
+* [StatFiles](https://github.com/davidanthoff/StatFiles.jl)
+* [CSV](https://github.com/JuliaData/CSV.jl)
+* [Feather](https://github.com/JuliaStats/Feather.jl)
+* [Query](https://github.com/davidanthoff/Query.jl)
+* any iterator who produces elements of type [NamedTuple](https://github.com/blackrock/NamedTuples.jl)
 
 The following data sinks are currently supported:
-[DataFrames](https://github.com/JuliaStats/DataFrames.jl) (including things
-like ``ModelFrame`` etc.),
-[DataStreams](https://github.com/JuliaData/DataStreams.jl)
-(including [CSV](https://github.com/JuliaData/CSV.jl),
-[Feather](https://github.com/JuliaStats/Feather.jl)),
-[DataTables](https://github.com/JuliaData/DataTables.jl),
-[IndexedTables](https://github.com/JuliaComputing/IndexedTables.jl),
-[TimeSeries](https://github.com/JuliaStats/TimeSeries.jl),
-[Temporal](https://github.com/dysonance/Temporal.jl),
-[TypedTables](https://github.com/FugroRoames/TypedTables.jl),
-[JuliaDB](https://github.com/JuliaComputing/JuliaDB.jl),
-[StatsModels](https://github.com/JuliaStats/StatsModels.jl),
-[CSVFiles](https://github.com/davidanthoff/CSVFiles.jl),
-[FeatherFiles](https://github.com/davidanthoff/FeatherFiles.jl),
-[Gadfly](https://github.com/GiovineItalia/Gadfly.jl) and
-[VegaLite](https://github.com/fredo-dedup/VegaLite.jl).
+* [DataFrames](https://github.com/JuliaStats/DataFrames.jl)
+* [DataTables](https://github.com/JuliaData/DataTables.jl)
+* [Pandas](https://github.com/JuliaPy/Pandas.jl)
+* [IndexedTables](https://github.com/JuliaComputing/IndexedTables.jl)
+* [TimeSeries](https://github.com/JuliaStats/TimeSeries.jl)
+* [Temporal](https://github.com/dysonance/Temporal.jl)
+* [TypedTables](https://github.com/FugroRoames/TypedTables.jl)
+* [JuliaDB](https://github.com/JuliaComputing/JuliaDB.jl)
+* [StatsModels](https://github.com/JuliaStats/StatsModels.jl)
+* [CSVFiles](https://github.com/davidanthoff/CSVFiles.jl)
+* [FeatherFiles](https://github.com/davidanthoff/FeatherFiles.jl)
+* [BedgraphFiles.jl](https://github.com/CiaranOMara/BedgraphFiles.jl)
+* [CSV](https://github.com/JuliaData/CSV.jl)
+* [Feather](https://github.com/JuliaStats/Feather.jl)
+* [StatPlots](https://github.com/JuliaPlots/StatPlots.jl)
+* [Gadfly](https://github.com/GiovineItalia/Gadfly.jl)
+* [VegaLite](https://github.com/fredo-dedup/VegaLite.jl)
+* [Query](https://github.com/davidanthoff/Query.jl)
 
 The package is tightly integrated with [Query.jl](https://github.com/davidanthoff/Query.jl):
 Any query that creates a named tuple in the last ``@select`` statement (and
