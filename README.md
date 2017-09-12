@@ -48,7 +48,7 @@ The following data sinks are currently supported:
 * [StatsModels](https://github.com/JuliaStats/StatsModels.jl)
 * [CSVFiles](https://github.com/davidanthoff/CSVFiles.jl)
 * [FeatherFiles](https://github.com/davidanthoff/FeatherFiles.jl)
-* [BedgraphFiles.jl](https://github.com/CiaranOMara/BedgraphFiles.jl)
+* [BedgraphFiles](https://github.com/CiaranOMara/BedgraphFiles.jl)
 * [CSV](https://github.com/JuliaData/CSV.jl)
 * [Feather](https://github.com/JuliaStats/Feather.jl)
 * [StatPlots](https://github.com/JuliaPlots/StatPlots.jl)
