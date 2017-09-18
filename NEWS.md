@@ -1,3 +1,7 @@
+# IterableTables.jl v0.5.2 Release Notes
+* Add support for Nulls.jl based DataFrames.jl
+* Precompile package
+
 # IterableTables.jl v0.5.1 Release Notes
 * Remove IndexedTables.jl integration (has been moved to that package)
 
