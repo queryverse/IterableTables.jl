@@ -1,6 +1,7 @@
 @require JuliaDB begin
 using TableTraits
 using JuliaDB: DTable
+import IndexedTables
 
 TableTraits.isiterable(x::DTable) = true
 TableTraits.isiterabletable(x::DTable) = true
