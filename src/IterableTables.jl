@@ -15,5 +15,6 @@ include("integrations/differentialequations.jl")
 include("integrations/juliadb.jl")
 include("integrations/generators.jl")
 include("integrations/temporal.jl")
+include("integrations/valuedtimes.jl")
 
 end # module
