@@ -1,7 +1,7 @@
 @require DiffEqBase begin
 using TableTraits
 
-immutable DESolutionIterator{T,S}
+struct DESolutionIterator{T,S}
     sol::S
 end
 

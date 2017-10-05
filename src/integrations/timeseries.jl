@@ -2,7 +2,7 @@
 using TableTraits
 using DataValues
 
-immutable TimeArrayIterator{T, S}
+struct TimeArrayIterator{T, S}
     source::S
 end
 

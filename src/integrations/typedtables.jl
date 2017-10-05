@@ -1,9 +1,9 @@
 @require TypedTables begin
 using TableTraits
-using DataValues
+using Nulls
 using NullableArrays
 
-immutable TypedTableIterator{T, TS}
+struct TypedTableIterator{T, TS}
     df::TypedTables.Table
     # This field hols a tuple with the columns of the DataFrame.
     # Having a tuple of the columns here allows the iterator
@@ -20,7 +20,7 @@ function TableTraits.getiterator(df::TypedTables.Table)
     for i in 1:length(df.data)
         etype = eltype(df.data[i])
         if isa(df.data[i], NullableArray)
-            push!(col_expressions, Expr(:(::), names(df)[i], DataValue{etype.parameters[1]}))
+            push!(col_expressions, Expr(:(::), names(df)[i], Union{Null, etype.parameters[1]}))
         else            
             push!(col_expressions, Expr(:(::), names(df)[i], etype))
         end
@@ -54,8 +54,8 @@ end
 @generated function Base.next{T,TS}(iter::TypedTableIterator{T,TS}, state)
     constructor_call = Expr(:call, :($T))
     for (i,t) in enumerate(T.parameters)
-        if iter.parameters[1].parameters[i] <: DataValue
-            push!(constructor_call.args, :(DataValue(columns[$i][i])))
+        if iter.parameters[1].parameters[i] >: Null
+            push!(constructor_call.args, :(isnull(columns[$i][i]) ? null : get(columns[$i][i])))
         else        
             push!(constructor_call.args, :(columns[$i][i]))
         end
@@ -80,7 +80,7 @@ end
     push_exprs = Expr(:block)
     for i in 1:n
         if tt.parameters[2].parameters[i] <: NullableArray
-            ex = :( push!(tt.data[$i], Nullable(row[$i]) ))
+            ex = :( push!(tt.data[$i], isnull(row[$i]) ? Nullable() : Nullable(row[$i]) ))
         else 
             ex = :( push!(tt.data[$i], row[$i]) )
         end
@@ -104,8 +104,8 @@ function TypedTables.Table(x)
 
         columns = []
         for t in source_coltypes
-            if t <: DataValue
-                push!(columns, NullableArrays.NullableArray(t.parameters[1],0))
+            if t >: Null
+                push!(columns, NullableArrays.NullableArray(Nulls.T(t),0))
             else
                 push!(columns, Array{t}(0))
             end

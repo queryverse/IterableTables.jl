@@ -2,14 +2,14 @@
 using TableTraits
 using DataValues
 
-immutable TSIterator{T, S}
+struct TSIterator{T, S}
     source::S
 end
 
 TableTraits.isiterable(x::Temporal.TS) = true
 TableTraits.isiterabletable(x::Temporal.TS) = true
 
-function TableTraits.getiterator{S<:Temporal.TS}(ta::S)
+function TableTraits.getiterator(ta::S) where {S<:Temporal.TS}
     col_expressions = Array{Expr,1}()
     df_columns_tuple_type = Expr(:curly, :Tuple)
 

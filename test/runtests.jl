@@ -22,7 +22,7 @@ f_2dlinear_named = @ode_def LotkaVolterra begin
   dy = -c*y + d*x*y
 end a=>1.5 b=>1 c=3 d=1
 
-immutable MyType
+struct MyType
 end
 
 @testset "IterableTables" begin
