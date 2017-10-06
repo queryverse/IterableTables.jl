@@ -3,7 +3,6 @@ using NamedTuples
 using TypedTables
 using DataFrames
 using NullableArrays
-using DataValues
 using Base.Test
 
 @testset "TypedTables" begin

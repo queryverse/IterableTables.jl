@@ -2,7 +2,6 @@ using IterableTables
 using TableTraits
 using NamedTuples
 using DataFrames
-using DataTables
 using CSV
 using SQLite
 using Feather
@@ -13,7 +12,7 @@ using VegaLite
 using IndexedTables
 using ParameterizedFunctions
 using Gadfly
-using Base.Test  
+using Base.Test
 
 # This defines a type needed by the differential equations
 # test, and that cannot happen in a testset

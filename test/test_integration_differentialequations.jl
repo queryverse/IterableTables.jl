@@ -6,14 +6,14 @@ using Base.Test
 
 @testset "DifferentialEquations" begin
 
-f_1dlinear = (t,u) -> 1.01u
-prob = ODEProblem(f_1dlinear,rand(),(0.0,1.0))
-sol =solve(prob,Euler();dt=1//2^(4))
-df = DataFrame(sol)
+# f_1dlinear = (t,u) -> 1.01u
+# prob = ODEProblem(f_1dlinear,rand(),(0.0,1.0))
+# sol =solve(prob,Euler();dt=1//2^(4))
+# df = DataFrame(sol)
 
-@test size(df) == (17,2)
-@test length(df[:timestamp]) == 17
-@test length(df[:value]) == 17
+# @test size(df) == (17,2)
+# @test length(df[:timestamp]) == 17
+# @test length(df[:value]) == 17
 
 f_2dlinear = (t,u,du) -> du.=1.01u
 prob = ODEProblem(f_2dlinear,rand(2),(0.0,1.0))

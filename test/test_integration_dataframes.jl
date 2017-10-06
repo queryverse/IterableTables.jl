@@ -48,11 +48,11 @@ dt_non_nullable = DataFrame(source_df_non_nullable)
 @test dt_non_nullable[:b] == [1.,2.,3.]
 @test dt_non_nullable[:c] == ["A","B","C"]
 
-source_array_non_nullable = @NT(a::Int, b::Union{Float64, Null}, c::String)[@NT(a=1,b=1.,c="A"), @NT(a=2,b=null,c="B"), @NT(a=3,b=3.,c="C")]
-source_array_non_nullable = NamedTuple{(:a,:b,:c), Tuple{Int, Union{Float64, Null}, String}}[(a=1,b=1.,c="A"), (a=2,b=null,c="B"), (a=3,b=3.,c="C")]
+source_array_non_nullable = [@NT(a=1,b=1.,c="A",d=:a), @NT(a=2,b=2.,c="B",d=:b), @NT(a=3,b=3.,c="C",d=:c)]
+
 df = DataFrame(source_array_non_nullable)
 
-@test size(df) == (3,3)
+@test size(df) == (3,4)
 @test isa(df[:a], Array)
 @test isa(df[:b], Array)
 @test isa(df[:c], Array)
@@ -60,22 +60,20 @@ df = DataFrame(source_array_non_nullable)
 @test df[:b] == [1.,2.,3.]
 @test df[:c] == ["A","B","C"]
 
-source_array = [@NT(a=DataValue(1),b=DataValue(1.),c=DataValue("A")), @NT(a=DataValue(2),b=DataValue(2.),c=DataValue("B")), @NT(a=DataValue(3),b=DataValue(3.),c=DataValue("C"))]
+source_array = [@NT(a::Union{Int, Null}, b::Union{Float64, Null})(1,1.), @NT(a::Union{Int, Null}, b::Union{Float64, Null})(2,2.), @NT(a::Union{Int, Null}, b::Union{Float64, Null})(3,3.)]
 df = DataFrame(source_array)
 
-@test size(df) == (3,3)
-@test isa(df[:a], DataArray)
-@test isa(df[:b], DataArray)
-@test isa(df[:c], DataArray)
+@test size(df) == (3,2)
+@test isa(df[:a], Vector{Union{Int, Null}})
+@test isa(df[:b], Vector{Union{Float64, Null}})
 @test df[:a] == [1,2,3]
 @test df[:b] == [1.,2.,3.]
-@test df[:c] == ["A","B","C"]
 
 # TODO add some test beyond just creating a ModelFrame
-mf_array = DataFrames.ModelFrame(DataFrames.@formula(a~b), source_array)
-mf_dt = DataFrames.ModelFrame(DataFrames.@formula(a~b), dt)
+# mf_array = DataFrames.ModelFrame(DataFrames.@formula(a~b), source_array)
+# mf_dt = DataFrames.ModelFrame(DataFrames.@formula(a~b), dt)
 
-lm(DataFrames.@formula(a~b), dt)
+# lm(DataFrames.@formula(a~b), dt)
 
 # This tests for a specific bug we once had
 df_with_sub_list = DataFrame(name=["John", "Sally", "Kirk"], numberoftoys=[[4; 3; 2], [2; 2; 4; 5; 1], [2; 2]])
@@ -83,25 +81,3 @@ dt = DataFrame(df_with_sub_list)
 @test size(dt) == (3,2)
 
 end
-
-
-
-
-julia> using NamedTuples
-INFO: Recompiling stale cache file /Users/jacobquinn/.julia/lib/v0.6/NamedTuples.ji for module NamedTuples.
-
-julia> struct Empty end
-
-julia> nt = @NT(a::Empty, b::Int)
-ERROR: UndefVarError: Empty not defined
-
-
-ulia> using NamedTuples
-INFO: Recompiling stale cache file /Users/jacobquinn/.julia/lib/v0.6/NamedTuples.ji for module NamedTuples.
-
-julia> struct Empty end
-
-julia> nt = @NT(a::Empty, b::Int)
-(sym, typ, val) = (:a, :Empty, nothing)
-(sym, typ, val) = (:b, :Int, nothing)
-NamedTuples._NT_a_b{Empty,Int64}

@@ -2,7 +2,6 @@ using IterableTables
 using NamedTuples
 using JuliaDB
 using DataFrames
-using NullableArrays
 using Base.Test
 
 @testset "JuliaDB" begin
