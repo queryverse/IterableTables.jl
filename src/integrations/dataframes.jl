@@ -1,9 +1,9 @@
 @require DataFrames begin
 
-if isdefined(DataFrames, :null)
-    include("dataframes-null.jl")
+if isdefined(DataFrames, :missing)
+    include("dataframes-missing.jl")
 else
-    include("dataframes-dataarray.jl")
+    include("dataframes-na.jl")
 end
 
 end

@@ -1,6 +1,6 @@
 using TableTraits
 using DataValues
-using Nulls
+using Missings
 
 # T is the type of the elements produced
 # TS is a tuple type that stores the columns of the DataFrame
@@ -19,8 +19,8 @@ function TableTraits.getiterator(df::DataFrames.DataFrame)
     col_expressions = Array{Expr,1}()
     df_columns_tuple_type = Expr(:curly, :Tuple)
     for i in 1:length(df.columns)
-        if isa(df.columns[i], AbstractArray{>:Null})
-            push!(col_expressions, Expr(:(::), names(df)[i], DataValue{Nulls.T(eltype(df.columns[i]))}))
+        if isa(df.columns[i], AbstractArray{>:Missing})
+            push!(col_expressions, Expr(:(::), names(df)[i], DataValue{Missings.T(eltype(df.columns[i]))}))
         else
             push!(col_expressions, Expr(:(::), names(df)[i], eltype(df.columns[i])))
         end
@@ -55,7 +55,7 @@ end
     constructor_call = Expr(:call, :($T))
     for i in 1:length(iter.types[2].types)
         if iter.parameters[1].parameters[i] <: DataValue
-            push!(constructor_call.args, :(isnull(columns[$i][i]) ? $(iter.parameters[1].parameters[i])() : $(iter.parameters[1].parameters[i])(columns[$i][i])))
+            push!(constructor_call.args, :(ismissing(columns[$i][i]) ? $(iter.parameters[1].parameters[i])() : $(iter.parameters[1].parameters[i])(columns[$i][i])))
         else
             push!(constructor_call.args, :(columns[$i][i]))
         end
@@ -79,8 +79,8 @@ end
     n = length(columns.types)
     push_exprs = Expr(:block)
     for i in 1:n
-        if columns.parameters[i] <: AbstractArray{>:Null}
-            ex = :( push!(columns[$i], isnull(i[$i]) ? null : get(i[$i])) )
+        if columns.parameters[i] <: AbstractArray{>:Missing}
+            ex = :( push!(columns[$i], isnull(i[$i]) ? missing : get(i[$i])) )
         else
             ex = :( push!(columns[$i], i[$i]) )
         end
@@ -110,7 +110,7 @@ function _DataFrame(x)
         if isa(t, TypeVar)
             push!(columns, Array{Any}(0))
         elseif t <: DataValue
-            push!(columns, Array{Union{t.parameters[1],Null},1}(0))
+            push!(columns, Array{Union{t.parameters[1],Missing},1}(0))
         else
             push!(columns, Array{t}(0))
         end
