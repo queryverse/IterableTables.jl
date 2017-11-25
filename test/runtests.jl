@@ -2,7 +2,6 @@ using IterableTables
 using TableTraits
 using NamedTuples
 using DataFrames
-using DataTables
 using CSV
 using SQLite
 using Feather
@@ -13,7 +12,7 @@ using VegaLite
 using IndexedTables
 using ParameterizedFunctions
 using Gadfly
-using Base.Test  
+using Base.Test
 
 # This defines a type needed by the differential equations
 # test, and that cannot happen in a testset
@@ -22,7 +21,7 @@ f_2dlinear_named = @ode_def LotkaVolterra begin
   dy = -c*y + d*x*y
 end a=>1.5 b=>1 c=3 d=1
 
-immutable MyType
+struct MyType
 end
 
 @testset "IterableTables" begin

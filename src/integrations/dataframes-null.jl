@@ -1,10 +1,9 @@
 using TableTraits
-using DataValues
 using Nulls
 
 # T is the type of the elements produced
 # TS is a tuple type that stores the columns of the DataFrame
-immutable DataFrameIterator{T, TS}
+struct DataFrameIterator{T, TS}
     df::DataFrames.DataFrame
     # This field hols a tuple with the columns of the DataFrame.
     # Having a tuple of the columns here allows the iterator
@@ -19,13 +18,9 @@ function TableTraits.getiterator(df::DataFrames.DataFrame)
     col_expressions = Array{Expr,1}()
     df_columns_tuple_type = Expr(:curly, :Tuple)
     for i in 1:length(df.columns)
-        if isa(df.columns[i], AbstractArray{>:Null})
-            push!(col_expressions, Expr(:(::), names(df)[i], DataValue{Nulls.T(eltype(df.columns[i]))}))
-        else
-            push!(col_expressions, Expr(:(::), names(df)[i], eltype(df.columns[i])))
-        end
+        push!(col_expressions, Expr(:(::), names(df)[i], eltype(df.columns[i])))
         push!(df_columns_tuple_type.args, typeof(df.columns[i]))
-    end
+    end    
     t_expr = NamedTuples.make_tuple(col_expressions)
 
     t2 = :(DataFrameIterator{Float64,Float64})
@@ -54,8 +49,8 @@ end
 @generated function Base.next{T,TS}(iter::DataFrameIterator{T,TS}, state)
     constructor_call = Expr(:call, :($T))
     for i in 1:length(iter.types[2].types)
-        if iter.parameters[1].parameters[i] <: DataValue
-            push!(constructor_call.args, :(isnull(columns[$i][i]) ? $(iter.parameters[1].parameters[i])() : $(iter.parameters[1].parameters[i])(columns[$i][i])))
+        if iter.parameters[1].parameters[i] >: Null
+            push!(constructor_call.args, :(v = columns[$i][i]; v isa Null ? null : v))
         else
             push!(constructor_call.args, :(columns[$i][i]))
         end
@@ -69,7 +64,7 @@ end
     end
 end
 
-function Base.done{T,TS}(iter::DataFrameIterator{T,TS}, state)
+function Base.done(iter::DataFrameIterator, state)
     return state>size(iter.df,1)
 end
 
@@ -80,7 +75,7 @@ end
     push_exprs = Expr(:block)
     for i in 1:n
         if columns.parameters[i] <: AbstractArray{>:Null}
-            ex = :( push!(columns[$i], isnull(i[$i]) ? null : get(i[$i])) )
+            ex = :( v = i[$i]; push!(columns[$i], v isa Null ? null : v) )
         else
             ex = :( push!(columns[$i], i[$i]) )
         end
@@ -109,8 +104,6 @@ function _DataFrame(x)
     for t in column_types
         if isa(t, TypeVar)
             push!(columns, Array{Any}(0))
-        elseif t <: DataValue
-            push!(columns, Array{Union{t.parameters[1],Null},1}(0))
         else
             push!(columns, Array{t}(0))
         end

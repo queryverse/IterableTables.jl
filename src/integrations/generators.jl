@@ -1,4 +1,4 @@
-immutable GeneratorIterator{T, S}
+struct GeneratorIterator{T, S}
     source::S
 end
 
@@ -16,20 +16,20 @@ function TableTraits.isiterabletable(source::Base.Generator)
     return T<:NamedTuple
 end
 
-Base.iteratorsize{T<:GeneratorIterator}(::Type{T}) = Base.SizeUnknown()
+Base.iteratorsize(::Type{T}) where {T<:GeneratorIterator} = Base.SizeUnknown()
 
-function Base.eltype{T,S}(iter::GeneratorIterator{T,S})
+function Base.eltype(iter::GeneratorIterator{T,S}) where {T,S}
     return T
 end
 
-function Base.start{T,S}(iter::GeneratorIterator{T,S})
+function Base.start(iter::GeneratorIterator{T,S}) where {T,S}
     return start(iter.source)
 end
 
-function Base.next{T,S}(iter::GeneratorIterator{T,S}, s)
+function Base.next(iter::GeneratorIterator{T,S}, s) where {T,S}
     return next(iter.source, s)
 end
 
-function Base.done{T,S}(iter::GeneratorIterator{T,S}, state)
+function Base.done(iter::GeneratorIterator{T,S}, state) where {T,S}
     return done(iter.source, state)
 end
