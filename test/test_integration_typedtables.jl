@@ -38,7 +38,7 @@ df_non_nullable = DataFrame(source_tt_non_nullable)
 @test df_non_nullable[:c] == ["A","B","C"]
 
 source_array_non_nullable = [@NT(a=1,b=1.,c="A"), @NT(a=2,b=2.,c="B"), @NT(a=3,b=3.,c="C")]
-tt = Table(source_array_non_nullable)
+tt = TypedTables.Table(source_array_non_nullable)
 
 @test TypedTables.ncol(tt) == 3
 @test TypedTables.nrow(tt) == 3
@@ -50,7 +50,7 @@ tt = Table(source_array_non_nullable)
 @test @col(tt, c) == ["A","B","C"]
 
 source_array = [@NT(a=DataValue(1),b=DataValue(1.),c=DataValue("A")), @NT(a=DataValue(2),b=DataValue(2.),c=DataValue("B")), @NT(a=DataValue(3),b=DataValue(3.),c=DataValue("C"))]
-tt = Table(source_array)
+tt = TypedTables.Table(source_array)
 
 @test TypedTables.ncol(tt) == 3
 @test TypedTables.nrow(tt) == 3
