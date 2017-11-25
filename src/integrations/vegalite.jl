@@ -1,13 +1,7 @@
 @require VegaLite begin
-using TableTraits
-import VegaLite
-import DataFrames
 
-function VegaLite.data_values(data_source)
-    isiterabletable(data_source) || error()
-
-    df = DataFrames.DataFrame(data_source)
-    return VegaLite.data_values(df)
+if isdefined(VegaLite, :data_values)
+    include("vegalite_core.jl")
 end
 
 end
