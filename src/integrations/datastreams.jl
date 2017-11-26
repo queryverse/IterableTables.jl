@@ -4,7 +4,7 @@ using DataStreams
 using WeakRefStrings
 using DataValues
 
-immutable DataStreamIterator{T, S<:DataStreams.Data.Source, TC, TSC}
+struct DataStreamIterator{T, S<:DataStreams.Data.Source, TC, TSC}
     source::S
     schema::DataStreams.Data.Schema
 end
@@ -12,7 +12,7 @@ end
 TableTraits.isiterable(x::DataStreams.Data.Source) = true
 TableTraits.isiterabletable(x::DataStreams.Data.Source) = true
 
-function TableTraits.getiterator{S<:DataStreams.Data.Source}(source::S)
+function TableTraits.getiterator(source::S) where {S <: DataStreams.Data.Source}
     if !Data.streamtype(S, Data.Field)
         error("Only sources that support field-based streaming are supported by IterableTables.")
     end
@@ -53,15 +53,15 @@ function TableTraits.getiterator{S<:DataStreams.Data.Source}(source::S)
     return e_df
 end
 
-function Base.length{T, S<:DataStreams.Data.Source, TC,TSC}(iter::DataStreamIterator{T,S,TC,TSC})
+function Base.length(iter::DataStreamIterator{T,S,TC,TSC}) where {T,S <: DataStreams.Data.Source,TC,TSC}
     return iter.schema.rows
 end
 
-function Base.eltype{T, S<:DataStreams.Data.Source, TC,TSC}(iter::DataStreamIterator{T,S,TC,TSC})
+function Base.eltype(iter::DataStreamIterator{T,S,TC,TSC}) where {T,S <: DataStreams.Data.Source,TC,TSC}
     return T
 end
 
-function Base.start{T, S<:DataStreams.Data.Source, TC,TSC}(iter::DataStreamIterator{T,S,TC,TSC})
+function Base.start(iter::DataStreamIterator{T,S,TC,TSC}) where {T,S <: DataStreams.Data.Source,TC,TSC}
     return 1
 end
 
@@ -74,7 +74,7 @@ function _convertion_helper_for_datastreams(source, row, col, T)
     end
 end
 
-@generated function Base.next{T, S<:DataStreams.Data.Source, TC,TSC}(iter::DataStreamIterator{T,S,TC,TSC}, state)
+@generated function Base.next(iter::DataStreamIterator{T,S,TC,TSC}, state) where {T,S <: DataStreams.Data.Source,TC,TSC}
     constructor_call = Expr(:call, :($T))
     for i in 1:length(TC.types)
         if TC.types[i] <: String
@@ -97,13 +97,13 @@ end
     end
 end
 
-function Base.done{T, S<:DataStreams.Data.Source, TC,TSC}(iter::DataStreamIterator{T,S,TC,TSC}, state)
+function Base.done(iter::DataStreamIterator{T,S,TC,TSC}, state) where {T,S <: DataStreams.Data.Source,TC,TSC}
     return Data.isdone(iter.source,state,1)
 end
 
 # DataStreams Source
 
-type DataStreamSource{TSource,TE} <: Data.Source
+mutable struct DataStreamSource{TSource,TE} <: Data.Source
     _schema::Data.Schema
     data::TSource
     iterate_state
@@ -116,7 +116,7 @@ type DataStreamSource{TSource,TE} <: Data.Source
     end
 end
 
-function Data.isdone{TSource,TE}(source::DataStreamSource{TSource,TE}, row, col)
+function Data.isdone(source::DataStreamSource{TSource,TE}, row, col) where {TSource,TE}
     row==source.current_row || row==source.current_row+1 || error()
 
     if source.current_row==0
@@ -135,9 +135,9 @@ function Data.isdone{TSource,TE}(source::DataStreamSource{TSource,TE}, row, col)
     return false
 end
 
-Data.streamtype{T<:DataStreamSource}(::Type{T}, ::Type{Data.Field}) = true
+Data.streamtype(::Type{T}, ::Type{Data.Field}) where {T <: DataStreamSource} = true
 
-function Data.streamfrom{T}(source::DataStreamSource, ::Type{Data.Field}, ::Type{T}, row, col)
+function Data.streamfrom(source::DataStreamSource, ::Type{Data.Field}, ::Type{T}, row, col) where {T}
     row==source.current_row || row==source.current_row+1 || error()
 
     if source.current_row==0
@@ -152,7 +152,7 @@ function Data.streamfrom{T}(source::DataStreamSource, ::Type{Data.Field}, ::Type
     return source.current_val[col]::T
 end
 
-function Data.streamfrom{T}(source::DataStreamSource, ::Type{Data.Field}, ::Type{Nullable{T}}, row, col)
+function Data.streamfrom(source::DataStreamSource, ::Type{Data.Field}, ::Type{Nullable{T}}, row, col) where {T}
     row==source.current_row || row==source.current_row+1 || error()
 
     if source.current_row==0
@@ -185,7 +185,7 @@ function Data.schema(source::DataStreamSource, ::Type{Data.Field})
     return Data.schema(source)
 end
 
-function get_datastreams_source{S}(source::S)
+function get_datastreams_source(source::S) where {S}
     isiterabletable(source) || error()
 
     iter = getiterator(source)
