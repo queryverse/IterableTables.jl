@@ -1,3 +1,9 @@
+# IterableTables.jl v0.6.0 Release Notes
+* Add support for VegaLite.jl master version
+* Fix various tests
+* Add DataFrames v0.11.x support
+* Add support for Missings based StatsModels
+
 # IterableTables.jl v0.5.2 Release Notes
 * Add support for Nulls.jl based DataFrames.jl
 * Precompile package
