@@ -22,6 +22,8 @@ function Base.eltype{T,S}(iter::GeneratorIterator{T,S})
     return T
 end
 
+Base.eltype(::Type{GeneratorIterator{T,TS}}) where {T,TS} = T
+
 function Base.start{T,S}(iter::GeneratorIterator{T,S})
     return start(iter.source)
 end

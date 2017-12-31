@@ -48,6 +48,8 @@ function Base.eltype{T,TS}(iter::TSIterator{T,TS})
     return T
 end
 
+Base.eltype(::Type{TSIterator{T,TS}}) where {T,TS} = T
+
 function Base.start{T,TS}(iter::TSIterator{T,TS})
     return 1
 end
