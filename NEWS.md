@@ -1,3 +1,6 @@
+# IterableTables.jl v0.6.1 Release Notes
+* Add missing eltype methods
+
 # IterableTables.jl v0.6.0 Release Notes
 * Add support for VegaLite.jl master version
 * Fix various tests
