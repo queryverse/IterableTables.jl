@@ -49,6 +49,8 @@ function Base.eltype{T,TS}(iter::DataTableIterator{T,TS})
     return T
 end
 
+Base.eltype(::Type{DataTableIterator{T,TS}}) where {T,TS} = T
+
 function Base.start{T,TS}(iter::DataTableIterator{T,TS})
     return 1
 end

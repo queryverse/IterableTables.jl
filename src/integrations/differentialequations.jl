@@ -63,6 +63,8 @@ function Base.eltype{T,S}(iter::DESolutionIterator{T,S})
     return T
 end
 
+Base.eltype(::Type{DESolutionIterator{T,TS}}) where {T,TS} = T
+
 function Base.start(iter::DESolutionIterator)
     return 1
 end
