@@ -1,3 +1,6 @@
+# IterableTables.jl v0.7.0 Release Notes
+* Move DiffEqBase.jl support out of this package
+
 # IterableTables.jl v0.6.1 Release Notes
 * Add missing eltype methods
 
