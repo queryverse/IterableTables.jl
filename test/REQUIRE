@@ -9,9 +9,6 @@ Gadfly
 VegaLite
 SQLite
 IndexedTables
-DiffEqBase
-OrdinaryDiffEq
-ParameterizedFunctions
 NullableArrays
 DataStreams
 GLM
