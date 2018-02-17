@@ -81,11 +81,27 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "userguide.html#Temporal-1",
+    "page": "User Guide",
+    "title": "Temporal",
+    "category": "section",
+    "text": "To construct a TS instance, one needs a source that follows a number of rules: 1) it must have a column that is of type TimeType and 2) all other columns must be of one type. With such a source, one can use the following code to create a TS, assuming that ds is an iterable table:ta = TS(ds, timestamp_column=:name_of_timestamp_column)If the column with the timestamp information is named Index in the source, one can use a single argument constructor call:ta = TS(ds)"
+},
+
+{
     "location": "userguide.html#IndexedTables-1",
     "page": "User Guide",
     "title": "IndexedTables",
     "category": "section",
     "text": "The simplest way to construct an IndexedTable is to call the one argument constructor on an iterable table ds:it = IndexedTable(ds)In this case the last column in the source will be the data column in the IndexedTable, and all other columns will be index columns.One can manually select the index and data columns by using the keyword arguments idxcols and datacols. Both take a vector of Symbols as arguments. For example, to make the time and region column in a data source the index columns, one would use the following command:it = IndexedTable(ds, idxcols=[:time, :region])In this case all remaining columns will be turned into data columns. If one only specifies the datacols argument, one will create an IndexedTable in which all columns that are not listed in the datacols argument will be turned into index columns. Finally, one can also specify both the idxcols and datacols argument at the same time (and thus even drop columns by noth listing them in either argument list)."
+},
+
+{
+    "location": "userguide.html#JuliaDB-1",
+    "page": "User Guide",
+    "title": "JuliaDB",
+    "category": "section",
+    "text": "The simplest way to load any iterable table ds into JuliaDB is to call the distribute function:jdb = distribute(ds)In addition to the arguments that distribute accepts in its normal JuliaDB definition, it also accepts named arguments idxcols and datacols, which have the same meaning as in the InexedTable case."
 },
 
 {
@@ -110,6 +126,14 @@ var documenterSearchIndex = {"docs": [
     "title": "StatsModels (and statistical models in DataFrames)",
     "category": "section",
     "text": "For statistical models one can use an iterable table instead of a DataFrame. Under the hood this is achieved by providing a constructor for ModelFrame that takes an iterable table, and by providing methods for the fit function that accept an iterable table instead of a DataFrame. For most users this implies that one can e.g. simply pass an iterable table to the lm and glm function in the GLM package (assuming ds is any iterable table):OLS = glm(@formula(Y ~ X), ds, Normal(), IdentityLink())"
+},
+
+{
+    "location": "userguide.html#CSVFiles,-FeatherFiles,-ExcelFiles-and-StatFiles-1",
+    "page": "User Guide",
+    "title": "CSVFiles, FeatherFiles, ExcelFiles and StatFiles",
+    "category": "section",
+    "text": "See the README for CSVFiles.jl, ExcelFiles.jl, FeatherFiles.jl and StatFiles.jl for documentation."
 },
 
 {
@@ -173,7 +197,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Integration Guide",
     "title": "Directly implementing the julia base iteration trait",
     "category": "section",
-    "text": "This strategy only works if the type that one wants to expose as an iterable table has enough information about the strcuture of the table that one can implement a type stable version of start, next and done. Typically that requires that one can deduce the names and types of the columns of the table purely from the type (and type parameters). For some types that works, but for other types (like DataFrame) this strategy won't work.If the type one wants to expose as an iterable table allows this strategy, the implementation is fairly straightforward: one simple needs to implement the standard julia base iterator interface, and during iteration one should return NamedTuples for each element. The fields in the NamedTuple correspond to the columns of the table, i.e. the names of the fields are the column names, and the types of the field are the column types. If the source supports some notion of missing values, it should return NamedTuples that have fields of type Nullable{T}, where T is the data type of the column.It is important to not only implement start, next and end from the julia iteration protocoll. Iterable tables also always require that eltype is implemented. Finally, one should either implement length, if the source supports returning the number of rows without expensive computations, or one should add a method iteratorsize that returns SizeUnknown() for the custom type.The implementation of a type stable next method typically requires the use of generated functions."
+    "text": "This strategy only works if the type that one wants to expose as an iterable table has enough information about the strcuture of the table that one can implement a type stable version of start, next and done. Typically that requires that one can deduce the names and types of the columns of the table purely from the type (and type parameters). For some types that works, but for other types (like DataFrame) this strategy won't work.If the type one wants to expose as an iterable table allows this strategy, the implementation is fairly straightforward: one simple needs to implement the standard julia base iterator interface, and during iteration one should return NamedTuples for each element. The fields in the NamedTuple correspond to the columns of the table, i.e. the names of the fields are the column names, and the types of the field are the column types. If the source supports some notion of missing values, it should return NamedTuples that have fields of type DataValue{T}, where T is the data type of the column.It is important to not only implement start, next and end from the julia iteration protocoll. Iterable tables also always require that eltype is implemented. Finally, one should either implement length, if the source supports returning the number of rows without expensive computations, or one should add a method iteratorsize that returns SizeUnknown() for the custom type.The implementation of a type stable next method typically requires the use of generated functions."
 },
 
 {
@@ -221,7 +245,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Developer Guide",
     "title": "Iteration conventions",
     "category": "section",
-    "text": "Any iterable table should return elements of type NamedTuple. Each column of the source table should be encoded as a field in the named tuple, and the type of that field in the named tuple should reflect the data type of the column in the table. If a column can hold missing values, the type of the corresponding field in the NamedTuple should be a Nullable{T} where T is the data type of the column."
+    "text": "Any iterable table should return elements of type NamedTuple. Each column of the source table should be encoded as a field in the named tuple, and the type of that field in the named tuple should reflect the data type of the column in the table. If a column can hold missing values, the type of the corresponding field in the NamedTuple should be a DataValue{T} where T is the data type of the column."
 },
 
 ]}
