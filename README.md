@@ -29,6 +29,7 @@ packages can act as a source iterable table:
 * [CSVFiles](https://github.com/davidanthoff/CSVFiles.jl)
 * [ExcelFiles](https://github.com/davidanthoff/ExcelFiles.jl)
 * [FeatherFiles](https://github.com/davidanthoff/FeatherFiles.jl)
+* [ParquetFiles](https://github.com/davidanthoff/ParquetFiles.jl)
 * [BedgraphFiles](https://github.com/CiaranOMara/BedgraphFiles.jl)
 * [StatFiles](https://github.com/davidanthoff/StatFiles.jl)
 * [CSV](https://github.com/JuliaData/CSV.jl)
