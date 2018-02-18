@@ -1,3 +1,6 @@
+# IterableTables.jl v0.7.1 Release Notes
+* Fix doc deployment
+
 # IterableTables.jl v0.7.0 Release Notes
 * Move DiffEqBase.jl support out of this package
 * Fix VegaLite.jl tests
