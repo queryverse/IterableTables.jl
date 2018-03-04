@@ -1,6 +1,7 @@
 using TableTraits
 using DataValues
 using Missings
+using DataArrays
 
 # T is the type of the elements produced
 # TS is a tuple type that stores the columns of the DataFrame
@@ -122,10 +123,32 @@ function _DataFrame(x)
     return df
 end
 
+function use_column_copy_interface(x)
+    nt_version = get_columns_copy(x)
+
+    colnames = fieldnames(typeof(nt_version))
+
+    df = DataFrames.DataFrame()
+    for i in 1:length(colnames)
+        col = nt_version[i]
+        if eltype(col)<:DataValues.DataValue
+            if isa(col, DataValueArray)
+                col = DataArray(col.values, convert(BitArray, col.isnull))
+            else
+                error("Can't handle this yet.")
+            end
+        end
+        df[colnames[i]] = col
+    end
+    return df
+end
+
 DataFrames.DataFrame{T<:NamedTuple}(x::Array{T,1}) = _DataFrame(x)
 
 function DataFrames.DataFrame(x)
-    if isiterabletable(x)
+    if supports_get_columns_copy(x)
+        return use_column_copy_interface(x)
+    elseif isiterabletable(x)
         return _DataFrame(x)
     else
         return convert(DataFrames.DataFrame, x)
