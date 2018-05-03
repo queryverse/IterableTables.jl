@@ -55,13 +55,15 @@ end
 
 @generated function Base.next{T,TS}(iter::DataFrameIterator{T,TS}, state)
     constructor_call = Expr(:call, :($T))
+    args = []
     for i in 1:length(iter.types[2].types)
         if iter.parameters[1].parameters[i] <: DataValue
-            push!(constructor_call.args, :(isna(columns[$i],i) ? $(iter.parameters[1].parameters[i])() : $(iter.parameters[1].parameters[i])(columns[$i][i])))
+            push!(args, :(isna(columns[$i],i) ? $(iter.parameters[1].parameters[i])() : $(iter.parameters[1].parameters[i])(columns[$i][i])))
         else
-            push!(constructor_call.args, :(columns[$i][i]))
+            push!(args, :(columns[$i][i]))
         end
     end
+    push!(constructor_call.args, Expr(:tuple, args...))
 
     quote
         i = state
