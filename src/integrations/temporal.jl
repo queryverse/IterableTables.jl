@@ -56,13 +56,14 @@ end
 
 @generated function Base.next{T,S}(iter::TSIterator{T,S}, state)
     constructor_call = Expr(:call, :($T))
-
+    args = []
     # Add index column
-    push!(constructor_call.args, :(iter.source.index[i]))
+    push!(args, :(iter.source.index[i]))
 
     for i in 1:length(T.parameters)-1
-        push!(constructor_call.args, :(iter.source.values[i,$i]))
+        push!(args, :(iter.source.values[i,$i]))
     end
+    push!(constructor_call.args, Expr(:tuple, args...))
 
     quote
         i = state

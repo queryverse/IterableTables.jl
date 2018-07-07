@@ -76,6 +76,7 @@ end
 
 @generated function Base.next(iter::DataStreamIterator{T,S,TC,TSC}, state) where {T,S <: DataStreams.Data.Source,TC,TSC}
     constructor_call = Expr(:call, :($T))
+    args = []
     for i in 1:length(TC.types)
         if TC.types[i] <: String
             get_expression = :(Data.streamfrom(source, Data.Field, WeakRefString, row, $i))
@@ -86,8 +87,9 @@ end
         else
             get_expression = :(Data.streamfrom(source, Data.Field, $(TC.types[i]), row, $i))
         end
-        push!(constructor_call.args, get_expression)
+        push!(args, get_expression)
     end
+    push!(constructor_call.args, Expr(:tuple, args...))
 
     quote
     	source = iter.source

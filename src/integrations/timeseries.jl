@@ -56,13 +56,15 @@ end
 
 @generated function Base.next{T,S}(iter::TimeArrayIterator{T,S}, state)
     constructor_call = Expr(:call, :($T))
+    args = []
 
     # Add timestamp column
-    push!(constructor_call.args, :(iter.source.timestamp[i]))
+    push!(args, :(iter.source.timestamp[i]))
 
     for i in 1:length(T.parameters)-1
-        push!(constructor_call.args, :(iter.source.values[i,$i]))
+        push!(args, :(iter.source.values[i,$i]))
     end
+    push!(constructor_call.args, Expr(:tuple, args...))
 
     quote
         i = state
