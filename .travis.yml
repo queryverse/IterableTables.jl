@@ -1,11 +1,11 @@
 # Documentation: http://docs.travis-ci.com/user/languages/julia/
 language: julia
-sudo: required
 os:
   - linux
   - osx
 julia:
-  - 0.6
+  - 0.7
+  - latest
 notifications:
   email: false
 branches:
@@ -13,19 +13,8 @@ branches:
   - master
   - /release-.*/
   - /v(\d+)\.(\d+)\.(\d+)/
-addons:
-  apt:
-    packages:
-      - xvfb
-      - xauth
-      - libgtk-3-0
-script:
-  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - if [[ `uname` = "Linux" ]]; then TESTCMD="xvfb-run julia"; else TESTCMD="julia"; fi
-  - $TESTCMD -e 'Pkg.clone(pwd()); Pkg.build("IterableTables"); Pkg.test("IterableTables"; coverage=true)'
 after_success:
   - julia -e 'cd(Pkg.dir("IterableTables")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
-  # - julia -e 'cd(Pkg.dir("IterableTables")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(process_folder())'  
   - julia -e 'Pkg.add("Documenter")'
   - julia -e 'cd(Pkg.dir("IterableTables")); include(joinpath("docs", "make.jl"))'
   
