@@ -1,37 +1,42 @@
-immutable GeneratorIterator{T, S}
+struct GeneratorWithElType{T, S}
     source::S
 end
 
-function TableTraits.getiterator(source::Base.Generator)
+function IteratorInterfaceExtensions.getiterator(source::Base.Generator)
     TS = eltype(source.iter)
     T = Base.return_types(source.f, (TS,))[1]
     S = typeof(source)
-    return GeneratorIterator{T,S}(source)
+
+    if isconcretetype(T)
+        return GeneratorWithElType{T,S}(source)
+    else
+        return source
+    end
 end
 
 function TableTraits.isiterabletable(source::Base.Generator)
     TS = eltype(source.iter)
     T = Base.return_types(source.f, (TS,))[1]
-    
-    return T<:NamedTuple
+
+    if isconcretetype(T)
+        if T <: NamedTuple
+            return true
+        else
+            return false
+        end
+    else
+        return missing
+    end
 end
 
-Base.iteratorsize{T<:GeneratorIterator}(::Type{T}) = Base.SizeUnknown()
+Base.IteratorSize(::Type{GeneratorWithElType{T,S}}) where {T,S} = Base.IteratorSize(S)
 
-function Base.eltype{T,S}(iter::GeneratorIterator{T,S})
-    return T
-end
+Base.size(it::GeneratorWithElType, dims...) = size(it.source, dims...)
 
-Base.eltype(::Type{GeneratorIterator{T,TS}}) where {T,TS} = T
+Base.length(it::GeneratorWithElType) = length(it.source)
 
-function Base.start{T,S}(iter::GeneratorIterator{T,S})
-    return start(iter.source)
-end
+Base.eltype(::Type{GeneratorWithElType{T,TS}}) where {T,TS} = T
 
-function Base.next{T,S}(iter::GeneratorIterator{T,S}, s)
-    return next(iter.source, s)
-end
+Base.iterate(it::GeneratorWithElType) = iterate(it.source)
 
-function Base.done{T,S}(iter::GeneratorIterator{T,S}, state)
-    return done(iter.source, state)
-end
+Base.iterate(it::GeneratorWithElType, state) = iterate(it.source, state)

@@ -1,3 +1,9 @@
+# IterableTables.jl v0.8.0 Release Notes
+* Drop julia 0.6 support, add 0.7 support
+* Remove TypedTables.jl support
+* Remove DataTables.jl support
+* Remove VegaLite.jl support
+
 # IterableTables.jl v0.7.1 Release Notes
 * Fix doc deployment
 
