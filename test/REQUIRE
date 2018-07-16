@@ -1,16 +1,11 @@
-DataFrames 0.9
-DataTables
-TypedTables
-CSV
-Feather
-StatsModels 0.0.2
-TimeSeries
-Gadfly
-VegaLite
-SQLite
-IndexedTables
-NullableArrays
-DataStreams
+DataFrames
+# CSV
+# Feather
+StatsModels
+# TimeSeries
+# Gadfly
+# SQLite
+# DataStreams
 GLM
-Temporal
-JuliaDB
+# Temporal
+# JuliaDB
