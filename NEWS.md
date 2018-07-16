@@ -3,6 +3,8 @@
 * Remove TypedTables.jl support
 * Remove DataTables.jl support
 * Remove VegaLite.jl support
+# IterableTables.jl v0.7.2 Release Notes
+* Update DataStreams integration
 
 # IterableTables.jl v0.7.1 Release Notes
 * Fix doc deployment
