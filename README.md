@@ -55,6 +55,9 @@ The following data sinks are currently supported:
 * [StatPlots](https://github.com/JuliaPlots/StatPlots.jl)
 * [Gadfly](https://github.com/GiovineItalia/Gadfly.jl)
 * [VegaLite](https://github.com/fredo-dedup/VegaLite.jl)
+* [TableView.jl](https://github.com/JuliaComputing/TableView.jl)
+* [DataVoyager.jl](https://github.com/davidanthoff/DataVoyager.jl)
+* [TableShowUtils.jl](https://github.com/davidanthoff/TableShowUtils.jl)
 * [Query](https://github.com/davidanthoff/Query.jl)
 
 The package is tightly integrated with [Query.jl](https://github.com/davidanthoff/Query.jl):
