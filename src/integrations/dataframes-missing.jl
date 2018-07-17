@@ -81,7 +81,7 @@ end
     n = length(columns.types)
     push_exprs = Expr(:block)
     for i in 1:n
-        if columns.parameters[i] <: AbstractArray{>:Missing}
+        if columns.parameters[i] <: AbstractArray{>:Missing} && eltype(columns.parameters[i]) != Any
             ex = :( push!(columns[$i], isnull(i[$i]) ? missing : get(i[$i])) )
         else
             ex = :( push!(columns[$i], i[$i]) )
