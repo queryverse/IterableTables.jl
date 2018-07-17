@@ -1,3 +1,6 @@
+# IterableTables.jl v0.7.3 Release Notes
+* Fix bug in DataFrames implementation
+
 # IterableTables.jl v0.7.2 Release Notes
 * Update DataStreams integration
 
