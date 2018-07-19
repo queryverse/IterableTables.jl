@@ -1,3 +1,6 @@
+# IterableTables.jl v0.8.1 Release Notes
+* Fix DataFrames.jl integration
+
 # IterableTables.jl v0.8.0 Release Notes
 * Drop julia 0.6 support, add 0.7 support
 * Remove TypedTables.jl support
