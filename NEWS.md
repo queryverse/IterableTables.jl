@@ -1,3 +1,6 @@
+# IterableTables.jl v0.8.2 Release Notes
+* Fix another issue with the DataFrames.jl integration
+
 # IterableTables.jl v0.8.1 Release Notes
 * Fix DataFrames.jl integration
 
