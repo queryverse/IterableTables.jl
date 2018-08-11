@@ -15,6 +15,6 @@ deploydocs(
     deps = nothing,
     make = nothing,
     target = "build",
-    repo = "github.com/davidanthoff/IterableTables.jl.git",
-    julia = "0.6"
+    repo = "github.com/queryverse/IterableTables.jl.git",
+    julia = "0.7"
 )
