@@ -1,12 +1,12 @@
 # IterableTables
 
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://davidanthoff.github.io/IterableTables.jl/stable)
-[![Build Status](https://travis-ci.org/davidanthoff/IterableTables.jl.svg?branch=master)](https://travis-ci.org/davidanthoff/IterableTables.jl)
-[![Build status](https://ci.appveyor.com/api/projects/status/uv9ybxa17e8581pr/branch/master?svg=true)](https://ci.appveyor.com/project/davidanthoff/iterabletables-jl/branch/master)
+[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://queryverse.github.io/IterableTables.jl/stable)
+[![Build Status](https://travis-ci.org/queryverse/IterableTables.jl.svg?branch=master)](https://travis-ci.org/queryverse/IterableTables.jl)
+[![Build status](https://ci.appveyor.com/api/projects/status/nf8lg1pef4xitjij/branch/master?svg=true)](https://ci.appveyor.com/project/queryverse/iterabletables-jl/branch/master)
 [![Query](http://pkg.julialang.org/badges/IterableTables_0.5.svg)](http://pkg.julialang.org/?pkg=IterableTables)
 [![Query](http://pkg.julialang.org/badges/IterableTables_0.6.svg)](http://pkg.julialang.org/?pkg=IterableTables)
-[![codecov.io](http://codecov.io/github/davidanthoff/IterableTables.jl/coverage.svg?branch=master)](http://codecov.io/github/davidanthoff/IterableTables.jl?branch=master)
+[![codecov.io](http://codecov.io/github/queryverse/IterableTables.jl/coverage.svg?branch=master)](http://codecov.io/github/queryverse/IterableTables.jl?branch=master)
 
 ## Overview
 
@@ -26,15 +26,15 @@ packages can act as a source iterable table:
 * [SQLite](https://github.com/JuliaDB/SQLite.jl)
 * [ODBC](https://github.com/JuliaDB/ODBC.jl)
 * [DifferentialEquations](https://github.com/JuliaDiffEq/DifferentialEquations.jl) (any ``DESolution``)
-* [CSVFiles](https://github.com/davidanthoff/CSVFiles.jl)
-* [ExcelFiles](https://github.com/davidanthoff/ExcelFiles.jl)
-* [FeatherFiles](https://github.com/davidanthoff/FeatherFiles.jl)
-* [ParquetFiles](https://github.com/davidanthoff/ParquetFiles.jl)
+* [CSVFiles](https://github.com/queryverse/CSVFiles.jl)
+* [ExcelFiles](https://github.com/queryverse/ExcelFiles.jl)
+* [FeatherFiles](https://github.com/queryverse/FeatherFiles.jl)
+* [ParquetFiles](https://github.com/queryverse/ParquetFiles.jl)
 * [BedgraphFiles](https://github.com/CiaranOMara/BedgraphFiles.jl)
-* [StatFiles](https://github.com/davidanthoff/StatFiles.jl)
+* [StatFiles](https://github.com/queryverse/StatFiles.jl)
 * [CSV](https://github.com/JuliaData/CSV.jl)
 * [Feather](https://github.com/JuliaStats/Feather.jl)
-* [Query](https://github.com/davidanthoff/Query.jl)
+* [Query](https://github.com/queryverse/Query.jl)
 * any iterator who produces elements of type [NamedTuple](https://github.com/blackrock/NamedTuples.jl)
 
 The following data sinks are currently supported:
@@ -47,8 +47,8 @@ The following data sinks are currently supported:
 * [TypedTables](https://github.com/FugroRoames/TypedTables.jl)
 * [JuliaDB](https://github.com/JuliaComputing/JuliaDB.jl)
 * [StatsModels](https://github.com/JuliaStats/StatsModels.jl)
-* [CSVFiles](https://github.com/davidanthoff/CSVFiles.jl)
-* [FeatherFiles](https://github.com/davidanthoff/FeatherFiles.jl)
+* [CSVFiles](https://github.com/queryverse/CSVFiles.jl)
+* [FeatherFiles](https://github.com/queryverse/FeatherFiles.jl)
 * [BedgraphFiles](https://github.com/CiaranOMara/BedgraphFiles.jl)
 * [CSV](https://github.com/JuliaData/CSV.jl)
 * [Feather](https://github.com/JuliaStats/Feather.jl)
@@ -56,15 +56,15 @@ The following data sinks are currently supported:
 * [Gadfly](https://github.com/GiovineItalia/Gadfly.jl)
 * [VegaLite](https://github.com/fredo-dedup/VegaLite.jl)
 * [TableView.jl](https://github.com/JuliaComputing/TableView.jl)
-* [DataVoyager.jl](https://github.com/davidanthoff/DataVoyager.jl)
-* [TableShowUtils.jl](https://github.com/davidanthoff/TableShowUtils.jl)
-* [Query](https://github.com/davidanthoff/Query.jl)
+* [DataVoyager.jl](https://github.com/queryverse/DataVoyager.jl)
+* [TableShowUtils.jl](https://github.com/queryverse/TableShowUtils.jl)
+* [Query](https://github.com/queryverse/Query.jl)
 
-The package is tightly integrated with [Query.jl](https://github.com/davidanthoff/Query.jl):
+The package is tightly integrated with [Query.jl](https://github.com/queryverse/Query.jl):
 Any query that creates a named tuple in the last ``@select`` statement (and
 doesn't ``@collect`` the results into a data structure) is automatically an
 iterable table data source, and any of the data sources mentioned above can
-be queried using [Query.jl](https://github.com/davidanthoff/Query.jl).
+be queried using [Query.jl](https://github.com/queryverse/Query.jl).
 
 ## Installation
 
