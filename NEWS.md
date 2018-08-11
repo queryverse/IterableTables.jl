@@ -1,3 +1,6 @@
+# IterableTables.jl v0.8.3 Release Notes
+* Remove precompile statement
+
 # IterableTables.jl v0.8.2 Release Notes
 * Fix another issue with the DataFrames.jl integration
 
