@@ -1,4 +1,3 @@
-__precompile__()
 module IterableTables
 
 using Requires, IteratorInterfaceExtensions, TableTraits, TableTraitsUtils
