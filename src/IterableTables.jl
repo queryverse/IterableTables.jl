@@ -10,7 +10,6 @@ include("integrations/generators.jl")
 # include("integrations/temporal.jl")
 
 function __init__()
-    @require DataFrames="a93c6f00-e57d-5684-b7b6-d8193f3e46c0" include("integrations/dataframes.jl")
     @require StatsModels="3eaba693-59b7-5ba5-a881-562e759f1c8d" include("integrations/statsmodels.jl")
 end
 

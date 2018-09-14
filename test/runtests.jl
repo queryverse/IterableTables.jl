@@ -5,7 +5,6 @@ end
 
 @testset "IterableTables" begin
 
-include("test_integration_dataframes.jl")
 # include("test_integration_datastreams.jl")
 # TODO Reenable once GLM is 0.7 compatible
 # include("test_integration_statsmodels.jl")
