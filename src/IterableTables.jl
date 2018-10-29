@@ -3,7 +3,6 @@ module IterableTables
 using Requires, IteratorInterfaceExtensions, TableTraits, TableTraitsUtils
 using DataValues
 
-# include("integrations/datastreams.jl")
 # include("integrations/gadfly.jl")
 # include("integrations/juliadb.jl")
 include("integrations/generators.jl")
