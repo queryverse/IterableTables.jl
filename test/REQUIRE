@@ -1,11 +1,7 @@
 DataFrames
-# CSV
-# Feather
 StatsModels
 # TimeSeries
 # Gadfly
-# SQLite
-# DataStreams
 GLM
 # Temporal
 # JuliaDB

@@ -2,7 +2,6 @@ module IterableTables
 
 using Requires, IteratorInterfaceExtensions, TableTraits, TableTraitsUtils
 
-# include("integrations/datastreams.jl")
 # include("integrations/gadfly.jl")
 # include("integrations/timeseries.jl")
 # include("integrations/juliadb.jl")
