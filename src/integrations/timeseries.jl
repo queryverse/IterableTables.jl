@@ -1,121 +1,94 @@
-@require TimeSeries begin
-using TableTraits
-using DataValues
-
-immutable TimeArrayIterator{T, S}
+struct TimeArrayIterator{T, S}
     source::S
 end
 
-TableTraits.isiterable(x::TimeSeries.TimeArray) = true
+IteratorInterfaceExtensions.isiterable(x::TimeSeries.TimeArray) = true
 TableTraits.isiterabletable(x::TimeSeries.TimeArray) = true
 
-function TableTraits.getiterator{S<:TimeSeries.TimeArray}(ta::S)
-    col_expressions = Array{Expr,1}()
-    df_columns_tuple_type = Expr(:curly, :Tuple)
+function IteratorInterfaceExtensions.getiterator(ta::S) where {S<:TimeSeries.TimeArray}
+    etype = eltype(TimeSeries.values(ta))
+    
+    T = NamedTuple{(:timestamp, Symbol.(TimeSeries.colnames(ta))...), Tuple{S.parameters[3], fill(etype, length(TimeSeries.colnames(ta)))...}}
 
-    # Add column for timestamp
-    push!(col_expressions, Expr(:(::), :timestamp, S.parameters[3]))
-    push!(df_columns_tuple_type.args, S.parameters[3])
-
-    etype = eltype(ta.values)
-    if ndims(ta.values)==1
-        push!(col_expressions, Expr(:(::), ta.colnames[1]=="" ? :value : Symbol(ta.colnames[1]), etype))
-        push!(df_columns_tuple_type.args, etype)
-    else
-        for i in 1:size(ta.values,2)
-            push!(col_expressions, Expr(:(::), Symbol(ta.colnames[i]), etype))
-            push!(df_columns_tuple_type.args, etype)
-        end
-    end
-    t_expr = NamedTuples.make_tuple(col_expressions)
-
-    t2 = :(TimeArrayIterator{Float64,Float64})
-    t2.args[2] = t_expr
-    t2.args[3] = S
-
-    t = eval(t2)
-
-    e_ta = t(ta)
-
-    return e_ta
+    return TimeArrayIterator{T, S}(ta)
 end
 
-function Base.length{T,TS}(iter::TimeArrayIterator{T,TS})
+function Base.length(iter::TimeArrayIterator)
     return length(iter.source)
 end
 
-function Base.eltype{T,TS}(iter::TimeArrayIterator{T,TS})
+function Base.eltype(iter::TimeArrayIterator{T,TS}) where {T,TS}
     return T
 end
 
 Base.eltype(::Type{TimeArrayIterator{T,TS}}) where {T,TS} = T
 
-function Base.start{T,TS}(iter::TimeArrayIterator{T,TS})
-    return 1
-end
-
-@generated function Base.next{T,S}(iter::TimeArrayIterator{T,S}, state)
+@generated function Base.iterate(iter::TimeArrayIterator{T,TS}, state=1) where {T,TS}
     constructor_call = Expr(:call, :($T))
 
-    # Add timestamp column
-    push!(constructor_call.args, :(iter.source.timestamp[i]))
+    push!(constructor_call.args, Expr(:tuple))
 
-    for i in 1:length(T.parameters)-1
-        push!(constructor_call.args, :(iter.source.values[i,$i]))
+    # Add timestamp column
+    push!(constructor_call.args[2].args, :(TimeSeries.timestamp(iter.source)[i]))
+
+    for i in 1:fieldcount(T)-1
+        push!(constructor_call.args[2].args, :(TimeSeries.values(iter.source)[i,$i]))
     end
 
     quote
-        i = state
-        a = $constructor_call
-        return a, state+1
+        if state>length(TimeSeries.timestamp(iter.source))
+            return nothing
+        else
+            i = state
+            a = $constructor_call
+            return a, state+1
+        end
     end
-end
-
-function Base.done{T,TS}(iter::TimeArrayIterator{T,TS}, state)
-    return state>length(iter.source.timestamp)
 end
 
 # Sink
 
-# TODO This is a terribly inefficient implementation. Minimally it
-# should be changed to be more type stable.
 function TimeSeries.TimeArray(x; timestamp_column::Symbol=:timestamp)
-    isiterabletable(x) || error()
+    TableTraits.isiterabletable(x) || error("Cannot create a TimeArray from something that is not a table.")
 
-    iter = getiterator(x)
+    iter = IteratorInterfaceExtensions.getiterator(x)
 
-    if TableTraits.column_count(iter)<2
+    et = eltype(iter)
+    
+    if fieldcount(et)<2
         error("Need at least two columns")
     end
 
-    names = TableTraits.column_names(iter)
+    names = fieldnames(et)
     
-    timestep_col_index = findfirst(names, timestamp_column)
+    timestep_col_index = findfirst(isequal(timestamp_column), names)
 
-    if timestep_col_index==0
+    if timestep_col_index===nothing
         error("No timestamp column found.")
     end
+
+    timestep_col_index = something(timestep_col_index)
     
-    col_types = TableTraits.column_types(iter)
+    col_types = [fieldtype(et, i) for i=1:fieldcount(et)]
 
     data_columns = collect(Iterators.filter(i->i[2][1]!=timestamp_column, enumerate(zip(names, col_types))))
 
     orig_data_type = data_columns[1][2][2]
 
-    data_type = orig_data_type <: DataValue ? orig_data_type.parameters[1] : orig_data_type
+    data_type = orig_data_type <: DataValues.DataValue ? orig_data_type.parameters[1] : orig_data_type
 
     orig_timestep_type = col_types[timestep_col_index]
 
-    timestep_type = orig_timestep_type <: DataValue ? orig_timestep_type.parameters[1] : orig_timestep_type
+    timestep_type = orig_timestep_type <: DataValues.DataValue ? orig_timestep_type.parameters[1] : orig_timestep_type
 
     if any(i->i[2][2]!=orig_data_type, data_columns)
         error("All data columns need to be of the same type.")
     end
 
-    t_column = Array{timestep_type,1}()
-    d_array = Array{Array{data_type,1},1}()
+    t_column = Vector{timestep_type}(undef,0)
+    d_array = Vector{Vector{data_type}}(undef,0)
     for i in data_columns
-        push!(d_array, Array{data_type,1}())
+        push!(d_array, Vector{data_type}(undef,0))
     end
 
     for v in iter
@@ -138,8 +111,6 @@ function TimeSeries.TimeArray(x; timestamp_column::Symbol=:timestamp)
 
     d_array = hcat(d_array...)
 
-    ta = TimeSeries.TimeArray(t_column,d_array,[string(i[2][1]) for i in data_columns])
+    ta = TimeSeries.TimeArray(t_column,d_array,[i[2][1] for i in data_columns])
     return ta
-end
-
 end
