@@ -3,5 +3,5 @@ StatsModels
 TimeSeries
 # Gadfly
 GLM
-# Temporal
+Temporal
 # JuliaDB
