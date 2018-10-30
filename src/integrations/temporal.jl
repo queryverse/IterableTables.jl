@@ -1,121 +1,94 @@
-@require Temporal begin
-using TableTraits
-using DataValues
-
-immutable TSIterator{T, S}
+struct TSIterator{T, S}
     source::S
 end
 
-TableTraits.isiterable(x::Temporal.TS) = true
+IteratorInterfaceExtensions.isiterable(x::Temporal.TS) = true
 TableTraits.isiterabletable(x::Temporal.TS) = true
 
-function TableTraits.getiterator{S<:Temporal.TS}(ta::S)
-    col_expressions = Array{Expr,1}()
-    df_columns_tuple_type = Expr(:curly, :Tuple)
-
-    # Add column for index
-    push!(col_expressions, Expr(:(::), :Index, S.parameters[2]))
-    push!(df_columns_tuple_type.args, S.parameters[2])
-
+function IteratorInterfaceExtensions.getiterator(ta::S) where {S<:Temporal.TS}
     etype = eltype(ta.values)
-    if ndims(ta.values)==1
-        push!(col_expressions, Expr(:(::), ta.fields[1], etype))
-        push!(df_columns_tuple_type.args, etype)
-    else
-        for i in 1:size(ta.values,2)
-            push!(col_expressions, Expr(:(::), Symbol(ta.fields[i]), etype))
-            push!(df_columns_tuple_type.args, etype)
-        end
-    end
-    t_expr = NamedTuples.make_tuple(col_expressions)
 
-    t2 = :(TSIterator{Float64,Float64})
-    t2.args[2] = t_expr
-    t2.args[3] = S
+    T = NamedTuple{(:Index, ta.fields...), Tuple{eltype(ta.index), fill(etype, length(ta.fields))...}}
 
-    t = eval(t2)
-
-    e_ta = t(ta)
-
-    return e_ta
+    return TSIterator{T,S}(ta)
 end
 
-function Base.length{T,TS}(iter::TSIterator{T,TS})
-    return length(iter.source)
+function Base.length(iter::TSIterator)
+    return length(iter.source.index)
 end
 
-function Base.eltype{T,TS}(iter::TSIterator{T,TS})
+function Base.eltype(iter::TSIterator{T,TS}) where {T,TS}
     return T
 end
 
 Base.eltype(::Type{TSIterator{T,TS}}) where {T,TS} = T
 
-function Base.start{T,TS}(iter::TSIterator{T,TS})
-    return 1
-end
-
-@generated function Base.next{T,S}(iter::TSIterator{T,S}, state)
+@generated function Base.iterate(iter::TSIterator{T,TS}, state=1) where {T,TS}
     constructor_call = Expr(:call, :($T))
 
-    # Add index column
-    push!(constructor_call.args, :(iter.source.index[i]))
+    push!(constructor_call.args, Expr(:tuple))
 
-    for i in 1:length(T.parameters)-1
-        push!(constructor_call.args, :(iter.source.values[i,$i]))
+    # Add timestamp column
+    push!(constructor_call.args[2].args, :(iter.source.index[i]))
+
+    for i in 1:fieldcount(T)-1
+        push!(constructor_call.args[2].args, :(iter.source.values[i,$i]))
     end
 
     quote
-        i = state
-        a = $constructor_call
-        return a, state+1
+        if state>length(iter.source.index)
+            return nothing
+        else
+            i = state
+            a = $constructor_call
+            return a, state+1
+        end
     end
-end
-
-function Base.done{T,TS}(iter::TSIterator{T,TS}, state)
-    return state>length(iter.source.index)
 end
 
 # Sink
 
-# TODO This is a terribly inefficient implementation. Minimally it
-# should be changed to be more type stable.
 function Temporal.TS(x; index_column::Symbol=:Index)
-    isiterabletable(x) || error()
+    TableTraits.isiterabletable(x) || error("Cannot create a TS from something that is not a table.")
 
     iter = getiterator(x)
 
-    if TableTraits.column_count(iter)<2
+    et = eltype(iter)
+
+    if fieldcount(et)<2
         error("Need at least two columns")
     end
 
-    names = TableTraits.column_names(iter)
+    names = fieldnames(et)
     
-    timestep_col_index = findfirst(names, index_column)
+    timestep_col_index = findfirst(isequal(index_column), names)
 
-    if timestep_col_index==0
-        error("No index column found.")
+    if timestep_col_index===nothing
+        error("No timestamp column found.")
     end
+
+    timestep_col_index = something(timestep_col_index)
     
-    col_types = TableTraits.column_types(iter)
+    col_types = [fieldtype(et, i) for i=1:fieldcount(et)]
 
     data_columns = collect(Iterators.filter(i->i[2][1]!=index_column, enumerate(zip(names, col_types))))
 
     orig_data_type = data_columns[1][2][2]
 
-    data_type = orig_data_type <: DataValue ? orig_data_type.parameters[1] : orig_data_type
+    data_type = orig_data_type <: DataValues.DataValue ? orig_data_type.parameters[1] : orig_data_type
 
     orig_timestep_type = col_types[timestep_col_index]
 
-    timestep_type = orig_timestep_type <: DataValue ? orig_timestep_type.parameters[1] : orig_timestep_type
+    timestep_type = orig_timestep_type <: DataValues.DataValue ? orig_timestep_type.parameters[1] : orig_timestep_type
 
     if any(i->i[2][2]!=orig_data_type, data_columns)
         error("All data columns need to be of the same type.")
     end
 
-    t_column = Array{timestep_type,1}()
-    d_array = Array{Array{data_type,1},1}()
+    t_column = Vector{timestep_type}(undef,0)
+    d_array = Vector{Vector{data_type}}(undef,0)
     for i in data_columns
-        push!(d_array, Array{data_type,1}())
+        push!(d_array, Vector{data_type}(undef,0))
     end
 
     for v in iter
@@ -140,6 +113,4 @@ function Temporal.TS(x; index_column::Symbol=:Index)
 
     ta = Temporal.TS(d_array, t_column,[i[2][1] for i in data_columns])
     return ta
-end
-
 end
