@@ -2,7 +2,7 @@ using Documenter, IterableTables
 
 makedocs(
 	modules = [IterableTables],
-	format = :html,
+	format=HTML(analytics="UA-132838790-1"),
 	sitename = "IterableTables.jl",
 	pages = [
 		"Introduction" => "index.md",
@@ -12,9 +12,5 @@ makedocs(
 )
 
 deploydocs(
-    deps = nothing,
-    make = nothing,
-    target = "build",
-    repo = "github.com/queryverse/IterableTables.jl.git",
-    julia = "0.7"
+    repo = "github.com/queryverse/IterableTables.jl.git"
 )
