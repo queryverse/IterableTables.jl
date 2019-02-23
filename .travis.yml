@@ -20,7 +20,7 @@ matrix:
 after_success:
   - julia -e 'using Pkg; cd(Pkg.dir("IterableTables")); Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
 
-  jobs:
+jobs:
   include:
     - stage: "Documentation"
       julia: 1.1
