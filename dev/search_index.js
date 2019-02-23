@@ -1,7 +1,7 @@
 var documenterSearchIndex = {"docs": [
 
 {
-    "location": "index.html#",
+    "location": "#",
     "page": "Introduction",
     "title": "Introduction",
     "category": "page",
@@ -9,7 +9,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "index.html#Introduction-1",
+    "location": "#Introduction-1",
     "page": "Introduction",
     "title": "Introduction",
     "category": "section",
@@ -17,7 +17,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "index.html#Overview-1",
+    "location": "#Overview-1",
     "page": "Introduction",
     "title": "Overview",
     "category": "section",
@@ -25,7 +25,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "index.html#Installation-1",
+    "location": "#Installation-1",
     "page": "Introduction",
     "title": "Installation",
     "category": "section",
@@ -33,7 +33,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "index.html#Getting-started-1",
+    "location": "#Getting-started-1",
     "page": "Introduction",
     "title": "Getting started",
     "category": "section",
@@ -41,7 +41,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "userguide.html#",
+    "location": "userguide/#",
     "page": "User Guide",
     "title": "User Guide",
     "category": "page",
@@ -49,7 +49,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "userguide.html#User-Guide-1",
+    "location": "userguide/#User-Guide-1",
     "page": "User Guide",
     "title": "User Guide",
     "category": "section",
@@ -57,7 +57,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "userguide.html#Overview-1",
+    "location": "userguide/#Overview-1",
     "page": "User Guide",
     "title": "Overview",
     "category": "section",
@@ -65,7 +65,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "userguide.html#DataFrames,-DataTables,-TypedTables-1",
+    "location": "userguide/#DataFrames,-DataTables,-TypedTables-1",
     "page": "User Guide",
     "title": "DataFrames, DataTables, TypedTables",
     "category": "section",
@@ -73,7 +73,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "userguide.html#TimeSeries-1",
+    "location": "userguide/#TimeSeries-1",
     "page": "User Guide",
     "title": "TimeSeries",
     "category": "section",
@@ -81,7 +81,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "userguide.html#Temporal-1",
+    "location": "userguide/#Temporal-1",
     "page": "User Guide",
     "title": "Temporal",
     "category": "section",
@@ -89,7 +89,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "userguide.html#IndexedTables-1",
+    "location": "userguide/#IndexedTables-1",
     "page": "User Guide",
     "title": "IndexedTables",
     "category": "section",
@@ -97,7 +97,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "userguide.html#JuliaDB-1",
+    "location": "userguide/#JuliaDB-1",
     "page": "User Guide",
     "title": "JuliaDB",
     "category": "section",
@@ -105,7 +105,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "userguide.html#DataStreams-(CSV,-Feather)-1",
+    "location": "userguide/#DataStreams-(CSV,-Feather)-1",
     "page": "User Guide",
     "title": "DataStreams (CSV, Feather)",
     "category": "section",
@@ -113,7 +113,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "userguide.html#Gadfly-and-VegaLite-1",
+    "location": "userguide/#Gadfly-and-VegaLite-1",
     "page": "User Guide",
     "title": "Gadfly and VegaLite",
     "category": "section",
@@ -121,7 +121,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "userguide.html#StatsModels-(and-statistical-models-in-DataFrames)-1",
+    "location": "userguide/#StatsModels-(and-statistical-models-in-DataFrames)-1",
     "page": "User Guide",
     "title": "StatsModels (and statistical models in DataFrames)",
     "category": "section",
@@ -129,7 +129,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "userguide.html#CSVFiles,-FeatherFiles,-ExcelFiles-and-StatFiles-1",
+    "location": "userguide/#CSVFiles,-FeatherFiles,-ExcelFiles-and-StatFiles-1",
     "page": "User Guide",
     "title": "CSVFiles, FeatherFiles, ExcelFiles and StatFiles",
     "category": "section",
@@ -137,7 +137,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "integrationguide.html#",
+    "location": "integrationguide/#",
     "page": "Integration Guide",
     "title": "Integration Guide",
     "category": "page",
@@ -145,7 +145,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "integrationguide.html#Integration-Guide-1",
+    "location": "integrationguide/#Integration-Guide-1",
     "page": "Integration Guide",
     "title": "Integration Guide",
     "category": "section",
@@ -153,7 +153,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "integrationguide.html#Overview-1",
+    "location": "integrationguide/#Overview-1",
     "page": "Integration Guide",
     "title": "Overview",
     "category": "section",
@@ -161,7 +161,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "integrationguide.html#Consuming-iterable-tables-1",
+    "location": "integrationguide/#Consuming-iterable-tables-1",
     "page": "Integration Guide",
     "title": "Consuming iterable tables",
     "category": "section",
@@ -169,7 +169,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "integrationguide.html#Reusing-an-existing-consumer-of-iterable-tables-1",
+    "location": "integrationguide/#Reusing-an-existing-consumer-of-iterable-tables-1",
     "page": "Integration Guide",
     "title": "Reusing an existing consumer of iterable tables",
     "category": "section",
@@ -177,7 +177,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "integrationguide.html#Coding-a-complete-conversion-1",
+    "location": "integrationguide/#Coding-a-complete-conversion-1",
     "page": "Integration Guide",
     "title": "Coding a complete conversion",
     "category": "section",
@@ -185,7 +185,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "integrationguide.html#Creating-an-iterable-table-source-1",
+    "location": "integrationguide/#Creating-an-iterable-table-source-1",
     "page": "Integration Guide",
     "title": "Creating an iterable table source",
     "category": "section",
@@ -193,7 +193,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "integrationguide.html#Directly-implementing-the-julia-base-iteration-trait-1",
+    "location": "integrationguide/#Directly-implementing-the-julia-base-iteration-trait-1",
     "page": "Integration Guide",
     "title": "Directly implementing the julia base iteration trait",
     "category": "section",
@@ -201,7 +201,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "integrationguide.html#Creating-a-custom-iteration-type-1",
+    "location": "integrationguide/#Creating-a-custom-iteration-type-1",
     "page": "Integration Guide",
     "title": "Creating a custom iteration type",
     "category": "section",
@@ -209,7 +209,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "developerguide.html#",
+    "location": "developerguide/#",
     "page": "Developer Guide",
     "title": "Developer Guide",
     "category": "page",
@@ -217,7 +217,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "developerguide.html#Developer-Guide-1",
+    "location": "developerguide/#Developer-Guide-1",
     "page": "Developer Guide",
     "title": "Developer Guide",
     "category": "section",
@@ -225,7 +225,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "developerguide.html#Overview-1",
+    "location": "developerguide/#Overview-1",
     "page": "Developer Guide",
     "title": "Overview",
     "category": "section",
@@ -233,7 +233,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "developerguide.html#Signaling-and-detection-of-iterable-tables-1",
+    "location": "developerguide/#Signaling-and-detection-of-iterable-tables-1",
     "page": "Developer Guide",
     "title": "Signaling and detection of iterable tables",
     "category": "section",
@@ -241,7 +241,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "developerguide.html#Iteration-conventions-1",
+    "location": "developerguide/#Iteration-conventions-1",
     "page": "Developer Guide",
     "title": "Iteration conventions",
     "category": "section",
