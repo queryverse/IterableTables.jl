@@ -2,7 +2,7 @@ using Documenter, IterableTables
 
 makedocs(
 	modules = [IterableTables],
-	format=Documenter.HTML(analytics="UA-132838790-1"),
+	analytics="UA-132838790-1",
 	sitename = "IterableTables.jl",
 	pages = [
 		"Introduction" => "index.md",
