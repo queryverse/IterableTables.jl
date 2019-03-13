@@ -1,3 +1,6 @@
+# IterableTables.jl v0.11.0 Release Notes
+* Remove StatsModels.jl integration for versions that load Tables.jl
+
 # IterableTables.jl v0.10.0 Release Notes
 * Reenable TimerSeries.jl support
 * Reenable Temporal.jl support
