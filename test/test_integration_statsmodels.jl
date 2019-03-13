@@ -6,11 +6,14 @@ using Test
 
 @testset "StatsModels" begin
 
-source_array = [(a=DataValue(1),b=DataValue(1.),c=DataValue("A")), (a=DataValue(2),b=DataValue(2.),c=DataValue("B")), (a=DataValue(3),b=DataValue(3.),c=DataValue("C"))]
+source_array = [(a=1,b=1.,c="A"), (a=2,b=2.,c="B"), (a=3,b=3.,c="C")]
 
-# TODO add some test beyond just creating a ModelFrame
 mf_array = StatsModels.ModelFrame(StatsModels.@formula(a~b), source_array)
 
-# lm(StatsModels.@formula(a~b), source_df)
+@test mf_array isa StatsModels.ModelFrame
+
+x = lm(StatsModels.@formula(a~b), source_array)
+
+@test x isa StatsModels.TableRegressionModel
 
 end
