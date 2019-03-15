@@ -14,6 +14,4 @@ mf_array = StatsModels.ModelFrame(StatsModels.@formula(a~b), source_array)
 
 x = lm(StatsModels.@formula(a~b), source_array)
 
-@test x isa StatsModels.TableRegressionModel
-
 end
