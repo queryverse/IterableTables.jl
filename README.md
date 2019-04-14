@@ -124,9 +124,9 @@ using Gadfly
 # Plot a TypedTable
 plot(tt, x=:Age, y=:Children, Geom.line)
 ````
-Or with ``StatPlots``:
+Or with ``StatsPlots``:
 ````julia
-using StatPlots
+using StatsPlots
 
 # Plot a DataTable
 @df dt plot(:Age, :Children)
