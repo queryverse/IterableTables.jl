@@ -4,8 +4,6 @@
 [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://queryverse.github.io/IterableTables.jl/stable)
 [![Build Status](https://travis-ci.org/queryverse/IterableTables.jl.svg?branch=master)](https://travis-ci.org/queryverse/IterableTables.jl)
 [![Build status](https://ci.appveyor.com/api/projects/status/nf8lg1pef4xitjij/branch/master?svg=true)](https://ci.appveyor.com/project/queryverse/iterabletables-jl/branch/master)
-[![Query](http://pkg.julialang.org/badges/IterableTables_0.5.svg)](http://pkg.julialang.org/?pkg=IterableTables)
-[![Query](http://pkg.julialang.org/badges/IterableTables_0.6.svg)](http://pkg.julialang.org/?pkg=IterableTables)
 [![codecov.io](http://codecov.io/github/queryverse/IterableTables.jl/coverage.svg?branch=master)](http://codecov.io/github/queryverse/IterableTables.jl?branch=master)
 
 ## Overview
