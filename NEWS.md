@@ -1,3 +1,7 @@
+# IterableTables.jl v1.0.0 Release Notes
+* Drop julia 0.7 support
+* Move to Project.toml
+
 # IterableTables.jl v0.11.0 Release Notes
 * Remove StatsModels.jl integration for versions that load Tables.jl
 
