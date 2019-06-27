@@ -30,7 +30,7 @@ like `ModelFrame` etc.),
 [TimeSeries](https://github.com/JuliaStats/TimeSeries.jl),
 [TypedTables](https://github.com/FugroRoames/TypedTables.jl),
 [StatsModels](https://github.com/JuliaStats/StatsModels.jl),
-[Gadfly](https://github.com/GiovineItalia/Gadfly.jl) and
+[Gadfly](https://github.com/GiovineItalia/Gadfly.jl) (currently not working) and
 [VegaLite](https://github.com/fredo-dedup/VegaLite.jl).
 
 The package is tightly integrated with [Query.jl](https://github.com/davidanthoff/Query.jl):
@@ -89,14 +89,14 @@ lm(@formula(Children~Age),tt)
 # Run a regression on a DataTable
 lm(@formula(Children~Age),dt)
 ```
-Or you can plot any of these data sources with `Gadfly`:
+Or you can plot any of these data sources with `VegaLite`:
 ```julia
-using Gadfly
+using VegaLite
 
 # Plot a TypedTable
-plot(tt, x=:Age, y=:Children, Geom.line)
+tt |> @vlplot(:point, x=:Age, y=:Children)
 
 # Plot a DataTable
-plot(dt, x=:Age, y=:Children, Geom.line)
+dt |> @vlplot(:point, x=:Age, y=:Children)
 ```
 Again, this will work with any of the data sources listed above.

@@ -96,23 +96,12 @@ And to write an iterable table to a Feather file, one would use the following co
 Feather.write("filename.csv", IterableTables.get_datastreams_source(ds))
 ```
 
-## Gadfly and VegaLite
+## VegaLite
 
-For both plotting packages one can simply pass an iterable table where one would normally have passed a `DataFrame`.
-
-The following example plots an iterable table `ds` using Gadfly:
+VegaLite can plot any iterable table. Here is a simple example:
 
 ```julia
-p = plot(ds, x=:a, y=:b, Geom.line)
-```
-
-And this code will plot an iterable table using VegaLite:
-
-```julia
-p = data_values(ds) +
-    mark_line() +
-    encoding_x_quant(:a) +
-    encoding_y_quant(:b)
+ds |> @vlplot(:line, x=:a, y=:b)
 ```
 
 ## StatsModels (and statistical models in DataFrames)

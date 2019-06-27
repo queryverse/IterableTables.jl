@@ -51,7 +51,7 @@ The following data sinks are currently supported:
 * [CSV](https://github.com/JuliaData/CSV.jl)
 * [Feather](https://github.com/JuliaStats/Feather.jl)
 * [StatPlots](https://github.com/JuliaPlots/StatPlots.jl)
-* [Gadfly](https://github.com/GiovineItalia/Gadfly.jl)
+* [Gadfly](https://github.com/GiovineItalia/Gadfly.jl) (currently not working)
 * [VegaLite](https://github.com/fredo-dedup/VegaLite.jl)
 * [TableView.jl](https://github.com/JuliaComputing/TableView.jl)
 * [DataVoyager.jl](https://github.com/queryverse/DataVoyager.jl)
@@ -115,12 +115,12 @@ lm(@formula(Children~Age),tt)
 # Run a regression on a DataTable
 lm(@formula(Children~Age),dt)
 ````
-Or you can plot any of these data sources with ``Gadfly``:
+Or you can plot any of these data sources with `VegaLite`:
 ````julia
-using Gadfly
+using VegaLite
 
 # Plot a TypedTable
-plot(tt, x=:Age, y=:Children, Geom.line)
+tt |> @vlplot(:point, x=:Age, y=:Children)
 ````
 Or with ``StatsPlots``:
 ````julia
