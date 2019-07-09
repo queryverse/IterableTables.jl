@@ -21,7 +21,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction",
     "title": "Overview",
     "category": "section",
-    "text": "IterableTables defines a  generic interface for tabular data.The package currently has support for the following data sources: DataFrames, DataStreams (including CSV, Feather, SQLite, ODBC), DataTables, IndexedTables, TimeSeries, TypedTables, DifferentialEquations (any DESolution) and any iterator who produces elements of type NamedTuple.The following data sinks are currently supported: DataFrames (including things like ModelFrame etc.), DataStreams (including CSV, Feather), DataTables, IndexedTables, TimeSeries, TypedTables, StatsModels, Gadfly and VegaLite.The package is tightly integrated with Query.jl: Any query that creates a named tuple in the last @select statement (and doesn\'t @collect the results into a data structure) is automatically an iterable table data source, and any of the data sources mentioned above can be queried using Query.jl."
+    "text": "IterableTables defines a  generic interface for tabular data.The package currently has support for the following data sources: DataFrames, DataStreams (including CSV, Feather, SQLite, ODBC), DataTables, IndexedTables, TimeSeries, TypedTables, DifferentialEquations (any DESolution) and any iterator who produces elements of type NamedTuple.The following data sinks are currently supported: DataFrames (including things like ModelFrame etc.), DataStreams (including CSV, Feather), DataTables, IndexedTables, TimeSeries, TypedTables, StatsModels, Gadfly (currently not working) and VegaLite.The package is tightly integrated with Query.jl: Any query that creates a named tuple in the last @select statement (and doesn\'t @collect the results into a data structure) is automatically an iterable table data source, and any of the data sources mentioned above can be queried using Query.jl."
 },
 
 {
@@ -37,7 +37,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Introduction",
     "title": "Getting started",
     "category": "section",
-    "text": "IterableTables makes it easy to conver between different table types in julia. It also makes it possible to use any table type in situations where packages traditionally expected a DataFrame.For example, if you have a DataFrameusing DataFrames\n\ndf = DataFrame(Name=[\"John\", \"Sally\", \"Jim\"], Age=[34.,25.,67.], Children=[2,0,3])you can easily convert this into any of the supported data sink types by simply constructing a new table type and passing your source df:using DataTables, TypedTables, IndexedTables\n\n# Convert to a DataTable\ndt = DataTable(df)\n\n# Convert to a TypedTable\ntt = Table(df)These conversions work in pretty much any direction. For example you can convert a TypedTable into a DataFrame:new_df = DataFrame(tt)Or you can convert it to a DataTable:new_dt = DataTable(t)The general rule is that you can convert any sink into any source.IterableTables also adds methods to a number of packages that have traditionally only worked with DataFrames that make these packages work with any data source type defined in IterableTables.For example, you can run a regression on any of the source types:using GLM, DataFrames\n\n# Run a regression on a TypedTable\nlm(@formula(Children~Age),tt)\n\n# Run a regression on a DataTable\nlm(@formula(Children~Age),dt)Or you can plot any of these data sources with Gadfly:using Gadfly\n\n# Plot a TypedTable\nplot(tt, x=:Age, y=:Children, Geom.line)\n\n# Plot a DataTable\nplot(dt, x=:Age, y=:Children, Geom.line)Again, this will work with any of the data sources listed above."
+    "text": "IterableTables makes it easy to conver between different table types in julia. It also makes it possible to use any table type in situations where packages traditionally expected a DataFrame.For example, if you have a DataFrameusing DataFrames\n\ndf = DataFrame(Name=[\"John\", \"Sally\", \"Jim\"], Age=[34.,25.,67.], Children=[2,0,3])you can easily convert this into any of the supported data sink types by simply constructing a new table type and passing your source df:using DataTables, TypedTables, IndexedTables\n\n# Convert to a DataTable\ndt = DataTable(df)\n\n# Convert to a TypedTable\ntt = Table(df)These conversions work in pretty much any direction. For example you can convert a TypedTable into a DataFrame:new_df = DataFrame(tt)Or you can convert it to a DataTable:new_dt = DataTable(t)The general rule is that you can convert any sink into any source.IterableTables also adds methods to a number of packages that have traditionally only worked with DataFrames that make these packages work with any data source type defined in IterableTables.For example, you can run a regression on any of the source types:using GLM, DataFrames\n\n# Run a regression on a TypedTable\nlm(@formula(Children~Age),tt)\n\n# Run a regression on a DataTable\nlm(@formula(Children~Age),dt)Or you can plot any of these data sources with VegaLite:using VegaLite\n\n# Plot a TypedTable\ntt |> @vlplot(:point, x=:Age, y=:Children)\n\n# Plot a DataTable\ndt |> @vlplot(:point, x=:Age, y=:Children)Again, this will work with any of the data sources listed above."
 },
 
 {
@@ -113,11 +113,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "userguide/#Gadfly-and-VegaLite-1",
+    "location": "userguide/#VegaLite-1",
     "page": "User Guide",
-    "title": "Gadfly and VegaLite",
+    "title": "VegaLite",
     "category": "section",
-    "text": "For both plotting packages one can simply pass an iterable table where one would normally have passed a DataFrame.The following example plots an iterable table ds using Gadfly:p = plot(ds, x=:a, y=:b, Geom.line)And this code will plot an iterable table using VegaLite:p = data_values(ds) +\n    mark_line() +\n    encoding_x_quant(:a) +\n    encoding_y_quant(:b)"
+    "text": "VegaLite can plot any iterable table. Here is a simple example:ds |> @vlplot(:line, x=:a, y=:b)"
 },
 
 {
