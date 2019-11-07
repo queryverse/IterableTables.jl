@@ -10,10 +10,10 @@ TableTraits = "3783bdb8-4a98-5b6b-af9a-565f29a5fe9c"
 TableTraitsUtils = "382cd787-c1b6-5bf2-a167-d5b971a19bda"
 
 [compat]
-DataValues = "≥ 0.4.4"
-IteratorInterfaceExtensions = "^0.1.1, ^1"
-Requires = "≥ 0.5.2"
-TableTraits = "^0.3.1, ^0.4, ^1"
+DataValues = "0.4.4"
+IteratorInterfaceExtensions = "0.1.1, 1"
+Requires = "0.5.2"
+TableTraits = "0.3.1, 0.4, 1"
 TableTraitsUtils = "0.2.1, 0.3, 0.4, 1"
 julia = "1"
 
