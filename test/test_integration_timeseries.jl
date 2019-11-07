@@ -43,7 +43,7 @@ df4 = DataFrame(source_ta4)
 @test df4[:B] == [3,2,1]
 
 source_df = DataFrame(a=[4.,5.], timestamp=[Date(1999,1,1),Date(1999,1,2)], b=[6.,8.])
-ta2 = TimeArray(source_df)
+ta2 = TimeArray(source_df, timestamp=:timestamp)
 @test length(ta2) == 2
 @test TimeSeries.colnames(ta2) == [:a, :b]
 @test TimeSeries.values(ta2) == [4. 6.;5. 8.]

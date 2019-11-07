@@ -14,7 +14,9 @@ function __init__()
     @require StatsModels="3eaba693-59b7-5ba5-a881-562e759f1c8d" if !isdefined(StatsModels, :Tables)
         include("integrations/statsmodels.jl")
     end
-    @require TimeSeries="9e3dc215-6440-5c97-bce1-76c03772f85e" include("integrations/timeseries.jl")
+    @require TimeSeries="9e3dc215-6440-5c97-bce1-76c03772f85e" if !isdefined(TimeSeries, :Tables)
+        include("integrations/timeseries.jl")
+    end
     @require Temporal="a110ec8f-48c8-5d59-8f7e-f91bc4cc0c3d" include("integrations/temporal.jl")
 end
 
