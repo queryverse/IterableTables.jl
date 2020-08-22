@@ -15,7 +15,7 @@ function _DataFrame(x)
     return DataFrames.DataFrame(cols, names)
 end
 
-DataFrames.DataFrame(x::AbstractVector{T}) where {T<:NamedTuple} = _DataFrame(x)
+DataFrames.DataFrame(x::AbstractVector{T}) where {T <: NamedTuple} = _DataFrame(x)
 
 function DataFrames.DataFrame(x)
     if TableTraits.isiterabletable(x)
