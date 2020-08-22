@@ -1,16 +1,16 @@
-struct TimeArrayIterator{T, S}
+struct TimeArrayIterator{T,S}
     source::S
 end
 
 IteratorInterfaceExtensions.isiterable(x::TimeSeries.TimeArray) = true
 TableTraits.isiterabletable(x::TimeSeries.TimeArray) = true
 
-function IteratorInterfaceExtensions.getiterator(ta::S) where {S<:TimeSeries.TimeArray}
+function IteratorInterfaceExtensions.getiterator(ta::S) where {S <: TimeSeries.TimeArray}
     etype = eltype(TimeSeries.values(ta))
     
-    T = NamedTuple{(:timestamp, Symbol.(TimeSeries.colnames(ta))...), Tuple{S.parameters[3], fill(etype, length(TimeSeries.colnames(ta)))...}}
+    T = NamedTuple{(:timestamp, Symbol.(TimeSeries.colnames(ta))...),Tuple{S.parameters[3],fill(etype, length(TimeSeries.colnames(ta)))...}}
 
-    return TimeArrayIterator{T, S}(ta)
+    return TimeArrayIterator{T,S}(ta)
 end
 
 function Base.length(iter::TimeArrayIterator)
@@ -31,17 +31,17 @@ Base.eltype(::Type{TimeArrayIterator{T,TS}}) where {T,TS} = T
     # Add timestamp column
     push!(constructor_call.args[2].args, :(TimeSeries.timestamp(iter.source)[i]))
 
-    for i in 1:fieldcount(T)-1
+    for i in 1:fieldcount(T) - 1
         push!(constructor_call.args[2].args, :(TimeSeries.values(iter.source)[i,$i]))
     end
 
     quote
-        if state>length(TimeSeries.timestamp(iter.source))
+        if state > length(TimeSeries.timestamp(iter.source))
             return nothing
         else
             i = state
             a = $constructor_call
-            return a, state+1
+            return a, state + 1
         end
     end
 end
@@ -55,7 +55,7 @@ function TimeSeries.TimeArray(x; timestamp_column::Symbol=:timestamp)
 
     et = eltype(iter)
     
-    if fieldcount(et)<2
+    if fieldcount(et) < 2
         error("Need at least two columns")
     end
 
@@ -63,15 +63,15 @@ function TimeSeries.TimeArray(x; timestamp_column::Symbol=:timestamp)
     
     timestep_col_index = findfirst(isequal(timestamp_column), names)
 
-    if timestep_col_index===nothing
+    if timestep_col_index === nothing
         error("No timestamp column found.")
     end
 
     timestep_col_index = something(timestep_col_index)
     
-    col_types = [fieldtype(et, i) for i=1:fieldcount(et)]
+    col_types = [fieldtype(et, i) for i = 1:fieldcount(et)]
 
-    data_columns = collect(Iterators.filter(i->i[2][1]!=timestamp_column, enumerate(zip(names, col_types))))
+    data_columns = collect(Iterators.filter(i -> i[2][1] != timestamp_column, enumerate(zip(names, col_types))))
 
     orig_data_type = data_columns[1][2][2]
 
@@ -81,14 +81,14 @@ function TimeSeries.TimeArray(x; timestamp_column::Symbol=:timestamp)
 
     timestep_type = orig_timestep_type <: DataValues.DataValue ? orig_timestep_type.parameters[1] : orig_timestep_type
 
-    if any(i->i[2][2]!=orig_data_type, data_columns)
+    if any(i -> i[2][2] != orig_data_type, data_columns)
         error("All data columns need to be of the same type.")
     end
 
-    t_column = Vector{timestep_type}(undef,0)
-    d_array = Vector{Vector{data_type}}(undef,0)
+    t_column = Vector{timestep_type}(undef, 0)
+    d_array = Vector{Vector{data_type}}(undef, 0)
     for i in data_columns
-        push!(d_array, Vector{data_type}(undef,0))
+        push!(d_array, Vector{data_type}(undef, 0))
     end
 
     for v in iter
@@ -99,18 +99,18 @@ function TimeSeries.TimeArray(x; timestamp_column::Symbol=:timestamp)
         end
 
         if orig_data_type <: DataValue
-            for (i,c) in enumerate(data_columns)
-                push!(d_array[i],get(v[c[1]]))
+            for (i, c) in enumerate(data_columns)
+                push!(d_array[i], get(v[c[1]]))
             end
         else
-            for (i,c) in enumerate(data_columns)
-                push!(d_array[i],v[c[1]])
+            for (i, c) in enumerate(data_columns)
+                push!(d_array[i], v[c[1]])
             end
         end
     end
 
     d_array = hcat(d_array...)
 
-    ta = TimeSeries.TimeArray(t_column,d_array,[i[2][1] for i in data_columns])
+    ta = TimeSeries.TimeArray(t_column, d_array, [i[2][1] for i in data_columns])
     return ta
 end

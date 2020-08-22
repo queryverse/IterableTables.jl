@@ -1,10 +1,10 @@
 using Documenter, IterableTables
 
 makedocs(
-	modules = [IterableTables],
+	modules=[IterableTables],
 	analytics="UA-132838790-1",
-	sitename = "IterableTables.jl",
-	pages = [
+	sitename="IterableTables.jl",
+	pages=[
 		"Introduction" => "index.md",
         "User Guide" => "userguide.md",
         "Integration Guide" => "integrationguide.md",
@@ -12,5 +12,5 @@ makedocs(
 )
 
 deploydocs(
-    repo = "github.com/queryverse/IterableTables.jl.git"
+    repo="github.com/queryverse/IterableTables.jl.git"
 )

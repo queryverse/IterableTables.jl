@@ -1,4 +1,4 @@
-struct GeneratorWithElType{T, S}
+struct GeneratorWithElType{T,S}
     source::S
 end
 
