@@ -1,6 +1,6 @@
 name = "IterableTables"
 uuid = "1c8ee90f-4401-5389-894e-7a04a3dc0f4d"
-version = "1.0.1-DEV"
+version = "1.1.0-DEV"
 
 [deps]
 DataValues = "e7dc6d0d-1eca-5fa6-8ad6-5aecde8b7ea5"
@@ -10,15 +10,17 @@ TableTraits = "3783bdb8-4a98-5b6b-af9a-565f29a5fe9c"
 TableTraitsUtils = "382cd787-c1b6-5bf2-a167-d5b971a19bda"
 
 [compat]
-DataValues = "0.4.4"
+DataValues = "0.4.4, 0.5"
 IteratorInterfaceExtensions = "0.1.1, 1"
 Requires = "0.5.2, 1.0"
 TableTraits = "0.3.1, 0.4, 1"
 TableTraitsUtils = "0.2.1, 0.3, 0.4, 1"
-julia = "1.1"
+julia = "1.12"
 
 [extras]
+TestItemRunner = "f8b46487-2199-4994-9208-9a1283c18c0a"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 GLM = "38e38edf-8417-5370-95a0-9cbb8c7f171a"
 StatsModels = "3eaba693-59b7-5ba5-a881-562e759f1c8d"
 Temporal = "a110ec8f-48c8-5d59-8f7e-f91bc4cc0c3d"
@@ -26,4 +28,4 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 TimeSeries = "9e3dc215-6440-5c97-bce1-76c03772f85e"
 
 [targets]
-test = ["StatsModels", "Test", "DataFrames", "TimeSeries", "Temporal", "GLM"]
+test = ["StatsModels", "Test", "DataFrames", "TimeSeries", "Temporal", "GLM", "Dates", "TestItemRunner"]

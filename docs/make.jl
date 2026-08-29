@@ -2,7 +2,8 @@ using Documenter, IterableTables
 
 makedocs(
 	modules = [IterableTables],
-	analytics="UA-132838790-1",
+	format = Documenter.HTML(analytics = "UA-132838790-1"),
+	warnonly = [:missing_docs],
 	sitename = "IterableTables.jl",
 	pages = [
 		"Introduction" => "index.md",

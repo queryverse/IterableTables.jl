@@ -4,3 +4,6 @@
 docs/build/
 docs/site/
 .vscode
+docs/Manifest.toml
+test-output*.*
+Manifest.toml
