@@ -11,7 +11,8 @@
     @test IteratorInterfaceExtensions.isiterable(g) == true
 
     it = IteratorInterfaceExtensions.getiterator(g)
-    @test eltype(it) == @NamedTuple{a::Int, b::Float64, c::String}
+    # spelled without @NamedTuple, which requires Julia 1.5
+    @test eltype(it) == NamedTuple{(:a, :b, :c),Tuple{Int,Float64,String}}
     @test length(it) == 5
     @test collect(it) == [(a=i, b=Float64(i)^2, c="x$i") for i in 1:5]
 
