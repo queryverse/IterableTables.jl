@@ -2,101 +2,59 @@
 
 ## Overview
 
-IterableTables defines a  generic interface for tabular data.
+Iterable tables is a generic interface for tabular data, defined in
+[TableTraits.jl](https://github.com/queryverse/TableTraits.jl).
 
-The package currently has support for the following data sources:
-[DataFrames](https://github.com/JuliaStats/DataFrames.jl),
-[DataStreams](https://github.com/JuliaData/DataStreams.jl)
-(including [CSV](https://github.com/JuliaData/CSV.jl),
-[Feather](https://github.com/JuliaStats/Feather.jl),
-[SQLite](https://github.com/JuliaDB/SQLite.jl),
-[ODBC](https://github.com/JuliaDB/ODBC.jl)),
-[DataTables](https://github.com/JuliaData/DataTables.jl),
-[IndexedTables](https://github.com/JuliaComputing/IndexedTables.jl),
-[TimeSeries](https://github.com/JuliaStats/TimeSeries.jl),
-[TypedTables](https://github.com/FugroRoames/TypedTables.jl),
-[DifferentialEquations](https://github.com/JuliaDiffEq/DifferentialEquations.jl) (any `DESolution`) and
-any iterator who produces elements of type
-[NamedTuple](https://github.com/blackrock/NamedTuples.jl).
+This package historically hosted the interface implementations for many
+third-party table types. That role is over: packages like
+[DataFrames](https://github.com/JuliaData/DataFrames.jl),
+[TimeSeries](https://github.com/JuliaStats/TimeSeries.jl) and
+[StatsModels](https://github.com/JuliaStats/StatsModels.jl) have long
+implemented the iterable tables interface natively (typically via
+[Tables.jl](https://github.com/JuliaData/Tables.jl)), so they interoperate
+with the [Queryverse](https://github.com/queryverse) without any help from
+this package.
 
-The following data sinks are currently supported:
-[DataFrames](https://github.com/JuliaStats/DataFrames.jl) (including things
-like `ModelFrame` etc.),
-[DataStreams](https://github.com/JuliaData/DataStreams.jl)
-(including [CSV](https://github.com/JuliaData/CSV.jl),
-[Feather](https://github.com/JuliaStats/Feather.jl)),
-[DataTables](https://github.com/JuliaData/DataTables.jl),
-[IndexedTables](https://github.com/JuliaComputing/IndexedTables.jl),
-[TimeSeries](https://github.com/JuliaStats/TimeSeries.jl),
-[TypedTables](https://github.com/FugroRoames/TypedTables.jl),
-[StatsModels](https://github.com/JuliaStats/StatsModels.jl),
-[Gadfly](https://github.com/GiovineItalia/Gadfly.jl) (currently not working) and
-[VegaLite](https://github.com/fredo-dedup/VegaLite.jl).
+What this package still provides:
 
-The package is tightly integrated with [Query.jl](https://github.com/davidanthoff/Query.jl):
-Any query that creates a named tuple in the last `@select` statement (and
-doesn't `@collect` the results into a data structure) is automatically an
-iterable table data source, and any of the data sources mentioned above can
-be queried using [Query.jl](https://github.com/davidanthoff/Query.jl).
+* Any iterator of `NamedTuple`s — for example a generator expression such as
+  `((a=i, b=i^2) for i in 1:10)` — becomes an iterable table, so it can be
+  queried with [Query.jl](https://github.com/queryverse/Query.jl) or passed
+  to any iterable table sink.
+* An integration for [Temporal](https://github.com/JTAmos/Temporal.jl),
+  which has no native support for the interface: a `TS` value works as a
+  source, and `TS(iterable_table; index_column=:Index)` works as a sink.
 
 ## Installation
 
-This package only works on julia 0.5 and newer. You can add it with:
 ```julia
-Pkg.add("IterableTables")
+julia> ]add IterableTables
 ```
 
 ## Getting started
 
-`IterableTables` makes it easy to conver between different table types in julia. It also makes it possible to use any table type in situations where packages traditionally expected a `DataFrame`.
+A generator of named tuples can be piped into a query or into any sink, for
+example a `DataFrame` or a CSV file:
 
-For example, if you have a `DataFrame`
 ```julia
-using DataFrames
+using IterableTables, Query, DataFrames, CSVFiles, FileIO
 
-df = DataFrame(Name=["John", "Sally", "Jim"], Age=[34.,25.,67.], Children=[2,0,3])
+g = ((a=i, b=i^2) for i in 1:10)
+
+df = g |> @filter(_.a > 5) |> DataFrame
+
+save("data.csv", g)
 ```
 
-you can easily convert this into any of the supported data sink types by simply constructing a new table type and passing your source `df`:
+A `Temporal.TS` works as a source and sink around a query:
+
 ```julia
-using DataTables, TypedTables, IndexedTables
+using IterableTables, Query, Temporal
 
-# Convert to a DataTable
-dt = DataTable(df)
-
-# Convert to a TypedTable
-tt = Table(df)
+ts2 = ts |> @filter(_.price > 100.) |> x -> TS(x, index_column=:Index)
 ```
-These conversions work in pretty much any direction. For example you can convert a `TypedTable` into a `DataFrame`:
-```julia
-new_df = DataFrame(tt)
-```
-Or you can convert it to a `DataTable`:
-```julia
-new_dt = DataTable(t)
-```
-The general rule is that you can convert any sink into any source.
 
-`IterableTables` also adds methods to a number of packages that have traditionally only worked with `DataFrame`s that make these packages work with any data source type defined in `IterableTables`.
-
-For example, you can run a regression on any of the source types:
-```julia
-using GLM, DataFrames
-
-# Run a regression on a TypedTable
-lm(@formula(Children~Age),tt)
-
-# Run a regression on a DataTable
-lm(@formula(Children~Age),dt)
-```
-Or you can plot any of these data sources with `VegaLite`:
-```julia
-using VegaLite
-
-# Plot a TypedTable
-tt |> @vlplot(:point, x=:Age, y=:Children)
-
-# Plot a DataTable
-dt |> @vlplot(:point, x=:Age, y=:Children)
-```
-Again, this will work with any of the data sources listed above.
+For sinks that only accept concrete table types (for example `Gadfly.plot`
+or the `TimeArray` constructor from
+[TimeSeries](https://github.com/JuliaStats/TimeSeries.jl)), convert the
+query result to a `DataFrame` first.

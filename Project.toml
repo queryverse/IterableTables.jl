@@ -19,13 +19,16 @@ julia = "1.1"
 
 [extras]
 TestItemRunner = "f8b46487-2199-4994-9208-9a1283c18c0a"
+CSVFiles = "5d742f6a-9f54-50ce-8119-2520741973ca"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
 GLM = "38e38edf-8417-5370-95a0-9cbb8c7f171a"
+Query = "1a8c2f83-1ff3-5112-b086-8aa67b057ba1"
 StatsModels = "3eaba693-59b7-5ba5-a881-562e759f1c8d"
 Temporal = "a110ec8f-48c8-5d59-8f7e-f91bc4cc0c3d"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 TimeSeries = "9e3dc215-6440-5c97-bce1-76c03772f85e"
 
 [targets]
-test = ["StatsModels", "Test", "DataFrames", "TimeSeries", "Temporal", "GLM", "Dates", "TestItemRunner"]
+test = ["StatsModels", "Test", "CSVFiles", "DataFrames", "FileIO", "Query", "TimeSeries", "Temporal", "GLM", "Dates", "TestItemRunner"]

@@ -1,3 +1,12 @@
+# IterableTables.jl v1.0.1 Release Notes
+* Remove the dead DataFrames.jl, TimeSeries.jl and StatsModels.jl integrations
+  (these packages have shipped native iterable tables support since 2019, so
+  the integrations here never loaded anymore)
+* Remove the Gadfly.jl and JuliaDB.jl integrations (disabled since 2018)
+* Widen compat bounds for Queryverse sibling packages
+* Add test coverage for the generator integration and for interop with
+  Query.jl and CSVFiles.jl
+
 # IterableTables.jl v1.0.0 Release Notes
 * Drop julia 0.7 support
 * Move to Project.toml

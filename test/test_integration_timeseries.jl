@@ -1,9 +1,12 @@
-@testitem "TimeSeries" begin
+# Recent TimeSeries versions use `pkgversion` (a Julia 1.9 builtin) while still claiming
+# `julia = "1.6"` compat, so the package cannot precompile on older Julia versions.
+@testitem "TimeSeries" skip=(VERSION < v"1.9") begin
     using Dates
     using TimeSeries
     using DataFrames
     using TableTraits
     using IteratorInterfaceExtensions
+    using Query
 
     dates  = collect(Date(1999,1,1):Day(1):Date(1999,1,3))
 
@@ -46,4 +49,13 @@
     @test TimeSeries.colnames(ta2) == [:a, :b]
     @test TimeSeries.values(ta2) == [4. 6.;5. 8.]
     @test TimeSeries.timestamp(ta2) == [Date(1999,1,1),Date(1999,1,2)]
+
+    # TimeArray as source and sink with a Query in the middle; the sink side needs a
+    # DataFrame bridge because TimeSeries' own table constructor requires a schema
+    qdf = source_ta3 |> @filter(_.a > 1) |> DataFrame
+    @test size(qdf) == (2,3)
+    @test qdf[!, :a] == [2,3]
+    ta3 = TimeArray(qdf, timestamp=:timestamp)
+    @test length(ta3) == 2
+    @test TimeSeries.colnames(ta3) == [:a, :b]
 end

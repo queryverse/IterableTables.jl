@@ -4,6 +4,7 @@
     using TableTraits
     using Temporal
     using DataFrames
+    using Query
 
     dates  = collect(Date(1999,1,1):Day(1):Date(1999,1,3))
 
@@ -45,4 +46,10 @@
     @test size(ta2) == (2,2)
     @test ta2.values == [4. 6.;5. 8.]
     @test ta2.index == [Date(1999,1,1),Date(1999,1,2)]
+
+    # TS as source and sink with a Query in the middle
+    qts = source_ta3 |> @filter(_.a > 1) |> x -> TS(x, index_column=:Index)
+    @test size(qts) == (2,2)
+    @test qts.values == [2 2; 3 1]
+    @test qts.index == dates[2:3]
 end
