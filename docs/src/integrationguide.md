@@ -7,16 +7,14 @@ that consumes iterable tables.
 
 # Overview
 
-For now I recommend that all integrations with IterableTables should live
-in the IterableTables package. This is a temporary solution until the
-interface in IterableTables is more stable, at which point integrations
-will be moved into the packages that they integrate. So new integrations
-should at this point ideally be submitted as pull requests against the
-[IterableTables repository](https://github.com/davidanthoff/IterableTables.jl).
-Specifically, each integration should be put into a file in the folder
-`src/integrations`, and the filename should be the name of the package
-that is being integrated. The code in that file should live in a
-`@require` block (see one of the existing integrations for an example).
+New integrations should be implemented in the package that defines the
+table type, not in this package. The interface itself lives in the small,
+dependency-light [TableTraits.jl](https://github.com/queryverse/TableTraits.jl)
+and [IteratorInterfaceExtensions.jl](https://github.com/queryverse/IteratorInterfaceExtensions.jl)
+packages, so a package can support iterable tables by depending on those
+directly. The [TableTraitsUtils.jl](https://github.com/queryverse/TableTraitsUtils.jl)
+package provides helper functions for both consuming and producing
+iterable tables.
 
 # Consuming iterable tables
 
@@ -70,17 +68,18 @@ end
 This assumes that `MyTable` has another constructor that accepts a
 `DataFrame`.
 
-Currently the most efficient table type for this kind of conversion is
-the `DataTable` type from the [DataTables.jl](https://github.com/JuliaData/DataTables.jl)
-package. How efficient is this strategy in general? It really depends
-what is happening in the next step with say the `DataTable` one constructed.
+How efficient is this strategy in general? It really depends
+what is happening in the next step with say the `DataFrame` one constructed.
 If the data will be copied into yet another data structure after it has
-been converted to a `DataTable`, one has added at least one unnecessary
+been converted to a `DataFrame`, one has added at least one unnecessary
 memory allocation in the conversion. For such a situation it is probably
 more efficient to manually code a complete version, as described in the
 next section. If, on the other hand, one for example requires a vector of
 values for each column of the table, this approach can be quite efficient:
-one can just access the vector in the `DataTable` and operate on that.
+one can just access the vector in the `DataFrame` and operate on that.
+Alternatively, `TableTraitsUtils.create_columns_from_iterabletable` converts
+an iterable table into a vector of column vectors without a dependency on
+DataFrames.
 
 ## Coding a complete conversion
 
@@ -92,21 +91,21 @@ conversion function also needs to start with a call to `isiterable` to
 check whether one actually has an iterable table. The second step in any
 custom conversion function is to all the `getiterator` function on the
 iterable table. This will return an instance of a type that implements
-the standard julia iterator interface, i.e. one can call `start`, `next`
-and `done` on the instance that is returned by `getiterator`. For some
+the standard julia iterator interface, i.e. one can call `iterate` on
+the instance that is returned by `getiterator`. For some
 iterable tables `getiterator` will just return the argument that one has
 passed to it, but for other iterable tables it will return an instance
 of a different type.
 
 `getiterator` is generally not a type stable function. Given that this
 function is generally only called once per conversion this hopefully
-is not a huge performance issue. The functions that really need to be
-type-stable are `start`, `next` and `done` because they will be called
-for every row of the table that is to be converted. In general, these three
-functions will be type stable for the type of the return value of
+is not a huge performance issue. The function that really needs to be
+type-stable is `iterate` because it will be called
+for every row of the table that is to be converted. In general, `iterate`
+will be type stable for the type of the return value of
 `getiterator`. But given that `getiterator` is not type stable, one needs
-to use a function barrier to make sure the three iteration functions are
-called from a type stable function.
+to use a function barrier to make sure the iteration is
+done in a type stable function.
 
 The next step in a custom conversion function is typically to find out
 what columns the iterable table has. The helper functions
@@ -121,7 +120,7 @@ the iterable table. `IterableTables.column_names` returns a vector of
 
 Custom conversion functions can at this point optionally check whether
 the iterable table implements the `length` function by checking whether
-`Base.iteratorsize(typeof(iter))==Base.HasLength()` (this is part of the
+`Base.IteratorSize(typeof(iter))==Base.HasLength()` (this is part of the
 standard iteration protocol). It is important to note that every consumer
 of iterable tables needs to handle the case where no length information
 is available, but can provide an additional, typically faster implementation
@@ -144,22 +143,22 @@ columns can have different types, which almost inevitably would lead to a
 type instability. 
 
 A good example of a custom consumer of an iterable table is the code
-in the `DataTable` integration.
+in the `Temporal` integration in this package.
 
 # Creating an iterable table source
 
 There are generally two strategies for turning some custom type into an
 iterable table. The first strategy works if one can implement a type-stable
-version of `start`, `next` and `done` that iterates elements of type
+version of `iterate` that iterates elements of type
 `NamedTuple`. If that is not feasible, the strategy is to create a new
 iterator type. The following two sections describe both approaches.
 
 ## Directly implementing the julia base iteration trait
 
 This strategy only works if the type that one wants to expose as an
-iterable table has enough information about the strcuture of the table
-that one can implement a type stable version of `start`, `next` and
-`done`. Typically that requires that one can deduce the names and types
+iterable table has enough information about the structure of the table
+that one can implement a type stable version of `iterate`.
+Typically that requires that one can deduce the names and types
 of the columns of the table purely from the type (and type parameters).
 For some types that works, but for other types (like `DataFrame`) this
 strategy won't work.
@@ -174,14 +173,14 @@ source supports some notion of missing values, it should return
 `NamedTuples` that have fields of type `DataValue{T}`, where `T` is the
 data type of the column.
 
-It is important to not only implement `start`, `next` and `end` from the
-julia iteration protocoll. Iterable tables also always require that `eltype`
+It is important to not only implement `iterate` from the
+julia iteration protocol. Iterable tables also always require that `eltype`
 is implemented. Finally, one should either implement `length`, if the source
 supports returning the number of rows without expensive computations, or
-one should add a method `iteratorsize` that returns `SizeUnknown()` for
+one should add a method `Base.IteratorSize` that returns `SizeUnknown()` for
 the custom type.
 
-The implementation of a type stable `next` method typically requires the
+The implementation of a type stable `iterate` method typically requires the
 use of generated functions.
 
 ## Creating a custom iteration type
@@ -212,4 +211,4 @@ custom iterator type that one returned from `getiterator`. All the same
 requirements that were discussed in the previous section apply here as
 well.
 
-An example of this strategy is the `DataTable` integration.
+An example of this strategy is the `Temporal` integration in this package.

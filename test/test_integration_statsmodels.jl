@@ -2,6 +2,7 @@
     using StatsModels
     using GLM
     using DataValues
+    using Query
 
     source_array = [(a=1,b=1.,c="A"), (a=2,b=2.,c="B"), (a=3,b=3.,c="C")]
 
@@ -10,4 +11,8 @@
     @test mf_array isa StatsModels.ModelFrame
 
     x = lm(StatsModels.@formula(a~b), source_array)
+
+    # model fitting works directly on a Query result
+    x2 = lm(StatsModels.@formula(a~b), source_array |> @filter(_.a > 0))
+    @test coef(x2) ≈ coef(x)
 end

@@ -2,6 +2,7 @@
     using IteratorInterfaceExtensions
     using DataFrames
     using DataValues
+    using Query
 
     source_df = DataFrame(a=Union{Int,Missing}[1,2,3], b=Union{Float64,Missing}[1.,2.,3.], c=Union{String,Missing}["A","B","C"])
 
@@ -46,4 +47,10 @@
     @test df[!, :a] == [1,2,3]
     @test df[!, :b] == [1.,2.,3.]
     @test df[!, :c] == ["A","B","C"]
+
+    # DataFrame as source and sink with a Query in the middle
+    qdf = df |> @filter(_.a > 1) |> @map({_.a, _.c}) |> DataFrame
+    @test size(qdf) == (2,2)
+    @test qdf[!, :a] == [2,3]
+    @test qdf[!, :c] == ["B","C"]
 end
